@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Machine Learning Applications in Educational Data Mining: A Systematic Review",
+    "authors": "Dr. Nome do Docente, Dr. Maria Silva, Dr. João Santos",
+    "venue": "Computers & Education",
+    "year": "2024",
+    "links": [
+      { "text": "PDF", "url": "#", "icon": "fas fa-file-pdf" },
+      { "text": "DOI", "url": "https://doi.org/10.1016/j.compedu.2024.105000", "icon": "fas fa-external-link-alt" }
+    ]
+  },
+  {
+    "title": "Adaptive Learning Systems: Design Principles and Implementation Strategies",
+    "authors": "Dr. Nome do Docente, Dr. Ana Costa, Dr. Pedro Oliveira",
+    "venue": "Journal of Educational Technology & Society",
+    "year": "2024",
+    "links": [
+      { "text": "PDF", "url": "#", "icon": "fas fa-file-pdf" },
+      { "text": "DOI", "url": "https://doi.org/10.30191/ETS", "icon": "fas fa-external-link-alt" },
+      { "text": "Code", "url": "#", "icon": "fab fa-github" }
+    ]
+  },
+  {
+    "title": "Gamification in Higher Education: Student Engagement and Learning Outcomes",
+    "authors": "Dr. Carlos Rodrigues, Dr. Nome do Docente, Dr. Lucia Ferreira",
+    "venue": "International Conference on Educational Technology (ICET 2023)",
+    "year": "2023",
+    "links": [
+      { "text": "PDF", "url": "#", "icon": "fas fa-file-pdf" },
+      { "text": "Slides", "url": "#", "icon": "fas fa-presentation" }
+    ]
+  },
+  {
+    "title": "Privacy-Preserving Educational Data Mining: Challenges and Solutions",
+    "authors": "Dr. Nome do Docente, Dr. Roberto Lima, Dr. Patricia Soares",
+    "venue": "IEEE Transactions on Learning Technologies",
+    "year": "2023",
+    "links": [
+      { "text": "PDF", "url": "#", "icon": "fas fa-file-pdf" },
+      { "text": "DOI", "url": "https://doi.org/10.1109/TLT.2023.123456", "icon": "fas fa-external-link-alt" }
+    ]
+  },
+  {
+    "title": "Intelligent Tutoring Systems: A Comprehensive Framework for Personalized Learning",
+    "authors": "Dr. Nome do Docente, Dr. Fernanda Alves",
+    "venue": "Artificial Intelligence in Education (AIED 2022)",
+    "year": "2022",
+    "links": [
+      { "text": "PDF", "url": "#", "icon": "fas fa-file-pdf" },
+      { "text": "Springer", "url": "#", "icon": "fas fa-external-link-alt" },
+      { "text": "Demo", "url": "#", "icon": "fas fa-play" }
+    ]
+  }
+]
