@@ -1,0 +1,38 @@
+[
+  {
+    "date": "15-18 Março 2025",
+    "title": "Keynote Speaker - International Conference on AI in Education",
+    "location": "Tokyo, Japão",
+    "description": "Palestra magistral sobre 'O Futuro da Educação Personalizada com IA', explorando tendências emergentes e desafios éticos na aplicação de inteligência artificial em ambientes educacionais."
+  },
+  {
+    "date": "5-7 Dezembro 2024",
+    "title": "Workshop: Mineração de Dados Educacionais na Prática",
+    "location": "SBIE 2024, Brasília",
+    "description": "Facilitação de workshop hands-on sobre técnicas avançadas de mineração de dados educacionais, incluindo pré-processamento, análise exploratória e modelagem preditiva."
+  },
+  {
+    "date": "22-25 Outubro 2024",
+    "title": "Mesa Redonda: Ética em IA Educacional",
+    "location": "Simpósio Nacional de Educação Digital, São Paulo",
+    "description": "Participação em mesa redonda discutindo questões éticas, privacidade e transparência no uso de sistemas de IA em contextos educacionais."
+  },
+  {
+    "date": "15-17 Setembro 2024",
+    "title": "Apresentação de Artigo: Sistemas Adaptativos",
+    "location": "ICALT 2024, Virtual",
+    "description": "Apresentação do artigo 'Adaptive Learning Systems: Design Principles and Implementation Strategies' na conferência IEEE International Conference on Advanced Learning Technologies."
+  },
+  {
+    "date": "10-12 Julho 2024",
+    "title": "Tutorial: Desenvolvimento de Sistemas Tutores Inteligentes",
+    "location": "AIED 2024, Recife",
+    "description": "Ministração de tutorial de 3 horas sobre desenvolvimento de Sistemas Tutores Inteligentes, cobrindo arquitetura, modelos de estudante e estratégias pedagógicas."
+  },
+  {
+    "date": "20-22 Maio 2024",
+    "title": "Painel: Tecnologias Emergentes na Educação",
+    "location": "EduTech Conference, Porto Alegre",
+    "description": "Participação como painelista na discussão sobre realidade virtual, blockchain e computação quântica aplicadas à educação."
+  }
+]

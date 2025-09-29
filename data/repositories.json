@@ -1,0 +1,50 @@
+[
+  {
+    "name": "educational-data-mining-toolkit",
+    "description": "Conjunto abrangente de ferramentas e algoritmos para mineração de dados educacionais, incluindo análise de padrões de aprendizagem, detecção de dificuldades e recomendação de recursos.",
+    "url": "https://github.com/username/educational-data-mining-toolkit",
+    "language": "Python",
+    "stars": "156",
+    "forks": "34"
+  },
+  {
+    "name": "adaptive-learning-platform",
+    "description": "Plataforma web completa para ensino adaptativo com recomendação personalizada de conteúdo baseada em IA, incluindo dashboard para professores e analytics em tempo real.",
+    "url": "https://github.com/username/adaptive-learning-platform",
+    "language": "TypeScript",
+    "stars": "89",
+    "forks": "23"
+  },
+  {
+    "name": "intelligent-tutoring-system",
+    "description": "Framework para desenvolvimento de Sistemas Tutores Inteligentes com modelos de estudante adaptativos, geração automática de feedback e sequenciamento de conteúdo.",
+    "url": "https://github.com/username/intelligent-tutoring-system",
+    "language": "Python",
+    "stars": "127",
+    "forks": "41"
+  },
+  {
+    "name": "gamification-education-framework",
+    "description": "Framework modular para implementação de elementos de gamificação em plataformas educacionais, incluindo sistema de pontos, badges e leaderboards.",
+    "url": "https://github.com/username/gamification-education-framework",
+    "language": "JavaScript",
+    "stars": "73",
+    "forks": "18"
+  },
+  {
+    "name": "learning-analytics-dashboard",
+    "description": "Dashboard interativo para visualização e análise de dados de aprendizagem, com métricas de engajamento, progresso e predição de desempenho.",
+    "url": "https://github.com/username/learning-analytics-dashboard",
+    "language": "React",
+    "stars": "95",
+    "forks": "27"
+  },
+  {
+    "name": "privacy-preserving-edm",
+    "description": "Implementação de técnicas de privacidade diferencial e aprendizado federado para mineração de dados educacionais preservando a privacidade dos estudantes.",
+    "url": "https://github.com/username/privacy-preserving-edm",
+    "language": "Python",
+    "stars": "64",
+    "forks": "15"
+  }
+]

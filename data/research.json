@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Inteligência Artificial em Educação",
+    "description": "Pesquisa sobre aplicação de técnicas de IA para personalização do ensino e melhoria do processo de aprendizagem. Inclui desenvolvimento de algoritmos de recomendação e análise de padrões de comportamento estudantil.",
+    "tags": ["IA", "Educação", "Machine Learning", "Personalização"]
+  },
+  {
+    "title": "Análise de Dados Educacionais",
+    "description": "Desenvolvimento de metodologias para análise de grandes volumes de dados educacionais visando insights pedagógicos. Foco em Learning Analytics e descoberta de conhecimento em bases de dados educacionais.",
+    "tags": ["Big Data", "Analytics", "Educação", "Data Mining"]
+  },
+  {
+    "title": "Sistemas Adaptativos de Aprendizagem",
+    "description": "Criação de plataformas educacionais que se adaptam ao ritmo e estilo de aprendizagem de cada estudante. Implementação de modelos de estudante e sistemas de tutoria inteligente.",
+    "tags": ["Sistemas Adaptativos", "E-learning", "Personalização", "ITS"]
+  },
+  {
+    "title": "Gamificação na Educação",
+    "description": "Investigação sobre o impacto de elementos de jogos no engajamento e motivação de estudantes. Desenvolvimento de frameworks para aplicação de gamificação em ambientes educacionais.",
+    "tags": ["Gamificação", "Engajamento", "Motivação", "Game Design"]
+  }
+]

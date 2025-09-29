@@ -1,0 +1,37 @@
+{
+  "personalInfo": {
+    "name": "Dr. Nome do Docente",
+    "title": "Professor(a) e Pesquisador(a)",
+    "description": "Especialista em [Área de Especialização], com foco em pesquisas inovadoras e desenvolvimento de soluções tecnológicas. Comprometido(a) com a excelência acadêmica e a disseminação do conhecimento científico.",
+    "profileImage": "images/profile.jpg"
+  },
+  "contact": {
+    "email": "email@universidade.edu.br",
+    "linkedin": "https://linkedin.com/in/seu-perfil",
+    "github": "https://github.com/seu-username",
+    "institution": "Universidade, Departamento",
+    "website": "https://seu-site.com"
+  },
+  "social": {
+    "orcid": "0000-0000-0000-0000",
+    "researchgate": "https://researchgate.net/profile/seu-perfil",
+    "googlescholar": "https://scholar.google.com/citations?user=seu-id",
+    "lattes": "http://lattes.cnpq.br/seu-lattes"
+  },
+  "theme": {
+    "primaryColor": "#3498db",
+    "secondaryColor": "#2c3e50",
+    "accentColor": "#667eea",
+    "backgroundColor": "#f8f9fa"
+  },
+  "features": {
+    "githubIntegration": true,
+    "githubUsername": "seu-username",
+    "darkMode": false,
+    "animations": true,
+    "analytics": {
+      "googleAnalytics": "",
+      "enabled": false
+    }
+  }
+}
