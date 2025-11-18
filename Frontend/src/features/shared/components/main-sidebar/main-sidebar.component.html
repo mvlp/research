@@ -1,0 +1,41 @@
+<p-panelMenu [model]="items" styleClass="w-full md:w-20rem">
+  <ng-template pTemplate="item" let-item>
+    <ng-container *ngIf="item.route; else urlRef">
+      <a routerLink="{{item.route}}" [pTooltip]="collapsed? item.label : ''" routerLinkActive="activated" class="expansible-item flex align-items-center cursor-pointer text-color">
+        <div class="content-wrapper">
+          <div class="icon-wrapper">
+            <i [class]="item.icon" style="color: white; font-size: 16px;"></i>
+          </div>
+          <span>
+            {{ item.label }}
+          </span>
+        </div>
+      </a>
+    </ng-container>
+    <ng-template #urlRef>
+      <a *ngIf="item.url; else noLink" [pTooltip]="collapsed? item.label : ''" routerLink="{{item.route}}" routerLinkActive="activated" class="expansible-item flex align-items-center cursor-pointer text-color">
+        <div class="content-wrapper">
+          <div class="icon-wrapper">
+            <i [class]="item.icon + ' '" style="color: white;"></i>
+          </div>
+          <span>
+            {{ item.label }}
+          </span>
+        </div>
+      </a>
+      <ng-template #noLink>
+        <span #mainMenu [pTooltip]="collapsed? item.label : ''"
+          class="{{item.expanded || checkActiveSegment(item.myRouterLink) ? 'activated' : '' }} expansible-item flex align-items-center cursor-pointer text-color ">
+          <div class="content-wrapper">
+            <div class="icon-wrapper">
+              <i [class]="item.icon + ' '" style="color: white; font-size: 16px"></i>
+            </div>
+            <span>
+              {{ item.label }}
+            </span>
+          </div>
+        </span>
+      </ng-template>
+    </ng-template>
+  </ng-template>
+</p-panelMenu>

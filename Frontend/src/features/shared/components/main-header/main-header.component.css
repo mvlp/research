@@ -1,0 +1,29 @@
+::ng-deep .header-options-menu-wrapper .p-button.p-button-secondary.p-button-text:hover {
+    color: #f97316 !important;
+    background-color: rgba(254, 215, 170, 0.03);
+}
+::ng-deep .header-options-menu-wrapper .p-button.p-button-secondary.p-button-text:active {
+    background-color: rgba(254, 215, 170, 0.15);
+}
+::ng-deep .header-user-avatar .p-avatar.p-avatar-circle {
+    border: 2px solid;
+    border-color: #d4d4d8;
+    transition: border-color 0.1s ease-in-out;
+}
+::ng-deep .header-user-avatar .p-avatar.p-avatar-circle:hover {
+    border: 2px solid;
+    border-color:#f97316;
+}
+
+.divider {
+    width: 2px;
+    height: 24px;
+    border-radius: 8px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 100px;
+}

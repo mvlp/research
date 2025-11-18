@@ -1,0 +1,27 @@
+<div *ngIf="severity === 'primary'" [class]="class + ' font-semibold'" style="background-color: #f9731625; color: #fb923c; width: fit-content; padding: 2px 6px; border-radius: 4px; font-size: 12px;" [ngStyle]="style">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+
+<div *ngIf="severity === 'success'" [class]="class + ' font-semibold'" style="background-color: #10b98125; color: #34d399; width: fit-content; padding: 2px 6px; border-radius: 4px; font-size: 12px;" [ngStyle]="style">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+
+<div *ngIf="severity === 'danger'" [class]="class + ' font-semibold'" style="background-color: #f43f5e25; color: #fb7185; width: fit-content; padding: 2px 6px; border-radius: 4px; font-size: 12px;" [ngStyle]="style">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+
+<div *ngIf="severity === 'warn'" [class]="class + ' font-semibold'" style="background-color: #f59e0b25; color: #fbbf24; width: fit-content; padding: 2px 6px; border-radius: 4px; font-size: 12px;" [ngStyle]="style">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+
+<div *ngIf="severity === 'info'" [class]="class + ' font-semibold'" style="background-color: #3b82f625; color: #60a5fa; width: fit-content; padding: 2px 6px; border-radius: 4px; font-size: 12px;" [ngStyle]="style">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+
+<div *ngIf="severity === 'help'" [class]="class + ' font-semibold'" style="background-color: #8b5cf625; color: #a78bfa; width: fit-content; padding: 2px 6px; border-radius: 4px; font-size: 12px;" [ngStyle]="style">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>

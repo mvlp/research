@@ -1,0 +1,9 @@
+/Backend/src/scripts/codigoR/*
+/Backend/src/scripts/codigoPython/assets/*
+/Backend/src/scripts/codigoPython/data/*
+/Backend/src/scripts/codigoPython/docs/*
+/Backend/src/scripts/data/*
+/Backend/src/scripts/assets/*
+/Backend/src/scripts/docs/*
+codigoR/
+**/__pycache__

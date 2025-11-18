@@ -1,0 +1,27 @@
+<p-toast key="main-toast" appendTo="body"/>
+<div style="background: linear-gradient(180deg, rgba(33,33,33,1) 0%, rgba(25,25,25,1) 100%);" class="layout-wrapper {{ collapsed? 'layout-wrapper-collapsed' : ''}}">
+
+  <aside class="border-right border-gray-700" style="background-color: #121212;">
+    <div class="brand expansible-item">
+      <div class="content-wrapper">
+        <div class="icon-wrapper">
+          <div class="flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+            <img (click)="toogleCollapse()" class="flex-shrink-0" src="../../../../assets/images/logos/logo-fabrica-criativa.png" alt="" style="width: 36px; object-fit: cover;">
+          </div>
+        </div>
+        <span class="font-semibold text-xl mt-2 text-orange-500">Fábrica Criativa</span>
+      </div>
+    </div>
+    <nav class="mt-5 nav-menu-items">
+      <app-main-sidebar [collapsed]="collapsed"></app-main-sidebar>
+    </nav>
+  </aside>
+  <header class="bg-gray-800">
+    <app-main-header></app-main-header>
+  </header>
+  <main class="p-3 overflow-x-hidden overflow-y-auto">
+    <div class="" style="width: 100%; height: 100%;">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
