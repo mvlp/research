@@ -1,6 +1,6 @@
-from Backend.src.Entities.Governanca_entity import Governanca_entity
-from Backend.src.infra.controller.BaseController import Base_controller
-from Backend.src.services.Governanca_service import Governanca_service
+from src.Entities.Governanca_entity import Governanca_entity
+from src.infra.controller.BaseController import Base_controller
+from src.services.Governanca_service import Governanca_service
 
 
 class Governanca_controller(Base_controller):

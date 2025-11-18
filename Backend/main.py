@@ -1,20 +1,21 @@
 from flask import Flask
 from sqlalchemy import text
-from Backend.src.infra.controller.Governanca_controller import Governanca_controller
-from Backend.src.infra.controller.Indice_controller import Indice_controller
-from Backend.src.infra.controller.Indice_grupo_controller import Indice_grupo_controller
-from Backend.src.infra.controller.Pergunta_controller import Pergunta_controller
-from Backend.src.infra.controller.Pergunta_indice_controller import Pergunta_indice_controller
 from src.infra.Database.extensions import db
-from src.infra.Database.Models.Governanca import Governanca
-from src.infra.Database.Models.Indice import Indice
-from src.infra.Database.Models.indice_grupo import Indice_grupo
-from src.infra.Database.Models.pergunta import Pergunta
-from src.infra.Database.Models.pergunta_indice import Pergunta_indice
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://guilhermedesouzafornaciari:Ga05112002@localhost:5432/research"
 db.init_app(app)
+with app.app_context():
+    from src.infra.controller.Governanca_controller import Governanca_controller
+    from src.infra.controller.Indice_controller import Indice_controller
+    from src.infra.controller.Indice_grupo_controller import Indice_grupo_controller
+    from src.infra.controller.Pergunta_controller import Pergunta_controller
+    from src.infra.controller.Pergunta_indice_controller import Pergunta_indice_controller
+    from src.infra.Database.Models.Governanca import Governanca
+    from src.infra.Database.Models.Indice import Indice
+    from src.infra.Database.Models.indice_grupo import Indice_grupo
+    from src.infra.Database.Models.pergunta import Pergunta
+    from src.infra.Database.Models.pergunta_indice import Pergunta_indice
 
 controllers = []
 controllers.append(Governanca_controller())
@@ -24,7 +25,7 @@ controllers.append(Pergunta_indice_controller())
 controllers.append(Pergunta_controller())
 
 for controller in controllers:
-    app.register_blueprint(controller.blueprint)
+    app.register_blueprint(controller.blueprint, url_prefix= "/" + controller.name)
 
 print(app.url_map)
 

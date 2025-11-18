@@ -3,11 +3,9 @@ from typing import Generic,Any
 
 from flask import Blueprint, jsonify, request
 
-from Backend.src.infra.Database.repositories.Base_repository import E, M
-from Backend.src.services.Base_service import Base_service
-from Backend.main import app
+from  src.infra.Database.repositories.Base_repository import E, M
+from  src.services.Base_service import Base_service
 class Base_controller(Generic[E]):
-    functions: dict[str,function]
     def __init__(self, service: Base_service, name: str) -> None:
         self.service = service
         self.name = name

@@ -1,5 +1,5 @@
-from Backend.src.Entities.pergunta_entity import Pergunta_entity
-from Backend.src.services.Base_service import Base_service
+from   src.Entities.Pergunta_entity import Pergunta_entity
+from  src.services.Base_service import Base_service
 
 
 class Pergunta_service(Base_service):

@@ -1,7 +1,7 @@
 from typing import Generic, Type
 
-from Backend.src.infra.Database.UnitOfWork import UnitOfWorkRepositories, DicionarioEntidadeRepository
-from Backend.src.infra.Database.repositories.Base_repository import E, M, BaseRepository
+from  src.infra.Database.UnitOfWork import UnitOfWorkRepositories, DicionarioEntidadeRepository
+from  src.infra.Database.repositories.Base_repository import E, M, BaseRepository
 
 
 class Base_service(Generic[E, M]):

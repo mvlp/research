@@ -1,19 +1,18 @@
-from sqlalchemy import select, delete, update
+from sqlalchemy import Engine, select, delete, update
 from sqlalchemy.orm import Session
 from typing import TypeVar, Generic, Type
 from src.infra.Database.Models.Base_model import Base_model
 from src.Entities.Base_entity import Base_entity
-from src.infra.Database.extensions import db
 E = TypeVar("E",bound=Base_entity) ## define uma entidade abstrata que será passado na inicialização da classe
 M = TypeVar("M",bound=Base_model) ## define um model abstrato que será passado na inicialização da classe
 
 ### A grande vantagem de termos essa camada separa é por que permite que todo a complexidade do banco de dados fique completamente
 ### isolada do restante da aplicação, portanto, nenhum problema que acontecer no app, será culpa do bd e vice versa
 class BaseRepository(Generic[E,M]):
-    def __init__(self, entity_class: Type[E], model_class: Type[M]):
+    def __init__(self, entity_class: Type[E], model_class: Type[M], engine:Engine):
         self.entity_class = entity_class
         self.model_class = model_class
-        self.sql_engine = db.engine ## Usa a váriavel global db
+        self.sql_engine = engine
 
     def create_one(self, entity: E)-> None:
         with Session(self.sql_engine) as session:

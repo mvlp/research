@@ -1,5 +1,5 @@
-from Backend.src.infra.controller.BaseController import Base_controller
-from Backend.src.services.Indice_service import Indice_service
+from  src.infra.controller.BaseController import Base_controller
+from  src.services.Indice_service import Indice_service
 
 
 class Indice_controller(Base_controller):

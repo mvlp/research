@@ -1,4 +1,4 @@
-from Backend.src.Entities.Base_entity import Base_entity
+from  src.Entities.Base_entity import Base_entity
 from src.infra.Database.extensions import db
 from  datetime import date
 

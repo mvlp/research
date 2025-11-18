@@ -1,5 +1,5 @@
-from Backend.src.Entities.pergunta_indice_entity import Pergunta_indice_entity
-from Backend.src.services.Base_service import Base_service
+from   src.Entities.Pergunta_indice_entity import Pergunta_indice_entity
+from  src.services.Base_service import Base_service
 
 
 class Pergunta_indice_service(Base_service):

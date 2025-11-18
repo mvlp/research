@@ -1,6 +1,6 @@
 
-from Backend.src.infra.controller.BaseController import Base_controller
-from Backend.src.services.Pergunta_indice_service import Pergunta_indice_service
+from  src.infra.controller.BaseController import Base_controller
+from  src.services.Pergunta_indice_service import Pergunta_indice_service
 
 
 class Pergunta_indice_controller(Base_controller):

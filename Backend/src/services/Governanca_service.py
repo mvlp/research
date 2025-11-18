@@ -1,5 +1,5 @@
-from Backend.src.Entities.Governanca_entity import Governanca_entity
-from Backend.src.services.Base_service import Base_service
+from  src.Entities.Governanca_entity import Governanca_entity
+from  src.services.Base_service import Base_service
 
 
 class Governanca_service(Base_service):
