@@ -4,6 +4,12 @@ class Indice(db.Model):
     __tablename__ = "Indice"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    id_grupo = db.Column(db.ForeignKey("Indice_grupo.id"))
-    grupo = db.relationship("Indice_grupo",back_populates="Indice")
+    data_ini = db.Column(db.Date, nullable=False)
+    data_fim = db.Column(db.Date, nullable=False)
 
+
+    perguntas_indice = db.relationship(
+        "Pergunta_indice",
+        back_populates="indice",
+        cascade="all, delete-orphan"
+    )

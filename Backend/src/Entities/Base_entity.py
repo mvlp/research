@@ -2,10 +2,17 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 class Base_entity:
-    id: int
+    id: int | None
+    def __init__(self, data: dict,):
+        self.id = None
+        for key, value in data.items():
+            setattr(self, key, value)
 
-    def __init__(self, model) -> None:
-        self = model
+    @abstractmethod
+    def to_model(self)-> Any:
+        pass
     
-    def to_model(self) -> Any:
-        return self
+    @classmethod
+    def from_model(cls, model): 
+        obj = cls(model)
+        return obj

@@ -15,8 +15,10 @@ class BaseRepository(Generic[E,M]):
         self.sql_engine = engine
 
     def create_one(self, entity: E)-> None:
+        model = entity.to_model()
         with Session(self.sql_engine) as session:
-            session.add(entity)
+            session.add(model)
+            session.commit()
 
     def get_one(self, id: int)-> E | None:
         with Session(self.sql_engine) as session:
@@ -24,13 +26,14 @@ class BaseRepository(Generic[E,M]):
             result = session.execute(pesquisa).scalar_one_or_none()
             if not result:
                 return None
-            entity = self.entity_class(result)
+            entity = self.entity_class.from_model(result)
             return entity
         
     def delete_one(self, id: int):
         with Session(self.sql_engine) as session:
             pesquisa = delete(self.model_class).where(self.model_class.id == id)
             result = session.execute(pesquisa)
+            session.commit()
             return None
 
     def update_one(self, entity: E) -> E | None:
@@ -45,7 +48,7 @@ class BaseRepository(Generic[E,M]):
 
             session.commit()
             session.refresh(obj)
-            entity = self.entity_class(obj)
+            entity = self.entity_class.from_model(obj)
             return entity
         
 
