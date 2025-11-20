@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Colors } from 'chart.js';
 import { ChartModule } from 'primeng/chart';
 
 

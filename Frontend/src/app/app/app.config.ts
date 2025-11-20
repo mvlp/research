@@ -4,6 +4,10 @@ import { provideRouter } from '@angular/router';
 import { routes } from '../app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { PRIME_NG_CONFIG, providePrimeNG } from 'primeng/config';
+import { MessageService } from 'primeng/api';
+import { provideHttpClient } from '@angular/common/http';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PerguntaService } from '../../features/governanca/services/PerguntaService';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +28,9 @@ export const appConfig: ApplicationConfig = {
         today: 'Hoje',
       }
     }),
-    provideRouter(routes), provideClientHydration(withEventReplay())
+    provideRouter(routes), provideClientHydration(withEventReplay()),
+    MessageService, provideHttpClient(), 
+    
+    DialogService,PerguntaService
   ]
 };

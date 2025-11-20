@@ -9,15 +9,13 @@ import { RestService } from "../interfaces/rest-service.interface";
 import { UserData } from "../Entities/user-data.type";
 import { PermissionKeys } from "../Entities/Permissions";
 import { PRIME_NG_CONFIG, PrimeNGConfigType } from "primeng/config";
-import AuthenticationService from "../../authentication/services/authentication.service";
 
 @Directive()
-export abstract class BaseListDirective<E extends { id: string }, P = any> implements OnInit {
+export abstract class BaseListDirective<E extends { id: number }, P = any> implements OnInit {
 
   protected formService: FormService = inject(FormService);
   protected modalService: ModalService = inject(ModalService);
   protected toastService: ToastService = inject(ToastService);
-  protected authenticationService: AuthenticationService = inject(AuthenticationService);
 
   abstract service: RestService<E, P>;
   abstract component: Type<any>;
@@ -35,7 +33,7 @@ export abstract class BaseListDirective<E extends { id: string }, P = any> imple
   filterSchema: FormSchema<P>;
   filter: FormGroup<{ [K in keyof P]: FormControl<P[K]> }>;
 
-  userData: UserData;
+  userData: UserData | any;
   modalData: any;
 
   // permissions
@@ -51,7 +49,7 @@ export abstract class BaseListDirective<E extends { id: string }, P = any> imple
 
   ngOnInit() {
 
-    this.userData = this.authenticationService.getUserData();
+    this.userData =  {}
 
     if(!this.permissionKey) {
       this.canCreate = true;
@@ -95,7 +93,7 @@ export abstract class BaseListDirective<E extends { id: string }, P = any> imple
     this.filter = this.formService.create(this.filterSchema);
   }
 
-  async onSelect(id: string) {
+  async onSelect(id: number) {
     if(!this.canUpdate) {
       this.toastService.add({ severity: "error", summary: "ERRO!", detail: "Você não possui permissão para executar esta ação!" });
       return;

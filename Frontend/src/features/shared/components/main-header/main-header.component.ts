@@ -10,7 +10,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
 import ModalService from '../../services/modal.service';
-import AuthenticationService from '../../../authentication/services/authentication.service';
 import { UserData } from '../../Entities/user-data.type';
 import { RouterLink } from '@angular/router';
 
@@ -24,13 +23,11 @@ import { RouterLink } from '@angular/router';
 })
 export class MainHeaderComponent implements OnInit {
 
-  userData: UserData;
-  authenticationService: AuthenticationService = inject(AuthenticationService);
+  userData: UserData | any;
 
   modalService: ModalService = inject(ModalService);
 
   ngOnInit(): void {
-    this.userData = this.authenticationService.getUserData();
 
     this.items = [
       { label: 'Configurações', icon: 'pi pi-cog', command: () => {
@@ -45,7 +42,6 @@ export class MainHeaderComponent implements OnInit {
   }
 
   logOut() {
-    this.authenticationService.signOut();
   }
 
   items: MenuItem[] = [];

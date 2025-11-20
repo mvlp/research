@@ -10,7 +10,6 @@ import { FormSchema } from "../interfaces/form-schema.interface";
 import { RestService } from "../interfaces/rest-service.interface";
 import { PermissionKeys } from "../Entities/Permissions";
 import { UserData } from "../Entities/user-data.type";
-import AuthenticationService from "../../authentication/services/authentication.service";
 
 export type Resolve = () => void;
 export type Reject = () => void;
@@ -23,7 +22,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
 
   protected formService: FormService = inject(FormService);
   protected toastService: ToastService = inject(ToastService);
-  protected authenticationService: AuthenticationService = inject(AuthenticationService);
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
 
   abstract builder: Builder<T, E>;
@@ -36,7 +34,7 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
   public formReady: boolean;
   public processing: boolean;
 
-  userData: UserData;
+  userData: UserData | any;
 
   // permissions
   canCreate: boolean = false;
@@ -55,7 +53,7 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
 
   async ngOnInit() {
 
-    this.userData = this.authenticationService.getUserData();
+    this.userData = {}
 
     if(!this.permissionKey) {
       this.canCreate = true;

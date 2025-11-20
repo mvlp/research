@@ -4,7 +4,6 @@ import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TooltipModule } from 'primeng/tooltip';
 import { Router, RouterLink } from '@angular/router';
-import AuthenticationService from '../../../authentication/services/authentication.service';
 import { UserData } from '../../Entities/user-data.type';
 
 @Component({
@@ -17,16 +16,15 @@ import { UserData } from '../../Entities/user-data.type';
 export class MainSidebarComponent implements OnInit {
 
   router = inject(Router);
-  authenticationService: AuthenticationService = inject(AuthenticationService);
   items: Array<MenuItem>;
 
-  userData: UserData;
+  userData: UserData | any;
 
   @Input() collapsed: Boolean = false;
 
   async ngOnInit() {
 
-    this.userData = this.authenticationService.getUserData();
+    this.userData = {}
 
     this.items = [
     ];
