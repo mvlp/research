@@ -13,6 +13,10 @@ class Base_controller(Generic[E]):
         self.entity_class = entity_class
         self.add_basic_routes_to_blueprint()
     def add_basic_routes_to_blueprint(self):
+        @self.blueprint.get("")
+        def get_all():
+            response = self.service.get_all()
+            return self._convert_to_json(response)
         @self.blueprint.get("<int:id>")
         def get_one(id: int):
             response = self.service.get_one(id)

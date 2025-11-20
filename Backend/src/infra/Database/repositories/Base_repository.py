@@ -14,6 +14,15 @@ class BaseRepository(Generic[E,M]):
         self.model_class = model_class
         self.sql_engine = engine
 
+    def get_all(self) -> list[E]:
+        with Session(self.sql_engine) as session:
+            query = select(self.model_class)
+            results = session.execute(query).scalars().all()
+            lista = []
+            for r in results:
+                lista.append(self.entity_class.from_model(r))
+            return lista
+
     def create_one(self, entity: E)-> None:
         model = entity.to_model()
         with Session(self.sql_engine) as session:

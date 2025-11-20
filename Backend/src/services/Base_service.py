@@ -11,6 +11,9 @@ class Base_service(Generic[E, M]):
         self.uw_repos = UnitOfWorkRepositories
         self.repo: BaseRepository[E, M] = UnitOfWorkRepositories[entity_cls]
 
+    def get_all(self) -> list[E]:
+        return self.repo.get_all()
+
     def get_one(self, id: int) -> E | None:
         return self.repo.get_one(id)
     def update_one(self, entity: E) -> E | None:
