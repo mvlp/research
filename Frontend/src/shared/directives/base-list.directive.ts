@@ -1,4 +1,4 @@
-import { Directive, inject, OnInit, Type } from "@angular/core";
+import { ChangeDetectorRef, Directive, inject, OnInit, Type } from "@angular/core";
 import FormService from "../services/form.service";
 import { FormControl, FormGroup } from "@angular/forms";
 import ModalService, { ModalWidth } from "../services/modal.service";
@@ -12,6 +12,7 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
 
   protected formService: FormService = inject(FormService);
   protected modalService: ModalService = inject(ModalService);
+  protected cdr = inject(ChangeDetectorRef)
 
   abstract service: RestService<E, P>;
   abstract component: Type<any>;
@@ -30,11 +31,6 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
 
   userData: UserData | any;
   modalData: any;
-
-  // permissions
-  canCreate: boolean = false;
-  canUpdate: boolean = false;
-  canDelete: boolean = false;
 
   async onNgOnInit() {}
   async onUpdateUI() {}
@@ -64,6 +60,7 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
       await this.filterFn();
       this.loading = false;
       await this.onUpdateUI();
+      this.cdr.detectChanges();
     }, async err => {
       console.log(err);
       this.loading = false;
@@ -77,10 +74,6 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
   }
 
   async onSelect(id: number) {
-    if(!this.canUpdate) {
-      return;
-    };
-
     await this.onPreviousSelect();
     this.modalService.open({
       data: { id, closeOnSave: this.closeOnSave, ...this.modalData },
@@ -92,9 +85,6 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
   }
 
   async add() {
-    if(!this.canCreate) {
-      return;
-    };
 
     await this.onPreviousAdd();
     this.modalService.open({
@@ -106,12 +96,8 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
     });
   }
 
-  async delete(event: any, id: string) {
+  async delete(event: any, id: number) {
     if(event) event.stopPropagation();
-
-    if(!this.canDelete) {
-      return;
-    };
 
     this.modalService.open({
       header: `Deseja excluir este item?`,

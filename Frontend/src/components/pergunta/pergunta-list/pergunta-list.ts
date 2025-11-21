@@ -7,10 +7,12 @@ import { ItemSelectorFieldComponent } from '../../../shared/components/item-sele
 import { TableHeaderComponent } from '../../../shared/components/table-header/table-header.component';
 import { PerguntaService } from '../../../services/PerguntaService';
 import { PerguntaEntity } from '../../../entities/Pergunta.entity';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-pergunta-list',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, CommonModule, TableModule, ButtonModule],
   templateUrl: './pergunta-list.html',
   styleUrl: './pergunta-list.css'
 })

@@ -1,10 +1,12 @@
 import { Validators } from "@angular/forms";
-import { PerguntaEntity, PerguntaModel } from "../../../features/governanca/entities/Pergunta.entity";
-import { Builder } from "../../../features/shared/interfaces/builder.interface";
-import { FormSchemaControl } from "../../../features/shared/interfaces/form-schema.interface";
+import { PerguntaModel, PerguntaEntity } from "../entities/Pergunta.entity";
+import { Builder } from "../shared/interfaces/builder.interface";
+import { FormSchemaControl } from "../shared/interfaces/form-schema.interface";
 
 export class PerguntaBuilder implements Builder<PerguntaModel, PerguntaEntity> {
   id: number;
+  identificador: string
+  texto: string
 
   assign(props: PerguntaModel) {
     Object.assign(this, props)
@@ -21,6 +23,8 @@ export class PerguntaBuilder implements Builder<PerguntaModel, PerguntaEntity> {
   getFormSchema() {
     return new FormSchemaControl<PerguntaModel>({
       id: { defaultValue: 0 },
+      identificador: { defaultValue: "" },
+      texto: { defaultValue: "" },
     }).build();
   };
 

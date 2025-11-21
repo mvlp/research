@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ButtonSeverity } from '../../services/toast.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -14,7 +13,6 @@ import { ButtonSeverity } from '../../services/toast.service';
 export class ConfirmationComponent {
 
   @Input() message: string;
-  @Input() severity: ButtonSeverity = "primary";
 
   dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
 

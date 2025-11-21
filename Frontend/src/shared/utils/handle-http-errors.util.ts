@@ -2,6 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { throwError } from "rxjs";
 
 export function handleHttpError(err: HttpErrorResponse) {
+  console.log(err)
   let message = err?.error?.message || "";
   if(message === "Internal server error") message = "Ocorreu um erro inesperado!";
   if(Array.isArray(err.error.message)) {

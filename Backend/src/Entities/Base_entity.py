@@ -11,8 +11,14 @@ class Base_entity:
     @abstractmethod
     def to_model(self)-> Any:
         pass
+
+    @abstractmethod
+    def to_dict(self)-> Any:
+        pass
     
     @classmethod
     def from_model(cls, model): 
-        obj = cls(model)
+        model_dict: dict = model.__dict__
+        model_dict.pop("_sa_instance_state")
+        obj = cls(model_dict)
         return obj

@@ -2,31 +2,27 @@ import { Directive, inject, Input, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import FormService from "../services/form.service";
 import { DynamicDialogRef } from "primeng/dynamicdialog";
-import ToastService from "../services/toast.service";
 import { Message } from "primeng/message";
 import { Toast } from "primeng/toast";
 import { Builder } from "../interfaces/builder.interface";
 import { FormSchema } from "../interfaces/form-schema.interface";
 import { RestService } from "../interfaces/rest-service.interface";
-import { PermissionKeys } from "../Entities/Permissions";
 import { UserData } from "../Entities/user-data.type";
 
 export type Resolve = () => void;
 export type Reject = () => void;
 @Directive()
-export abstract class BaseFormDirective<T extends { id: string } = any, E extends { id: string } = any> implements OnInit {
+export abstract class BaseFormDirective<T extends { id: number } = any, E extends { id: number } = any> implements OnInit {
 
-  @Input() id: string;
+  @Input() id: number;
   @Input() closeOnSave: boolean;
   @Input() showMessages: boolean = true;
 
   protected formService: FormService = inject(FormService);
-  protected toastService: ToastService = inject(ToastService);
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
 
   abstract builder: Builder<T, E>;
   abstract service: RestService<E>;
-  permissionKey: PermissionKeys;
 
   public schema: FormSchema<T>;
   public form: FormGroup<{ [K in keyof T]: FormControl<T[K]> }>;
@@ -35,10 +31,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
   public processing: boolean;
 
   userData: UserData | any;
-
-  // permissions
-  canCreate: boolean = false;
-  canUpdate: boolean = false;
 
   async onNgOnInit() {}
   async onUpdateUI() {}
@@ -54,17 +46,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
   async ngOnInit() {
 
     this.userData = {}
-
-    if(!this.permissionKey) {
-      this.canCreate = true;
-      this.canUpdate = true;
-    };
-
-    if(this.permissionKey) {
-      this.canCreate = this.userData?.permissions[this.permissionKey]?.create || false;
-      this.canUpdate = this.userData?.permissions[this.permissionKey]?.update || false;
-    };
-
     this.configureForm();
     await this.onNgOnInit();
     this.updateUI();
@@ -91,7 +72,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
       console.log(err);
       this.configureForm();
       this.setDefaultData();
-      this.toastService.add({ severity: "error", summary: "ERRO!", detail: err.message || "Erro ao inserir registro!" });
       this.formReady = true;
       await this.onUpdateUI();
     });
@@ -121,12 +101,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
 
   async onSubmit() {
     await this.onPreviousOnSubmit();
-
-    if(!this.id && !this.canCreate || this.id && !this.canUpdate) {
-      this.toastService.add({ severity: "error", summary: "ERRO!", detail: "Você não possui permissão para executar esta ação!" });
-      return;
-    };
-
     console.log(`SUBMIT-FORM-VALUE - ${this.form.invalid? "INVALID" : "VALID"}`, this.form.value);
     if(this.form.invalid) return;
 
@@ -153,7 +127,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
     await this.onPreviousInsertRegistry();
     console.log("INSERT-REGISTRY-DATA", this.registry);
     await this.service.create(this.registry).subscribe(async res => {
-      if(this.showMessages) this.toastService.add({ severity: "success", summary: "SUCESSO!", detail: "Registro inserido com sucesso!" });
       this.id = res.id;
       await this.onInsertRegistry();
       if(this.closeOnSave) this.dialogRef.close({ status: "OK", data: res });
@@ -161,7 +134,6 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
       this.processing = false;
     }, (err:any) => {
       console.log(err);
-      this.toastService.add({ severity: "error", summary: "ERRO!", detail: err.message || "Erro ao inserir registro!" });
       this.processing = false;
     });
   };
@@ -171,14 +143,12 @@ export abstract class BaseFormDirective<T extends { id: string } = any, E extend
     await this.onPreviousUpdateRegistry();
     console.log("UPDATE-REGISTRY-DATA", this.registry);
     await this.service.update(this.registry).subscribe(async res => {
-      if(this.showMessages) this.toastService.add({ severity: "success", summary: "SUCESSO!", detail: "Registro atualizado com sucesso!" });
       await this.onUpdateRegistry();
       if(this.closeOnSave) this.dialogRef.close({ status: "OK", data: res });
       if(!this.closeOnSave) this.updateUI();
       this.processing = false;
     }, (err:any) => {
       console.log(err);
-      this.toastService.add({ severity: "error", summary: "ERRO!", detail: err.message || "Erro ao atualizar registro!" });
       this.processing = false;
     });
   };

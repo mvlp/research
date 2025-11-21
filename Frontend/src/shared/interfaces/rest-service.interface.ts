@@ -1,16 +1,16 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { catchError, Observable, ObservableInput, throwError } from "rxjs";
-import environment from "../../../../environment.dev";
 import { formatHttpParams } from "../utils/format-http-params.util";
 import { handleHttpError } from "../utils/handle-http-errors.util";
 export interface RestService<E = any, P = any> {
-  get: (id: string) => Observable<E>,
+  get: (id: number) => Observable<E>,
   getByFilters: (params: P) => Observable<E[]>,
-  create: (data: E & { id: string }) => Observable<{ id: string }>,
-  update: (data: E & { id: string }) => Observable<{ id: string }>,
-  delete: (id: string) => Observable<void>,
+  create: (data: E & { id: number }) => Observable<{ id: number }>,
+  update: (data: E & { id: number }) => Observable<{ id: number }>,
+  delete: (id: number) => Observable<void>,
 }
+const environment = { base_url : "http://127.0.0.1:5000/"}
 
 export abstract class BaseRestService<E, P = any> implements RestService<E, P> {
 
@@ -18,7 +18,7 @@ export abstract class BaseRestService<E, P = any> implements RestService<E, P> {
 
   abstract route: string;
 
-  get(id: string): Observable<E> {
+  get(id: number): Observable<E> {
     return this.http.get<E>(`${environment.base_url}${this.route}/${id}`).pipe(catchError(handleHttpError)) as Observable<E>;
   };
 
@@ -27,17 +27,18 @@ export abstract class BaseRestService<E, P = any> implements RestService<E, P> {
     return this.http.get<E[]>(`${environment.base_url}${this.route}`, { params: params as any }).pipe(catchError(handleHttpError)) as Observable<E[]>;
   };
 
-  create(data: E): Observable<{ id: string }> {
+  create(data: E): Observable<{ id: number }> {
     const dataWithoutId = data as any;
     if(dataWithoutId?.id) delete dataWithoutId.id;
-    return this.http.post<{ id: string }>(`${environment.base_url}${this.route}`, dataWithoutId).pipe(catchError(handleHttpError)) as Observable<{ id: string }>;
+    return this.http.post<{ id: number }>(`${environment.base_url}${this.route}`, dataWithoutId).pipe(catchError(handleHttpError)) as Observable<{ id: number }>;
   };
 
-  update(data: Partial<E> & { id: string }): Observable<{ id: string }> {
-    return this.http.put<{ id: string }>(`${environment.base_url}${this.route}/${data.id}`, data).pipe(catchError(handleHttpError)) as Observable<{ id: string }>;
+  update(data: Partial<E> & { id: number }): Observable<{ id: number }> {
+    console.log("SISMMMSDMADAMSMDMADMASDMASDMA",data)
+    return this.http.put<{ id: number }>(`${environment.base_url}${this.route}`, data).pipe(catchError(handleHttpError)) as Observable<{ id: number }>;
   };
 
-  delete(id: string): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${environment.base_url}${this.route}/${id}`).pipe(catchError(handleHttpError)) as Observable<any>;
   };
 

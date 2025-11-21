@@ -2,6 +2,7 @@ import json
 from typing import Generic,Any, Type
 
 from flask import Blueprint, jsonify, request
+from sqlalchemy import inspect
 
 from  src.infra.Database.repositories.Base_repository import E, M
 from  src.services.Base_service import Base_service
@@ -23,13 +24,13 @@ class Base_controller(Generic[E]):
             return self._convert_to_json(response)
         @self.blueprint.put("")
         def update_one():
-            data = request.form.to_dict()
+            data = request.get_json()
             entity = self.entity_class(data)
             response = self.service.update_one(entity)
             return self._convert_to_json(response)
         @self.blueprint.post("")
         def create_one():
-            data = request.form.to_dict()
+            data = request.get_json()
             entity = self.entity_class(data)
             response = self.service.create_one(entity)
             return self._convert_to_json(response)
@@ -38,6 +39,11 @@ class Base_controller(Generic[E]):
             response = self.service.delete_one(id)
             return self._convert_to_json(response)
 
-    def _convert_to_json(self,variable:Any):
-        return jsonify(variable)
-    
+    def _convert_to_json(self,obj:Any):
+        if obj == None: return jsonify(obj)
+        elif isinstance(obj,list):
+            lista = []
+            for item in obj: 
+                lista.append(item.to_dict())
+            return jsonify(lista)
+        else: return jsonify(obj.to_dict())

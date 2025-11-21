@@ -1,6 +1,7 @@
 from flask import Flask
 from sqlalchemy import text
 from src.infra.Database.extensions import db
+from flask_cors import CORS
 from src.infra.Database.Models.Governanca import Governanca
 from src.infra.Database.Models.Indice import Indice
 from src.infra.Database.Models.pergunta import Pergunta
@@ -9,6 +10,7 @@ from src.infra.Database.Models.pergunta_indice import Pergunta_indice
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://guilhermedesouzafornaciari:Ga05112002@localhost:5432/research"
 db.init_app(app)
+CORS(app)
 with app.app_context():
     from src.infra.controller.Governanca_controller import Governanca_controller
     from src.infra.controller.Indice_controller import Indice_controller

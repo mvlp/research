@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from '../header-component/header-component';
-import { RouterOutlet } from "../../../../node_modules/@angular/router/types/_router_module-chunk";
+import { RouterOutlet } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-main-layout-component',

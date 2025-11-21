@@ -1,12 +1,39 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from "primeng/config"
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { DialogService } from 'primeng/dynamicdialog';
+import { PerguntaService } from '../services/PerguntaService';
+import lara from '@primeuix/themes/lara'
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), provideClientHydration(withEventReplay())
-  ]
+    provideZonelessChangeDetection(),
+    provideRouter(routes), provideClientHydration(withEventReplay()),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      translation: {
+        apply: 'Aplicar',
+        clear: 'Limpar',
+        accept: 'Sim',
+        reject: 'Não',
+        firstDayOfWeek: 0,
+        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+        dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        today: 'Hoje',
+      },
+      theme: {
+        preset: lara
+      }
+    }),
+    provideHttpClient(withFetch()),
+    DialogService, PerguntaService
+  ],
 };
