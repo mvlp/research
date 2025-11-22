@@ -1,4 +1,4 @@
-import { Directive, inject, Input, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Directive, inject, Input, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import FormService from "../services/form.service";
 import { DynamicDialogRef } from "primeng/dynamicdialog";
@@ -20,6 +20,7 @@ export abstract class BaseFormDirective<T extends { id: number } = any, E extend
 
   protected formService: FormService = inject(FormService);
   protected dialogRef: DynamicDialogRef = inject(DynamicDialogRef);
+  protected cdr = inject(ChangeDetectorRef)
 
   abstract builder: Builder<T, E>;
   abstract service: RestService<E>;
@@ -48,7 +49,7 @@ export abstract class BaseFormDirective<T extends { id: number } = any, E extend
     this.userData = {}
     this.configureForm();
     await this.onNgOnInit();
-    this.updateUI();
+    await this.updateUI();
 
   }
 
@@ -68,12 +69,15 @@ export abstract class BaseFormDirective<T extends { id: number } = any, E extend
       await this.onPopulateForm();
       this.formReady = true;
       await this.onUpdateUI();
+      this.cdr.markForCheck()
     }, async err => {
       console.log(err);
       this.configureForm();
       this.setDefaultData();
       this.formReady = true;
       await this.onUpdateUI();
+      this.cdr.markForCheck()
+
     });
 
   };
@@ -127,14 +131,19 @@ export abstract class BaseFormDirective<T extends { id: number } = any, E extend
     await this.onPreviousInsertRegistry();
     console.log("INSERT-REGISTRY-DATA", this.registry);
     await this.service.create(this.registry).subscribe(async res => {
+      console.log(res)
       this.id = res.id;
       await this.onInsertRegistry();
       if(this.closeOnSave) this.dialogRef.close({ status: "OK", data: res });
       if(!this.closeOnSave) this.updateUI();
       this.processing = false;
+      this.cdr.markForCheck()
+
     }, (err:any) => {
       console.log(err);
       this.processing = false;
+      this.cdr.markForCheck()
+
     });
   };
 
@@ -147,14 +156,19 @@ export abstract class BaseFormDirective<T extends { id: number } = any, E extend
       if(this.closeOnSave) this.dialogRef.close({ status: "OK", data: res });
       if(!this.closeOnSave) this.updateUI();
       this.processing = false;
+      this.cdr.markForCheck()
     }, (err:any) => {
       console.log(err);
       this.processing = false;
+      this.cdr.markForCheck()
+
     });
   };
 
   back() {
     this.dialogRef.close();
+    this.cdr.markForCheck()
+
   }
 
 }

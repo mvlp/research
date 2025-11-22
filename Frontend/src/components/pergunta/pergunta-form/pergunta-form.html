@@ -1,4 +1,4 @@
-<form class="m-grid p-fluid" style="gap: 14px 8px;" *ngIf="formReady" [formGroup]="form" (submit)="onSubmit()">
+<form class="m-grid p-fluid" style="gap: 14px 8px;" *ngIf="formReady" [formGroup]="form" (submit)="onSubmit()" >
     <p-floatlabel>
         <input pInputText id="over_label" formControlName="texto" autocomplete="off" />
         <label for="over_label">Texto</label>

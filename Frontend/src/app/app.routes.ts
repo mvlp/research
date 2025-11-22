@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from '../shared/components/main-layout-component/main-layout-component';
 import { PerguntaList } from '../components/pergunta/pergunta-list/pergunta-list';
+import { IndiceListComponent } from '../components/indice/indice-list-component/indice-list-component';
 
 export const routes: Routes = [
     {
@@ -10,6 +11,10 @@ export const routes: Routes = [
             {
                 path: "perguntas",
                 component: PerguntaList
+            },
+            {
+                path: "indices",
+                component: IndiceListComponent
             }
         ]
     }

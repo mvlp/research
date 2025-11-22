@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PerguntaForm } from './pergunta-form';
+import { IndiceGrupoListComponent } from './indice-grupo-list-component';
 
-describe('PerguntaForm', () => {
-  let component: PerguntaForm;
-  let fixture: ComponentFixture<PerguntaForm>;
+describe('IndiceGrupoListComponent', () => {
+  let component: IndiceGrupoListComponent;
+  let fixture: ComponentFixture<IndiceGrupoListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PerguntaForm]
+      imports: [IndiceGrupoListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PerguntaForm);
+    fixture = TestBed.createComponent(IndiceGrupoListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

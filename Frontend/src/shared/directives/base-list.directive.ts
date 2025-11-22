@@ -38,14 +38,12 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
   async onPreviousSelect() {}
   async filterFn() {}
 
-  ngOnInit() {
+  async ngOnInit() {
 
     this.userData =  {}
-
-
-    this.configureFilter();
-    this.onNgOnInit();
-    this.updateUI();
+    await this.configureFilter();
+    await this.onNgOnInit();
+    await this.updateUI();
 
 
   }
@@ -59,12 +57,15 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
       this.filteredValues = res;
       await this.filterFn();
       this.loading = false;
+      this.cdr.markForCheck();
+
       await this.onUpdateUI();
-      this.cdr.detectChanges();
     }, async err => {
       console.log(err);
       this.loading = false;
       await this.onUpdateUI();
+      this.cdr.reattach();
+
     });
   }
 
@@ -80,7 +81,10 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
       header: this.header,
       width: this.modalWidth,
       component: this.component,
-      onClose: () => this.updateUI(),
+      onClose: () => {
+        this.cdr.markForCheck()
+        this.updateUI()
+      },
     })
   }
 
@@ -92,11 +96,14 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
       header: this.header,
       width: this.modalWidth,
       component: this.component,
-      onClose: () => this.updateUI(),
+      onClose: () => {
+        this.cdr.markForCheck()
+        this.updateUI()
+      },
     });
   }
 
-  async delete(event: any, id: number) {
+  async deleteRegistry(event: any, id: number) {
     if(event) event.stopPropagation();
 
     this.modalService.open({

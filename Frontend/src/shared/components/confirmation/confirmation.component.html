@@ -1,0 +1,13 @@
+<div class="m-grid p-fluid" style="gap: 14px 8px;">
+
+  <div class="m-col-12 md-m-col-12 sm-m-col-12 -mt-2" *ngIf="message">
+    {{ message }}
+  </div>
+
+  <div class="m-col-6 md-m-col-6 sm-m-col-12">
+    <p-button label="Cancelar" severity="secondary" (click)="cancel()" iconPos="right"></p-button>
+  </div>
+  <div class="m-col-6 md-m-col-6 sm-m-col-12">
+    <p-button label="Confirmar" iconPos="right" (click)="confirm()" [severity]=""></p-button>
+  </div>
+</div>

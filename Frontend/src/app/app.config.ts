@@ -6,8 +6,9 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
-import { PerguntaService } from '../services/PerguntaService';
+import { PerguntaService } from '../services/Pergunta.service';
 import lara from '@primeuix/themes/lara'
+import { IndiceService } from '../services/Indice.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,12 +29,14 @@ export const appConfig: ApplicationConfig = {
         monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
         monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
         today: 'Hoje',
+        dateFormat: "dd/mm/yy"
       },
       theme: {
         preset: lara
       }
     }),
     provideHttpClient(withFetch()),
-    DialogService, PerguntaService
+    DialogService, 
+    PerguntaService, IndiceService
   ],
 };

@@ -23,11 +23,14 @@ class BaseRepository(Generic[E,M]):
                 lista.append(self.entity_class.from_model(r))
             return lista
 
-    def create_one(self, entity: E)-> None:
+    def create_one(self, entity: E)-> E:
+        entity.id = None
         model = entity.to_model()
         with Session(self.sql_engine) as session:
             session.add(model)
             session.commit()
+            session.refresh(model)
+            return self.entity_class.from_model(model)
 
     def get_one(self, id: int)-> E | None:
         with Session(self.sql_engine) as session:

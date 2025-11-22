@@ -18,7 +18,7 @@ class Base_service(Generic[E, M]):
         return self.repo.get_one(id)
     def update_one(self, entity: E) -> E | None:
         return self.repo.update_one(entity)
-    def create_one(self,entity: E) -> None:
+    def create_one(self,entity: E) -> E:
         return self.repo.create_one(entity)
     def delete_one(self, id: int) -> None:
         return self.repo.delete_one(id)

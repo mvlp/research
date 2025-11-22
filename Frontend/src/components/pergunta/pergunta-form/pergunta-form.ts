@@ -4,7 +4,7 @@ import { BaseFormDirective } from '../../../shared/directives/base-form.directiv
 import { Builder } from '../../../shared/interfaces/builder.interface';
 import { RestService } from '../../../shared/interfaces/rest-service.interface';
 import { PerguntaBuilder } from '../../../builders/Pergunta.builder';
-import { PerguntaService } from '../../../services/PerguntaService';
+import { PerguntaService } from '../../../services/Pergunta.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -19,5 +19,6 @@ import { CommonModule } from '@angular/common';
 export class PerguntaForm extends BaseFormDirective<PerguntaEntity>{
   override builder = new PerguntaBuilder()
   override service = inject(PerguntaService)
+  
 
 }
