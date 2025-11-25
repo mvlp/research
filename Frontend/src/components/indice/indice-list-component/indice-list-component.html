@@ -7,16 +7,12 @@
 <p-table [value]="values" #table >
     <ng-template #header>
         <tr>
-            <th>Nome</th>
-            <th>Data inicio</th>
-            <th>Data fim</th>
+            <th>Perguntas</th>
         </tr>
     </ng-template>
     <ng-template #body let-product > 
         <tr class="cursor-pointer" (click)="onSelect(product.id)">
-            <td>{{ product.nome }}</td>
-            <td>{{ product.data_ini }}</td>
-            <td>{{ product.data_fim }}</td>
+            <td>{{ product.perguntas }}</td>
             <td><p-button [rounded]="true" icon="pi pi-trash" text="true" (click)="deleteRegistry($event,product.id)" [disabled]="loading"/></td>
         </tr>
     </ng-template>

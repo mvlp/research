@@ -1,5 +1,5 @@
 <form class="m-grid p-fluid" style="gap: 14px 8px;" *ngIf="formReady" [formGroup]="form" (submit)="onSubmit()" >
-    <p-multiselect [options]="perguntaOptions" formControlName="identificador"  optionLabel="identificador" placeholder="Selecione as perguntas" appendTo="body" class="w-full md:w-80" />
+    <p-multiselect [options]="perguntaOptions" formControlName="perguntas"  optionLabel="id" optionValue="id" placeholder="Selecione as perguntas" appendTo="body" class="w-full md:w-80" />
 
     <p-button severity="danger" (onClick)="back()">Cancelar</p-button>
     <p-button severity="success" type="submit">Enviar</p-button>

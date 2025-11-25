@@ -8,7 +8,7 @@ import { RestService } from "../interfaces/rest-service.interface";
 import { UserData } from "../Entities/user-data.type";
 
 @Directive()
-export abstract class BaseListDirective<E extends { id: number }, P = any> implements OnInit {
+export abstract class BaseListDirective<E extends { id: any }, P = any> implements OnInit {
 
   protected formService: FormService = inject(FormService);
   protected modalService: ModalService = inject(ModalService);
@@ -74,7 +74,7 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
     this.filter = this.formService.create(this.filterSchema);
   }
 
-  async onSelect(id: number) {
+  async onSelect(id: any) {
     await this.onPreviousSelect();
     this.modalService.open({
       data: { id, closeOnSave: this.closeOnSave, ...this.modalData },
@@ -103,7 +103,7 @@ export abstract class BaseListDirective<E extends { id: number }, P = any> imple
     });
   }
 
-  async deleteRegistry(event: any, id: number) {
+  async deleteRegistry(event: any, id: any) {
     if(event) event.stopPropagation();
 
     this.modalService.open({

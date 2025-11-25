@@ -4,8 +4,7 @@ import { Builder } from "../shared/interfaces/builder.interface";
 import { FormSchemaControl } from "../shared/interfaces/form-schema.interface";
 
 export class PerguntaBuilder implements Builder<PerguntaModel, PerguntaEntity> {
-  id: number;
-  identificador: string
+  id: string;
   texto: string
 
   assign(props: PerguntaModel) {
@@ -22,8 +21,7 @@ export class PerguntaBuilder implements Builder<PerguntaModel, PerguntaEntity> {
 
   getFormSchema() {
     return new FormSchemaControl<PerguntaModel>({
-      id: { defaultValue: 0 },
-      identificador: { defaultValue: "" },
+      id: { defaultValue: "" },
       texto: { defaultValue: "" },
     }).build();
   };

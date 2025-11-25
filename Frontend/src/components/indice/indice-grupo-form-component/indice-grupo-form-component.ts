@@ -12,10 +12,12 @@ import { RestService } from '../../../shared/interfaces/rest-service.interface';
 import { Builder } from '../../../shared/interfaces/builder.interface';
 import { IndiceGrupoBuilder } from '../../../builders/IndiceGrupo.builder';
 import { IndiceGrupoService } from '../../../services/IndiceGrupo.service';
+import { IndiceGrupoListComponent } from "../indice-grupo-list-component/indice-grupo-list-component";
+import { IndiceListComponent } from "../indice-list-component/indice-list-component";
 
 @Component({
   selector: 'app-indice-grupo-form-component',
-  imports: [DatePickerModule,FormsModule,CommonModule,InputTextModule,FloatLabel, ButtonModule, ReactiveFormsModule, MultiSelectModule],
+  imports: [DatePickerModule, FormsModule, CommonModule, InputTextModule, FloatLabel, ButtonModule, ReactiveFormsModule, MultiSelectModule, IndiceListComponent, IndiceListComponent],
   templateUrl: './indice-grupo-form-component.html',
   styleUrl: './indice-grupo-form-component.css',
 })

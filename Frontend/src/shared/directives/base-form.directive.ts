@@ -12,9 +12,9 @@ import { UserData } from "../Entities/user-data.type";
 export type Resolve = () => void;
 export type Reject = () => void;
 @Directive()
-export abstract class BaseFormDirective<T extends { id: number } = any, E extends { id: number } = any> implements OnInit {
+export abstract class BaseFormDirective<T extends { id: any } = any, E extends { id: any } = any> implements OnInit {
 
-  @Input() id: number;
+  @Input() id: any;
   @Input() closeOnSave: boolean;
   @Input() showMessages: boolean = true;
 

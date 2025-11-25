@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { BaseFormDirective } from '../../../shared/directives/base-form.directive';
 import { IndiceEntity } from '../../../entities/Indice.entity';
 import { Builder } from '../../../shared/interfaces/builder.interface';
@@ -17,7 +17,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-indice-form-component',
-  imports: [DatePickerModule,FormsModule,CommonModule,InputTextModule,FloatLabel, ButtonModule, ReactiveFormsModule, MultiSelectModule],
+  imports: [DatePickerModule,FormsModule,CommonModule,InputTextModule, ButtonModule, ReactiveFormsModule, MultiSelectModule],
   templateUrl: './indice-form-component.html',
   styleUrl: './indice-form-component.css',
 })
@@ -25,10 +25,12 @@ export class IndiceFormComponent extends BaseFormDirective<IndiceEntity> {
   override builder = new IndiceBuilder( )
   override service = inject(IndiceService)
 
+  @Input("idGrupo") idGrupo
   perguntaService = inject(PerguntaService)
   perguntaOptions: PerguntaEntity[]
 
   override async onNgOnInit(): Promise<void> {
+    this.form.controls.idGrupo.setValue(this.idGrupo)
     await this.perguntaService.getByFilters({}).subscribe(res =>{
       this.perguntaOptions = res
       console.log("OPIÇÔES" ,this.perguntaOptions)

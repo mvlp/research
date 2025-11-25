@@ -14,7 +14,7 @@
     </ng-template>
     <ng-template #body let-product > 
         <tr class="cursor-pointer" (click)="onSelect(product.id)">
-            <td>{{ product.identificador }}</td>
+            <td>{{ product.id }}</td>
             <td>{{ product.texto }}</td>
             <td><p-button [rounded]="true" icon="pi pi-trash" text="true" (click)="deleteRegistry($event,product.id)" [disabled]="loading"/></td>
         </tr>

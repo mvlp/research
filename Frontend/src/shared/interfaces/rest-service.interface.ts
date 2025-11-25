@@ -28,13 +28,14 @@ export abstract class BaseRestService<E, P = any> implements RestService<E, P> {
   };
 
   create(data: E): Observable<{ id: number }> {
-    const dataWithoutId = data as any;
-    if(dataWithoutId?.id) delete dataWithoutId.id;
+    let dataWithoutId = data as any;
+    if ((typeof (data as any).id) !== "string" ){
+      if(dataWithoutId?.id) delete dataWithoutId.id;
+    }
     return this.http.post<{ id: number }>(`${environment.base_url}${this.route}`, dataWithoutId).pipe(catchError(handleHttpError)) as Observable<{ id: number }>;
   };
 
   update(data: Partial<E> & { id: number }): Observable<{ id: number }> {
-    console.log("SISMMMSDMADAMSMDMADMASDMASDMA",data)
     return this.http.put<{ id: number }>(`${environment.base_url}${this.route}`, data).pipe(catchError(handleHttpError)) as Observable<{ id: number }>;
   };
 

@@ -1,17 +1,15 @@
 export class PerguntaModel {
-  id: number;
-  identificador: string
+  id: string;
   texto: string
 }
 
 export class PerguntaEntity implements PerguntaModel {
-  id: number;
-  identificador: string
+  id: string;
   texto: string
 
-  constructor (props: Omit<PerguntaModel, "id">, id?: number) {
+  constructor (props: Omit<PerguntaModel, "id">, id?: string) {
     Object.assign(this, props);
-    this.id = id || 0;
+    this.id = id || "";
   }
 
 }

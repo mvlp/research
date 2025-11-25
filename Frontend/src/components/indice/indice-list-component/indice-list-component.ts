@@ -5,7 +5,7 @@ import { RestService } from '../../../shared/interfaces/rest-service.interface';
 import { IndiceService } from '../../../services/Indice.service';
 import { IndiceFormComponent } from '../indice-form-component/indice-form-component';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TableHeaderComponent } from '../../../shared/components/table-header/table-header.component';
@@ -20,9 +20,19 @@ import { MultiSelectModule } from 'primeng/multiselect';
   styleUrl: './indice-list-component.css',
 })
 export class IndiceListComponent extends BaseListDirective<IndiceEntity>{
-  @Input("idGrupo") idGrupo: number
+  @Input("idGrupo") idGrupo: number = 0;
+  override filter = new FormRecord<FormControl<any>>({});
   override service = inject(IndiceService)
   override component = IndiceFormComponent
   override header = "Indice"
 
+  override async onNgOnInit(): Promise<void> {
+    this.filter.addControl('idGrupo', new FormControl(this.idGrupo))
+  }
+
+  override async onPreviousAdd(): Promise<void> {
+    this.modalData = {
+      idGrupo: this.idGrupo
+    }
+  }
 }
