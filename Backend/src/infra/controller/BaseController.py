@@ -16,7 +16,8 @@ class Base_controller(Generic[E]):
     def add_basic_routes_to_blueprint(self):
         @self.blueprint.get("")
         def get_all():
-            response = self.service.get_all()
+            params = request.args
+            response = self.service.get_all(params)
             return self._convert_to_json(response)
         @self.blueprint.get("<int:id>")
         def get_one(id: int):

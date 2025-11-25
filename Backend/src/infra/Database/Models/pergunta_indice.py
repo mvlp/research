@@ -7,6 +7,6 @@ class Pergunta_indice(db.Model):
     id_indice = db.Column(db.Integer, db.ForeignKey("Indice.id"))
     indice = db.relationship("Indice", back_populates="perguntas_indice")
 
-    id_pergunta = db.Column(db.Integer, db.ForeignKey("Pergunta.id"))
+    id_pergunta = db.Column(db.String(10), db.ForeignKey("Pergunta.id"))
     pergunta = db.relationship("Pergunta", back_populates="indices_pergunta")
 

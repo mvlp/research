@@ -1,6 +1,6 @@
 from sqlalchemy import Engine, select, delete, update
 from sqlalchemy.orm import Session
-from typing import TypeVar, Generic, Type
+from typing import Any, TypeVar, Generic, Type
 from src.infra.Database.Models.Base_model import Base_model
 from src.Entities.Base_entity import Base_entity
 E = TypeVar("E",bound=Base_entity) ## define uma entidade abstrata que será passado na inicialização da classe
@@ -14,9 +14,11 @@ class BaseRepository(Generic[E,M]):
         self.model_class = model_class
         self.sql_engine = engine
 
-    def get_all(self) -> list[E]:
+    def get_all(self, filters: dict[str,Any] = {}) -> list[E]:
         with Session(self.sql_engine) as session:
             query = select(self.model_class)
+            for key, value in filters.items():
+                query = query.where(getattr(self.model_class, key) == value)
             results = session.execute(query).scalars().all()
             lista = []
             for r in results:
@@ -24,8 +26,9 @@ class BaseRepository(Generic[E,M]):
             return lista
 
     def create_one(self, entity: E)-> E:
-        entity.id = None
         model = entity.to_model()
+        if model.id == 0:
+            model.id = None
         with Session(self.sql_engine) as session:
             session.add(model)
             session.commit()

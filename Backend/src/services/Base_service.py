@@ -1,4 +1,4 @@
-from typing import Generic, Type
+from typing import Any, Generic, Type
 
 from  src.infra.Database.UnitOfWork import UnitOfWorkRepositories, DicionarioEntidadeRepository
 from  src.infra.Database.repositories.Base_repository import E, M, BaseRepository
@@ -11,8 +11,8 @@ class Base_service(Generic[E, M]):
         self.uw_repos = UnitOfWorkRepositories
         self.repo: BaseRepository[E, M] = UnitOfWorkRepositories[entity_cls]
 
-    def get_all(self) -> list[E]:
-        return self.repo.get_all()
+    def get_all(self,params: dict[str,Any]) -> list[E]:
+        return self.repo.get_all(params)
 
     def get_one(self, id: int) -> E | None:
         return self.repo.get_one(id)
