@@ -1,5 +1,4 @@
 from  src.infra.Database.extensions import db
-from  datetime import date
 
 class Governanca(db.Model):
     __tablename__ = "Governanca"
