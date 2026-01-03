@@ -14,8 +14,8 @@ class DataMinerCGVN(DataMiner):
     dataset = pd.DataFrame()
     
     for nome in nomes_arquivos:
-      with ZipFile(f"{BASE_DIR}/data/zip/{self.dir}/{nome}", 'r') as zip_ref:
-        zip_ref.extractall(f"{BASE_DIR}/data/{self.dir}/{nome}")
+      with ZipFile(f"{BASE_DIR}/data/zip/CGVN/{nome}", 'r') as zip_ref:
+        zip_ref.extractall(f"{BASE_DIR}/data/CGVN/{nome}")
         ano = nome.split("_")[-1].split(".")[0]
         principal = f"cgvn_cia_aberta_{ano}.csv"
         praticas = f"cgvn_cia_aberta_praticas_{ano}.csv"
@@ -30,18 +30,18 @@ class DataMinerCGVN(DataMiner):
               how='left'
           )
       dataset = pd.concat([dataset, second_dataset], ignore_index=True)
-      remove(f"{BASE_DIR}/data/{self.dir}/{nome}/{principal}")
-      remove(f"{BASE_DIR}/data/{self.dir}/{nome}/{praticas}")
-      removedirs(f"{BASE_DIR}/data/{self.dir}/{nome}/")
-    dataset.to_csv(f"{BASE_DIR}/docs/{self.dir}.csv",index=False, sep=';', encoding='latin1')
+      remove(f"{BASE_DIR}/data/CGVN/{nome}/{principal}")
+      remove(f"{BASE_DIR}/data/CGVN/{nome}/{praticas}")
+      removedirs(f"{BASE_DIR}/data/CGVN/{nome}/")
+    dataset.to_csv(f"{BASE_DIR}/docs/CGVN.csv",index=False, sep=';', encoding='latin1')
 
 if __name__ == "__main__":
   url = "https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/CGVN/DADOS/"
   dir = "CGVN"
-  miner = DataMinerCGVN(url,dir)
-  nomes_arquivos: list[str] = miner.pegar_nomes_arquivos()
+  miner = DataMinerCGVN()
+  nomes_arquivos: list[str] = miner.pegar_nomes_arquivos(url)
   print(nomes_arquivos)
-  # miner.baixar_zips(nomes_arquivos)
+  miner.baixar_zips(url,dir,nomes_arquivos)
   miner.descompactar_e_unificar_zips(nomes_arquivos)
   print()
 
