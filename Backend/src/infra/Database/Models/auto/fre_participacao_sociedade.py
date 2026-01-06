@@ -4,6 +4,7 @@ class fre_participacao_sociedade(db.Model):
     __tablename__ = "fre_participacao_sociedade"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     CNPJ = db.Column(db.Text, nullable=True)

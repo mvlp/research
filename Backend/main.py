@@ -6,7 +6,6 @@ from flask_cors import CORS
 
 from src.infra.Database.Models.ajustes_auto.fre_obrigacao import fre_obrigacao
 
-from src.infra.Database.Models.Governanca import Governanca
 from src.infra.Database.Models.Grupo_do_indice import Grupo_do_indice
 from src.infra.Database.Models.Indice import Indice
 from src.infra.Database.Models.pergunta import Pergunta

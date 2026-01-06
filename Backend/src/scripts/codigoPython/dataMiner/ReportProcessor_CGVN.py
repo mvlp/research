@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 from pandas.core.groupby.generic import DataFrameGroupBy
-from src.infra.Database.Models.Governanca import Governanca
+from src.infra.Database.Models.ajustes_auto.cgvn_praticas import cgvn_praticas
 from src.Entities.Grafico_entity import Grafico_entity
 from sqlalchemy.engine.base import Engine
 BASE_DIR = Path(__file__).resolve().parent
@@ -33,7 +33,7 @@ class ReportProcessor:
     error_df = error_df.sort_values(by="Nome_Empresarial")
     error_df.to_json(f"{BASE_DIR}/assets/data/error_log.json", orient="records", force_ascii=False, indent=4)
     dataset.to_csv(f"{BASE_DIR}/docs/dataset_CGVN.csv",index=False, sep=';', encoding='latin1')
-    dataset.to_sql("governanca", engine, if_exists="replace", index=False)
+    dataset.to_sql("cgvn_praticas", engine, if_exists="replace", index=False)
 
   def gerar_grafico_percentual(self, chapter: str, chapter_dataset: pd.DataFrame) -> Grafico_entity:
     dataset = chapter_dataset.copy() ## Necessário para não alterar o dataframe original

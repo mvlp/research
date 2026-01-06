@@ -1,5 +1,5 @@
 from typing import Any
-from src.infra.Database.Models.Governanca import Governanca
+from src.infra.Database.Models.auto.cgvn_praticas import cgvn_praticas
 from src.Entities.Base_entity import Base_entity
 from src.infra.Database.extensions import db
 from datetime import date
@@ -20,7 +20,7 @@ class Governanca_entity(Base_entity):
     gc_value: int
     
     def to_model(self) -> Any:
-        obj = Governanca()
+        obj = cgvn_praticas()
         obj.CNPJ_Companhia = self.CNPJ_Companhia
         obj.Data_Referencia = self.Data_Referencia
         obj.Nome_Empresarial = self.Nome_Empresarial

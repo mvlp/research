@@ -52,6 +52,10 @@ class DataMiner:
     self.baixar_zips(url,self.dir, zip_para_importar)
     for zip in zip_para_importar:
       self.importar_zip(zip)
+    self.exec_final()
+
+  def exec_final(self):
+    pass
 
 
 

@@ -4,6 +4,7 @@ class fre_politica_negociacao_cargo(db.Model):
     __tablename__ = "fre_politica_negociacao_cargo"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     CNPJ_Companhia = db.Column(db.Text, nullable=True)

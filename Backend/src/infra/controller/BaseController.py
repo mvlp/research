@@ -19,8 +19,9 @@ class Base_controller(Generic[E]):
             params = request.args
             response = self.service.get_all(params)
             return self._convert_to_json(response)
-        @self.blueprint.get("<int:id>")
-        def get_one(id: int):
+        @self.blueprint.get("getOne")
+        def get_one():
+            id: Any = request.args.get('id')
             response = self.service.get_one(id)
             return self._convert_to_json(response)
         @self.blueprint.put("")

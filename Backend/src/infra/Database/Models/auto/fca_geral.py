@@ -4,6 +4,7 @@ class fca_geral(db.Model):
     __tablename__ = "fca_geral"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     Categoria_Registro_CVM = db.Column(db.Text, nullable=True)

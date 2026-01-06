@@ -5,6 +5,7 @@ class fre_transacao_parte_relacionada(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tipo_csv = db.Column(db.Text, nullable=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
 
     CNPJ_Companhia = db.Column(db.Text, nullable=True)
     Data_Referencia = db.Column(db.Text, nullable=True)

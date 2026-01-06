@@ -4,6 +4,7 @@ class fre_volume_valor_mobiliario(db.Model):
     __tablename__ = "fre_volume_valor_mobiliario"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     Classe_Acao_Preferencial = db.Column(db.Text, nullable=True)

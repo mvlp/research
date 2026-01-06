@@ -4,6 +4,7 @@ class dfp_parecer(db.Model):
     __tablename__ = "dfp_parecer"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     CNPJ_CIA = db.Column(db.Text, nullable=True)

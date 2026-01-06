@@ -4,6 +4,7 @@ class fca_auditor(db.Model):
     __tablename__ = "fca_auditor"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     Auditor = db.Column(db.Text, nullable=True)

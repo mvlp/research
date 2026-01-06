@@ -4,6 +4,7 @@ class fca_departamento_acionistas(db.Model):
     __tablename__ = "fca_departamento_acionistas"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     Bairro = db.Column(db.Text, nullable=True)

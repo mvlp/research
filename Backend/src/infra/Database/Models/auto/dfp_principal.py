@@ -4,6 +4,7 @@ class dfp_principal(db.Model):
     __tablename__ = "dfp_principal"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     CATEG_DOC = db.Column(db.Text, nullable=True)

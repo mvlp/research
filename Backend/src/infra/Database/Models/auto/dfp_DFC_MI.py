@@ -4,6 +4,7 @@ class dfp_DFC_MI(db.Model):
     __tablename__ = "dfp_DFC_MI"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
     tipo_csv = db.Column(db.Text, nullable=True)
 
     CD_CONTA = db.Column(db.Text, nullable=True)

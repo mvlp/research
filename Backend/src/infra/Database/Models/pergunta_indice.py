@@ -1,5 +1,6 @@
 from  src.infra.Database.extensions import db
 
+
 class Pergunta_indice(db.Model):
     __tablename__ = "Pergunta_indice"
 
