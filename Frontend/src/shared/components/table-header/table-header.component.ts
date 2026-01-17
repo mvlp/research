@@ -2,11 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+
 
 @Component({
   standalone: true,
   selector: 'app-table-header',
-  imports: [InputTextModule, CommonModule, FormsModule],
+  imports: [InputTextModule, CommonModule, FormsModule,IconFieldModule,InputIconModule],
   templateUrl: './table-header.component.html',
 })
 export class TableHeaderComponent {

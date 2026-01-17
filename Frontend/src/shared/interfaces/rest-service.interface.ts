@@ -19,7 +19,9 @@ export abstract class BaseRestService<E, P = any> implements RestService<E, P> {
   abstract route: string;
 
   get(id: number): Observable<E> {
-    return this.http.get<E>(`${environment.base_url}${this.route}/${id}`).pipe(catchError(handleHttpError)) as Observable<E>;
+    return this.http.get<E>(`${environment.base_url}${this.route}/getOne`,{
+      params: {id}
+    }).pipe(catchError(handleHttpError)) as Observable<E>;
   };
 
   getByFilters(params: P): Observable<E[]> {

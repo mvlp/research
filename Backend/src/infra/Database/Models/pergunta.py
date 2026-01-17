@@ -6,8 +6,8 @@ class Pergunta(db.Model):
     texto = db.Column(db.Text, nullable=False)
 
 
-    indices_pergunta = db.relationship(
-        "Pergunta_indice",
+    Dimensaos_pergunta = db.relationship(
+        "Pergunta_Dimensao",
         back_populates="pergunta",
         cascade="all, delete-orphan"
     )

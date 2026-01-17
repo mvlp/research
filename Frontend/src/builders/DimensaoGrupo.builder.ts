@@ -1,19 +1,19 @@
 import { Builder } from "../shared/interfaces/builder.interface";
 import { FormSchemaControl } from "../shared/interfaces/form-schema.interface";
-import { IndiceGrupoEntity, IndiceGrupoModel } from "../entities/IndiceGrupo.entity";
+import { DimensaoGrupoEntity, DimensaoGrupoModel } from "../entities/DimensaoGrupo.entity";
 
-export class IndiceGrupoBuilder implements Builder<IndiceGrupoModel, IndiceGrupoEntity> {
+export class DimensaoGrupoBuilder implements Builder<DimensaoGrupoModel, DimensaoGrupoEntity> {
   id: number;
   nome: string
   data_ini: Date
   data_fim: Date | null
 
-  assign(props: IndiceGrupoModel) {
+  assign(props: DimensaoGrupoModel) {
     Object.assign(this, props)
   };
 
   build() {
-    return new IndiceGrupoEntity(this, this.id);
+    return new DimensaoGrupoEntity(this, this.id);
   };
 
   unbuild() {
@@ -21,7 +21,7 @@ export class IndiceGrupoBuilder implements Builder<IndiceGrupoModel, IndiceGrupo
   };
 
   getFormSchema() {
-    return new FormSchemaControl<IndiceGrupoModel>({
+    return new FormSchemaControl<DimensaoGrupoModel>({
       id: { defaultValue: 0 },
       nome: { defaultValue: "" },
       data_ini: { defaultValue: new Date() },

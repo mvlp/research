@@ -6,10 +6,10 @@ from  src.infra.Database.repositories.Base_repository import E, M, BaseRepositor
 
 class Base_service(Generic[E, M]):
     uw_repos: DicionarioEntidadeRepository
-    repo: BaseRepository[E, M]
+    repo: Any
     def __init__(self, entity_cls: Type[E]) -> None:
         self.uw_repos = UnitOfWorkRepositories
-        self.repo: BaseRepository[E, M] = UnitOfWorkRepositories[entity_cls]
+        self.repo: Any = UnitOfWorkRepositories[entity_cls]
 
     def get_all(self,params: dict[str,Any]) -> list[E]:
         return self.repo.get_all(params)

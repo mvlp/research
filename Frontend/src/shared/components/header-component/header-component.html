@@ -1,1 +1,11 @@
-<p>header-component works!</p>
+<div class="flex justify-content-between">
+    <div class="text-2xl font-bold text">Marcos Pereira</div>
+    <div class="flex justify-content-end relative">
+
+        <p-button icon="pi pi-cog" 
+        (onClick)="menu.toggle($event)"/>
+        <p-popover #menu>
+            <p-menu  [model]="items" class="w-12rem" appendTo="body"/>
+        </p-popover>
+    </div>
+</div>

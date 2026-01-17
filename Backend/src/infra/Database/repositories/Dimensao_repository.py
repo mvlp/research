@@ -1,16 +1,16 @@
 from typing import Any, Type
 
 from sqlalchemy import Engine, select
-from src.infra.Database.Models.Indice import Indice
-from src.Entities.Indice_entity import Indice_entity
-from src.infra.Database.Models.pergunta_indice import Pergunta_indice
+from src.infra.Database.Models.Dimensao import Dimensao
+from src.Entities.Dimensao_entity import Dimensao_entity
+from src.infra.Database.Models.pergunta_dimensao import Pergunta_Dimensao
 from  src.infra.Database.repositories.Base_repository import E, M, BaseRepository
 from sqlalchemy.orm import Session
 
-class Indice_repository(BaseRepository):
+class Dimensao_repository(BaseRepository):
     def __init__(self, engine: Engine):
-        super().__init__(Indice_entity, Indice, engine)
-    def create_one(self, entity: Indice_entity)-> Indice_entity:
+        super().__init__(Dimensao_entity, Dimensao, engine)
+    def create_one(self, entity: Dimensao_entity)-> Dimensao_entity:
         entity.id = None
         model = entity.to_model()
         with Session(self.sql_engine) as session:
@@ -18,16 +18,16 @@ class Indice_repository(BaseRepository):
             session.commit()
             session.refresh(model)
             for id_pergunta in entity.perguntas:
-                pergunta_indice = Pergunta_indice()
-                pergunta_indice.id_indice = model.id
-                pergunta_indice.id_pergunta = id_pergunta
-                session.add(pergunta_indice)
+                pergunta_Dimensao = Pergunta_Dimensao()
+                pergunta_Dimensao.id_Dimensao = model.id
+                pergunta_Dimensao.id_pergunta = id_pergunta
+                session.add(pergunta_Dimensao)
             session.commit()
             session.refresh(model)
             entity = self.entity_class.from_model(model)
             perguntas_ids = (
-                session.query(Pergunta_indice.id_pergunta)
-                .filter(Pergunta_indice.id_indice == entity.id)
+                session.query(Pergunta_Dimensao.id_pergunta)
+                .filter(Pergunta_Dimensao.id_Dimensao == entity.id)
                 .all()
             )
             entity.perguntas = [pid[0] for pid in perguntas_ids]
@@ -35,7 +35,7 @@ class Indice_repository(BaseRepository):
             return entity
         
     
-    def get_all(self, filters: dict[str,Any] = {}) -> list[Indice_entity]:
+    def get_all(self, filters: dict[str,Any] = {}) -> list[Dimensao_entity]:
         with Session(self.sql_engine) as session:
             query = select(self.model_class)
             for key, value in filters.items():
@@ -48,8 +48,8 @@ class Indice_repository(BaseRepository):
                 entity = self.entity_class.from_model(model)
                 # Carregar IDs das perguntas deste índice
                 perguntas_ids = (
-                    session.query(Pergunta_indice.id_pergunta)
-                    .filter(Pergunta_indice.id_indice == entity.id)
+                    session.query(Pergunta_Dimensao.id_pergunta)
+                    .filter(Pergunta_Dimensao.id_Dimensao == entity.id)
                     .all()
                 )
 
@@ -60,7 +60,7 @@ class Indice_repository(BaseRepository):
             return lista
 
 
-    def get_one(self, id: int)-> Indice_entity | None:
+    def get_one(self, id: int)-> Dimensao_entity | None:
         with Session(self.sql_engine) as session:
             pesquisa = select(self.model_class).where(self.model_class.id == id)
             result = session.execute(pesquisa).scalar_one_or_none()
@@ -68,8 +68,8 @@ class Indice_repository(BaseRepository):
                 return None
             entity = self.entity_class.from_model(result)
             perguntas_ids = (
-                session.query(Pergunta_indice.id_pergunta)
-                .filter(Pergunta_indice.id_indice == entity.id)
+                session.query(Pergunta_Dimensao.id_pergunta)
+                .filter(Pergunta_Dimensao.id_Dimensao == entity.id)
                 .all()
             )
 
@@ -78,7 +78,7 @@ class Indice_repository(BaseRepository):
 
             return entity
         
-    def update_one(self, entity: Indice_entity) -> Indice_entity | None:
+    def update_one(self, entity: Dimensao_entity) -> Dimensao_entity | None:
         with Session(self.sql_engine) as session:
             obj = session.get(self.model_class, entity.id)
             if not obj:
@@ -88,13 +88,13 @@ class Indice_repository(BaseRepository):
                     continue
                 setattr(obj, key, value)
             # Remove todas as perguntas antigas
-            session.query(Pergunta_indice).filter_by(id_indice=entity.id).delete()
+            session.query(Pergunta_Dimensao).filter_by(id_Dimensao=entity.id).delete()
             ##Readiciona tudo novamente
             for id_pergunta in entity.perguntas:
-                pergunta_indice = Pergunta_indice()
-                pergunta_indice.id_indice = entity.id
-                pergunta_indice.id_pergunta = id_pergunta
-                session.add(pergunta_indice)
+                pergunta_Dimensao = Pergunta_Dimensao()
+                pergunta_Dimensao.id_Dimensao = entity.id
+                pergunta_Dimensao.id_pergunta = id_pergunta
+                session.add(pergunta_Dimensao)
                 session.commit()
 
 

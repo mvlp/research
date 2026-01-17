@@ -1,18 +1,18 @@
 import { Builder } from "../shared/interfaces/builder.interface";
 import { FormSchemaControl } from "../shared/interfaces/form-schema.interface";
-import { IndiceEntity, IndiceModel } from "../entities/Indice.entity";
+import { DimensaoEntity, DimensaoModel } from "../entities/Dimensao.entity";
 
-export class IndiceBuilder implements Builder<IndiceModel, IndiceEntity> {
+export class DimensaoBuilder implements Builder<DimensaoModel, DimensaoEntity> {
   id: number;
   idGrupo: number;
   perguntas: Array<string> 
 
-  assign(props: IndiceModel) {
+  assign(props: DimensaoModel) {
     Object.assign(this, props)
   };
 
   build() {
-    return new IndiceEntity(this, this.id);
+    return new DimensaoEntity(this, this.id);
   };
 
   unbuild() {
@@ -20,7 +20,7 @@ export class IndiceBuilder implements Builder<IndiceModel, IndiceEntity> {
   };
 
   getFormSchema() {
-    return new FormSchemaControl<IndiceModel>({
+    return new FormSchemaControl<DimensaoModel>({
       id: { defaultValue: 0 },
       idGrupo: { defaultValue: 0 },
       perguntas: { defaultValue: [] }

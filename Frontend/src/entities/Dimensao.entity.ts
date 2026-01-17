@@ -1,15 +1,15 @@
-export class IndiceModel {
+export class DimensaoModel {
     id: number;
     idGrupo: number
     perguntas: Array<string> 
 }
 
-export class IndiceEntity implements IndiceModel {
+export class DimensaoEntity implements DimensaoModel {
     id: number;
     idGrupo: number
     perguntas: Array<string> 
 
-  constructor (props: Omit<IndiceModel, "id">, id?: number) {
+  constructor (props: Omit<DimensaoModel, "id">, id?: number) {
     Object.assign(this, props);
     this.id = id || 0;
   }

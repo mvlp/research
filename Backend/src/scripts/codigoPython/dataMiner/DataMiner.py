@@ -12,7 +12,7 @@ from zipfile import ZipFile
 
 import pandas as pd
 from requests import get
-from sqlalchemy import Engine, select
+from sqlalchemy import Engine, delete, select, text
 
 def log_bad_lines(bad_line):
     print("Linha descartada:", bad_line)
@@ -40,6 +40,7 @@ class DataMiner:
     nomes_importados = [res.nome_arquivo for res in importados]
     
     zip_para_importar: list[str] = []
+    zip_para_apagar: list[str] = []
     for arquivo in dados.keys():
       if not arquivo in nomes_importados: ## significa que ele não foi importado ainda
         print("Não importado: ",arquivo)
@@ -48,8 +49,12 @@ class DataMiner:
       index = nomes_importados.index(arquivo)
       if importados[index].data_importacao < dados[arquivo]:
         print("atualizar importação: ",arquivo)
+        zip_para_apagar.append(arquivo)
         zip_para_importar.append(arquivo)
     self.baixar_zips(url,self.dir, zip_para_importar)
+    print(zip_para_importar)
+    for zip in zip_para_apagar:
+      self.apagar_zip(zip)
     for zip in zip_para_importar:
       self.importar_zip(zip)
     self.exec_final()
@@ -61,9 +66,27 @@ class DataMiner:
 
   def pegar_dados_importados(self) -> list[Importacao]:
     with Session(self.engine) as session:
-      query = select(Importacao).where(Importacao.tabela == self.dir)
+      query = select(Importacao).where(Importacao.tabela == self.dir).order_by(Importacao.data_importacao.desc())
       resultados = session.execute(query).scalars().all()
       return list(resultados)
+
+  def apagar_zip(self,zip:str):
+    print("APAGANDO ZIP: ",zip)
+    url_arquivo = f"{str(BASE_DIR)}/data/zip/{self.dir}/{zip}"
+    with ZipFile(url_arquivo, 'r') as zip_ref:
+      arquivos = zip_ref.namelist()
+      for arquivo in arquivos:
+        nome_database = self.tratar_nome(arquivo)
+        print("APAGANDO ARQUIVO: ",arquivo)
+        stmt = text(f"DELETE  FROM {nome_database} WHERE arquivo_origem = :zip")
+        with Session(self.engine) as session:
+            session.execute(
+                stmt,
+                {"zip": zip}
+            )
+            session.commit()
+        
+
 
   def importar_zip(self, zip:str):
     print("IMPORTANDO ZIP: ",zip)
@@ -83,7 +106,7 @@ class DataMiner:
           elif nome_database.endswith("_ind"):
             df["tipo_csv"] = "ind"
             nome_database = nome_database[0:-len("_ind")]
-
+          df["arquivo_origem"] = zip
           df.to_sql(nome_database,self.engine, if_exists="append",index=False)
     with Session(self.engine) as session:
       importacao = Importacao()

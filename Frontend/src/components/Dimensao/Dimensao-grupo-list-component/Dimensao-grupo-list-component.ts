@@ -6,20 +6,20 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { TableHeaderComponent } from '../../../shared/components/table-header/table-header.component';
 import { BaseListDirective } from '../../../shared/directives/base-list.directive';
-import { IndiceGrupoEntity } from '../../../entities/IndiceGrupo.entity';
+import { DimensaoGrupoEntity } from '../../../entities/DimensaoGrupo.entity';
 import { RestService } from '../../../shared/interfaces/rest-service.interface';
-import { IndiceGrupoService } from '../../../services/IndiceGrupo.service';
-import { IndiceGrupoFormComponent } from '../indice-grupo-form-component/indice-grupo-form-component';
+import { DimensaoGrupoService } from '../../../services/DimensaoGrupo.service';
+import { DimensaoGrupoFormComponent } from '../Dimensao-grupo-form-component/Dimensao-grupo-form-component';
 
 @Component({
-  selector: 'app-indice-grupo-list-component',
+  selector: 'app-Dimensao-grupo-list-component',
   imports: [FormsModule, ReactiveFormsModule, CommonModule, CommonModule, TableModule, ButtonModule, TableHeaderComponent, MultiSelectModule],
-  templateUrl: './indice-grupo-list-component.html',
-  styleUrl: './indice-grupo-list-component.css',
+  templateUrl: './Dimensao-grupo-list-component.html',
+  styleUrl: './Dimensao-grupo-list-component.css',
 })
-export class IndiceGrupoListComponent extends BaseListDirective<IndiceGrupoEntity>{
-  override service = inject(IndiceGrupoService)
-  override component = IndiceGrupoFormComponent
-  override header = "Indice"
+export class DimensaoGrupoListComponent extends BaseListDirective<DimensaoGrupoEntity>{
+  override service = inject(DimensaoGrupoService)
+  override component = DimensaoGrupoFormComponent
+  override header = "Dimensão"
 
 }

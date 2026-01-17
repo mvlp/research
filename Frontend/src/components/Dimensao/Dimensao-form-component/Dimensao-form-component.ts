@@ -1,10 +1,10 @@
 import { Component, inject, Input } from '@angular/core';
 import { BaseFormDirective } from '../../../shared/directives/base-form.directive';
-import { IndiceEntity } from '../../../entities/Indice.entity';
+import { DimensaoEntity } from '../../../entities/Dimensao.entity';
 import { Builder } from '../../../shared/interfaces/builder.interface';
 import { RestService } from '../../../shared/interfaces/rest-service.interface';
-import { IndiceBuilder } from '../../../builders/Indice.builder';
-import { IndiceService } from '../../../services/Indice.service';
+import { DimensaoBuilder } from '../../../builders/Dimensao.builder';
+import { DimensaoService } from '../../../services/Dimensao.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,14 +16,14 @@ import { PerguntaService } from '../../../services/Pergunta.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
-  selector: 'app-indice-form-component',
+  selector: 'app-Dimensao-form-component',
   imports: [DatePickerModule,FormsModule,CommonModule,InputTextModule, ButtonModule, ReactiveFormsModule, MultiSelectModule],
-  templateUrl: './indice-form-component.html',
-  styleUrl: './indice-form-component.css',
+  templateUrl: './Dimensao-form-component.html',
+  styleUrl: './Dimensao-form-component.css',
 })
-export class IndiceFormComponent extends BaseFormDirective<IndiceEntity> {
-  override builder = new IndiceBuilder( )
-  override service = inject(IndiceService)
+export class DimensaoFormComponent extends BaseFormDirective<DimensaoEntity> {
+  override builder = new DimensaoBuilder( )
+  override service = inject(DimensaoService)
 
   @Input("idGrupo") idGrupo
   perguntaService = inject(PerguntaService)
@@ -33,7 +33,6 @@ export class IndiceFormComponent extends BaseFormDirective<IndiceEntity> {
     this.form.controls.idGrupo.setValue(this.idGrupo)
     await this.perguntaService.getByFilters({}).subscribe(res =>{
       this.perguntaOptions = res
-      console.log("OPIÇÔES" ,this.perguntaOptions)
     })
   }
 

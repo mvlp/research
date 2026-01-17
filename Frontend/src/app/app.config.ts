@@ -8,8 +8,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { DialogService } from 'primeng/dynamicdialog';
 import { PerguntaService } from '../services/Pergunta.service';
 import lara from '@primeuix/themes/lara'
-import { IndiceService } from '../services/Indice.service';
-import { IndiceGrupoService } from '../services/IndiceGrupo.service';
+import { DimensaoService } from '../services/Dimensao.service';
+import { DimensaoGrupoService } from '../services/DimensaoGrupo.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,6 +38,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(withFetch()),
     DialogService, 
-    PerguntaService, IndiceService, IndiceGrupoService
+    PerguntaService, DimensaoService, DimensaoGrupoService
   ],
 };

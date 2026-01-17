@@ -1,19 +1,20 @@
 from datetime import date
 from pathlib import Path
+from typing import Any
 from requests import get
 from os import listdir, remove, removedirs
 from zipfile import ZipFile
 import pandas as pd
-from src.infra.Database.Models.pergunta import Pergunta
 from src.infra.Database.Models.Indice import Indice
-from src.infra.Database.Models.pergunta_indice import Pergunta_indice
-from src.infra.Database.Models.Grupo_do_indice import Grupo_do_indice
+from src.infra.Database.Models.Dimensao import Dimensao
+from src.infra.Database.Models.pergunta import Pergunta
+from src.infra.Database.Models.pergunta_dimensao import Pergunta_Dimensao
 
 from src.infra.Database.Models.Importacao import Importacao
 from src.scripts.codigoPython.dataMiner.ReportProcessor_CGVN import ReportProcessor
 from src.scripts.codigoPython.dataMiner.DataMiner import DataMiner
 from sqlalchemy.orm import Session
-from sqlalchemy import Engine, create_engine, text
+from sqlalchemy import Engine, create_engine, select, text
 from src.scripts.codigoPython.dataMiner.url_db import url_db
 
 BASE_DIR = Path(__file__).resolve().parent  # Isso dá "src/"
@@ -24,6 +25,7 @@ class DataMinerCGVN(DataMiner):
   dataset: pd.DataFrame
 
   def importar_zip(self,zip: str) -> None:
+    print("IMPORTANDO ZIP: ",zip)
     with ZipFile(f"{BASE_DIR}/data/zip/CGVN/{zip}", 'r') as zip_ref:
       zip_ref.extractall(f"{BASE_DIR}/data/CGVN/{zip}")
       ano = zip.split("_")[-1].split(".")[0]
@@ -37,6 +39,7 @@ class DataMinerCGVN(DataMiner):
             on='ID_Documento',
             how='left'
         )
+        second_dataset["arquivo_origem"] = zip
       self.dataset = pd.concat([self.dataset, second_dataset], ignore_index=True)
       remove(f"{BASE_DIR}/data/CGVN/{zip}/{principal}")
       remove(f"{BASE_DIR}/data/CGVN/{zip}/{praticas}")
@@ -47,10 +50,11 @@ class DataMinerCGVN(DataMiner):
       importacao.nome_arquivo = zip
       importacao.tabela = self.dir
       session.add(importacao)
-      # session.commit()
+      session.commit()
 
   def exec_final(self):
-    if self.dataset.empty: return
+    if self.dataset.__len__() == 0: return
+
     # Escala artigo => Enanpad 2024
     ordem_levels = ["Não se Aplica", "Não", "Parcialmente", "Sim"]
     self.dataset["gc_factor"] = pd.Categorical(
@@ -71,14 +75,23 @@ class DataMinerCGVN(DataMiner):
     # Ordenar por nome
     error_df = error_df.sort_values(by="Nome_Empresarial")
     error_df.to_json(f"{BASE_DIR}/assets/data/error_log.json", orient="records", force_ascii=False, indent=4)
+    self.dataset = self.dataset.dropna(subset=["gc_value"])
+    self.dataset.to_csv(f"{BASE_DIR}/docs/dataset_CGVN.csv",index=False, sep=';', encoding='latin1')
     self.dataset.to_sql("cgvn_praticas", self.engine, if_exists="replace", index=False)
     perguntas = (self.dataset[["ID_Item", "Pratica_Recomendada"]].drop_duplicates().to_dict(orient="records"))
     with Session(self.engine) as session:
+      query = select(Importacao).where(Importacao.tabela == "perguntas").order_by(Importacao.data_importacao.desc())
+      importacao = session.execute(query).scalars().first()
+      if importacao != None: return
       for obj in perguntas:
-        print(obj)
         pergunta = Pergunta()
         pergunta.id = obj["ID_Item"]
         pergunta.texto = obj["Pratica_Recomendada"]
         session.add(pergunta)
+      importacao = Importacao()
+      importacao.data_importacao = date.today() 
+      importacao.nome_arquivo = ''
+      importacao.tabela = "perguntas"
+      session.add(importacao)
       session.commit()
 

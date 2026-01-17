@@ -6,10 +6,10 @@ from flask_cors import CORS
 
 from src.infra.Database.Models.ajustes_auto.fre_obrigacao import fre_obrigacao
 
-from src.infra.Database.Models.Grupo_do_indice import Grupo_do_indice
 from src.infra.Database.Models.Indice import Indice
+from src.infra.Database.Models.Dimensao import Dimensao
 from src.infra.Database.Models.pergunta import Pergunta
-from src.infra.Database.Models.pergunta_indice import Pergunta_indice
+from src.infra.Database.Models.pergunta_dimensao import Pergunta_Dimensao
 from src.infra.Database.Models.Importacao import Importacao
 from src.infra.Database.Models.auto.cgvn_praticas import cgvn_praticas
 from src.infra.Database.Models.auto.cgvn_principal import cgvn_principal
@@ -106,15 +106,15 @@ db.init_app(app)
 CORS(app)
 with app.app_context():
     from src.infra.controller.Governanca_controller import Governanca_controller
-    from src.infra.controller.Indice_controller import Indice_controller
+    from src.infra.controller.Dimensao_controller import Dimensao_controller
     from src.infra.controller.Pergunta_controller import Pergunta_controller
-    from src.infra.controller.Grupo_do_indice_controller import Grupo_do_indice_controller
+    from src.infra.controller.Indice_controller import Indice_controller
 
 controllers = []
 controllers.append(Governanca_controller())
-controllers.append(Indice_controller())
+controllers.append(Dimensao_controller())
 controllers.append(Pergunta_controller())
-controllers.append(Grupo_do_indice_controller())
+controllers.append(Indice_controller())
 
 for controller in controllers:
     app.register_blueprint(controller.blueprint, url_prefix= "/" + controller.name)
