@@ -20,19 +20,19 @@ import { MultiSelectModule } from 'primeng/multiselect';
   styleUrl: './Dimensao-list-component.css',
 })
 export class DimensaoListComponent extends BaseListDirective<DimensaoEntity>{
-  @Input("idGrupo") idGrupo: number = 0;
+  @Input("idIndice") idIndice: number = 0;
   override filter = new FormRecord<FormControl<any>>({});
   override service = inject(DimensaoService)
   override component = DimensaoFormComponent
   override header = "Dimensão"
 
   override async onNgOnInit(): Promise<void> {
-    this.filter.addControl('idGrupo', new FormControl(this.idGrupo))
+    this.filter.addControl('idIndice', new FormControl(this.idIndice))
   }
 
   override async onPreviousAdd(): Promise<void> {
     this.modalData = {
-      idGrupo: this.idGrupo
+      idIndice: this.idIndice
     }
   }
 }

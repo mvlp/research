@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from '../shared/components/main-layout-component/main-layout-component';
 import { PerguntaList } from '../components/pergunta/pergunta-list/pergunta-list';
 import { DimensaoListComponent } from '../components/Dimensao/Dimensao-list-component/Dimensao-list-component';
-import { DimensaoGrupoListComponent } from '../components/Dimensao/Dimensao-grupo-list-component/Dimensao-grupo-list-component';
+import { IndiceListComponent } from '../components/Dimensao/indice-list-component/indice-list-component';
 
 export const routes: Routes = [
     {
@@ -15,7 +15,7 @@ export const routes: Routes = [
             },
             {
                 path: "dimensoes",
-                component: DimensaoGrupoListComponent
+                component: IndiceListComponent
             }
         ]
     }

@@ -4,7 +4,7 @@ import { DimensaoEntity, DimensaoModel } from "../entities/Dimensao.entity";
 
 export class DimensaoBuilder implements Builder<DimensaoModel, DimensaoEntity> {
   id: number;
-  idGrupo: number;
+  idIndice: number;
   perguntas: Array<string> 
 
   assign(props: DimensaoModel) {
@@ -22,7 +22,7 @@ export class DimensaoBuilder implements Builder<DimensaoModel, DimensaoEntity> {
   getFormSchema() {
     return new FormSchemaControl<DimensaoModel>({
       id: { defaultValue: 0 },
-      idGrupo: { defaultValue: 0 },
+      idIndice: { defaultValue: 0 },
       perguntas: { defaultValue: [] }
     }).build();
   };

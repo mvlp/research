@@ -25,12 +25,12 @@ export class DimensaoFormComponent extends BaseFormDirective<DimensaoEntity> {
   override builder = new DimensaoBuilder( )
   override service = inject(DimensaoService)
 
-  @Input("idGrupo") idGrupo
+  @Input("idIndice") idIndice
   perguntaService = inject(PerguntaService)
   perguntaOptions: PerguntaEntity[]
 
   override async onNgOnInit(): Promise<void> {
-    this.form.controls.idGrupo.setValue(this.idGrupo)
+    this.form.controls.idIndice.setValue(this.idIndice)
     await this.perguntaService.getByFilters({}).subscribe(res =>{
       this.perguntaOptions = res
     })

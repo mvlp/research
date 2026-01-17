@@ -7,23 +7,22 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { BaseFormDirective } from '../../../shared/directives/base-form.directive';
-import { DimensaoGrupoEntity } from '../../../entities/DimensaoGrupo.entity';
+import { IndiceEntity } from '../../../entities/Indice.entity';
 import { RestService } from '../../../shared/interfaces/rest-service.interface';
 import { Builder } from '../../../shared/interfaces/builder.interface';
-import { DimensaoGrupoBuilder } from '../../../builders/DimensaoGrupo.builder';
-import { DimensaoGrupoService } from '../../../services/DimensaoGrupo.service';
-import { DimensaoGrupoListComponent } from "../Dimensao-grupo-list-component/Dimensao-grupo-list-component";
+import { IndiceBuilder } from '../../../builders/indice.builder';
+import { IndiceService } from '../../../services/indice.service';
+import { IndiceListComponent } from "../indice-list-component/indice-list-component";
 import { DimensaoListComponent } from "../Dimensao-list-component/Dimensao-list-component";
 
 @Component({
   selector: 'app-Dimensao-grupo-form-component',
   imports: [DatePickerModule, FormsModule, CommonModule, InputTextModule, FloatLabel, ButtonModule, ReactiveFormsModule, MultiSelectModule, DimensaoListComponent, DimensaoListComponent],
-  templateUrl: './Dimensao-grupo-form-component.html',
-  styleUrl: './Dimensao-grupo-form-component.css',
+  templateUrl: './indice-form-component.html',
 })
-export class DimensaoGrupoFormComponent extends BaseFormDirective<DimensaoGrupoEntity>{
-  override builder = new DimensaoGrupoBuilder;
-  override service = inject(DimensaoGrupoService)
+export class IndiceFormComponent extends BaseFormDirective<IndiceEntity>{
+  override builder = new IndiceBuilder;
+  override service = inject(IndiceService)
   
 
   minDate: Date

@@ -1,12 +1,12 @@
 export class DimensaoModel {
     id: number;
-    idGrupo: number
+    idIndice: number
     perguntas: Array<string> 
 }
 
 export class DimensaoEntity implements DimensaoModel {
     id: number;
-    idGrupo: number
+    idIndice: number
     perguntas: Array<string> 
 
   constructor (props: Omit<DimensaoModel, "id">, id?: number) {
