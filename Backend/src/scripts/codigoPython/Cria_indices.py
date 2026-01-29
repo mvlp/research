@@ -4,10 +4,11 @@ from datetime import date
 from typing import Any
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
-from Backend.src.infra.Database.Models.Indice import Indice
-from Backend.src.infra.Database.Models.Dimensao import Dimensao
-from Backend.src.infra.Database.Models.pergunta_dimensao import Pergunta_Dimensao
-from Backend.src.scripts.codigoPython.dataMiner.url_db import url_db
+from src.infra.Database.Models.Indice import Indice
+from src.infra.Database.Models.Dimensao import Dimensao
+from src.infra.Database.Models.pergunta import Pergunta
+from src.infra.Database.Models.pergunta_dimensao import Pergunta_Dimensao
+from src.scripts.codigoPython.url_db import url_db
 
 
 def monta_dimensao(sigla: str, id_indice:int):
@@ -44,13 +45,13 @@ def cria_indices(engine):
         session.commit()
         for i in range(1,6):
             session.refresh(dimensoes[i])
-            sql = text("""SELECT * FROM cgvn_praticas WHERE "ID_Item" LIKE :IdItem;""")
-            result = session.execute(sql,{"IdItem":str(i) +"%"}).mappings().all()
-            print(result)
+            sql = text("""SELECT * FROM "Pergunta" WHERE id LIKE :IdItem;""")
+            result = session.execute(sql,{"IdItem":str(i) +"%"}).unique().mappings().all()
+            print(result.__len__())
             for registro in result:
                 pd = Pergunta_Dimensao()
                 pd.id_Dimensao = dimensoes[i].id
-                pd.id_pergunta = registro["ID_Item"]
+                pd.id_pergunta = registro["id"]
                 session.add(pd)
             session.commit()
 

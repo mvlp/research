@@ -1,7 +1,7 @@
 
 from pathlib import Path
-from src.scripts.codigoPython.dataMiner.DataMiner_CGVN import DataMinerCGVN
-from src.scripts.codigoPython.dataMiner.url_db import url_db
+from src.scripts.codigoPython.DataMiner_CGVN import DataMinerCGVN
+from src.scripts.codigoPython.url_db import url_db
 from .DataMiner import DataMiner
 from sqlalchemy import Engine, create_engine
 BASE_DIR = Path(__file__).resolve().parent  # Isso dá "src/"

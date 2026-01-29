@@ -1,10 +1,10 @@
 /Backend/src/scripts/codigoR/*
-Backend/src/scripts/codigoPython/dataMiner/mineracao/META/*
-Backend/src/scripts/codigoPython/dataMiner/mineracao/model/*
-Backend/src/scripts/codigoPython/dataMiner/mineracao/script/*
-/Backend/src/scripts/codigoPython/dataMiner/assets/*
-/Backend/src/scripts/codigoPython/dataMiner/data/zip/*
-/Backend/src/scripts/codigoPython/dataMiner/docs/*
+Backend/src/scripts/codigoPython/mineracao/META/*
+Backend/src/scripts/codigoPython/mineracao/model/*
+Backend/src/scripts/codigoPython/mineracao/script/*
+/Backend/src/scripts/codigoPython/assets/*
+/Backend/src/scripts/codigoPython/data/zip/*
+/Backend/src/scripts/codigoPython/docs/*
 /Backend/src/scripts/data/*
 /Backend/src/scripts/assets/*
 /Backend/src/scripts/docs/*

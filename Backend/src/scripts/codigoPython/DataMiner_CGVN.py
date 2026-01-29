@@ -11,11 +11,10 @@ from src.infra.Database.Models.pergunta import Pergunta
 from src.infra.Database.Models.pergunta_dimensao import Pergunta_Dimensao
 
 from src.infra.Database.Models.Importacao import Importacao
-from src.scripts.codigoPython.dataMiner.ReportProcessor_CGVN import ReportProcessor
-from src.scripts.codigoPython.dataMiner.DataMiner import DataMiner
+from src.scripts.codigoPython.DataMiner import DataMiner
 from sqlalchemy.orm import Session
 from sqlalchemy import Engine, create_engine, select, text
-from src.scripts.codigoPython.dataMiner.url_db import url_db
+from src.scripts.codigoPython.url_db import url_db
 
 BASE_DIR = Path(__file__).resolve().parent  # Isso dá "src/"
 class DataMinerCGVN(DataMiner):

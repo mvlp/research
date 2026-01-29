@@ -5,6 +5,7 @@ class Pergunta_Dimensao(db.Model):
     __tablename__ = "Pergunta_Dimensao"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    peso = db.Column(db.Integer)
     id_Dimensao = db.Column(db.Integer, db.ForeignKey("Dimensao.id"))
     Dimensao = db.relationship("Dimensao", back_populates="perguntas_Dimensao")
 
