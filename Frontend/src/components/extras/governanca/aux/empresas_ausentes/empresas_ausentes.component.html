@@ -1,0 +1,24 @@
+<main>
+    <div class="text-sm text-800">A base de dados fornecida pela CVM contém lacunas de informações para as seguintes empresas nas respectivas datas:</div>
+    <p-table [value]="faltantes" class="caixa my-2 " style="table-layout: fixed;"
+        [stripedRows]="true" [scrollable]="true" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20,50,100]"
+    >
+        <ng-template #header class="m-2">
+            <tr >
+                <th style="width: 25%;">CNPJ</th>
+                <th style="width: 25%;">Data de entrega</th>
+                <th style="width: 25%;">Data de referência</th>
+                <th style="width: 25%;">Nome empresarial</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rowData >
+            <tr>
+                <td  style="width: 25%;" class="p-2"><div class="text-xs">{{ rowData["CNPJ_Companhia"] }}</div></td>
+                <td  style="width: 25%;" class="p-2"><div class="text-xs">{{ rowData["Data_Entrega"] }}</div></td>
+                <td  style="width: 25%;" class="p-2"><div class="text-xs">{{ rowData["Data_Referencia"] }}</div></td>
+                <td  style="width: 25%;" class="p-2"><div class="text-xs">{{ rowData["Nome_Empresarial"] }}</div></td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</main>

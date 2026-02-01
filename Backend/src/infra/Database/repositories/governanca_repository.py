@@ -1,9 +1,10 @@
 from typing import Any, Type
 
 from sqlalchemy import Engine, select, text
+from src.Entities.SelectDataEntity import SelectDataEntity
 from src.Entities.Percentuais_CGVN_entity import Percentuais_CGVN_Entity
 from src.Entities.Grafico_entity import Grafico_entity
-from src.Entities import Governanca_entity
+from src.Entities.Governanca_entity import Governanca_entity
 from src.infra.Database.Models.auto.cgvn_praticas import cgvn_praticas
 from  src.infra.Database.repositories.Base_repository import E, M, BaseRepository
 from sqlalchemy.orm import Session
@@ -13,6 +14,33 @@ class Governanca_repository(BaseRepository):
     def __init__(self, engine: Engine):
         super().__init__(Governanca_entity, cgvn_praticas, engine)
 
+    def get_empresa(self,empresa:str):
+        sql = text("""
+            SELECT DISTINCT "CNPJ_Companhia", "Nome_Empresarial"
+            FROM cgvn_praticas
+            WHERE
+                "CNPJ_Companhia" LIKE :cnpj
+                OR unaccent(lower("Nome_Empresarial"))
+                LIKE unaccent(lower(:empresa))
+        """)
+        params = {
+            "empresa": "%" + empresa.lower().replace(" ", "%") + "%",
+            "cnpj": f"%{empresa}%"
+        }
+
+        with Session(self.sql_engine) as session:
+            result = session.execute(sql,params).mappings().all()
+        tabela = []
+        for r in result:
+            tabela.append(SelectDataEntity(str(r["Nome_Empresarial"]),str(r["CNPJ_Companhia"])))
+        return tabela
+    
+    def get_dados_faltantes(self):
+        sql = text("SELECT * FROM cgvn_dados_faltantes;")
+        with Session(self.sql_engine) as session:
+            result = session.execute(sql).mappings().all()
+        lista = []
+        return [Governanca_entity(dict(r)) for r in result]
 
     def get_tabela_percentuais(self) -> list[Percentuais_CGVN_Entity]:
         sql = text("""

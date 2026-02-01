@@ -10,7 +10,7 @@ export interface RestService<E = any, P = any> {
   update: (data: E & { id: number }) => Observable<{ id: number }>,
   delete: (id: number) => Observable<void>,
 }
-const environment = { base_url : "http://127.0.0.1:5000/"}
+export const environment = { base_url : "http://127.0.0.1:5000/"}
 
 export abstract class BaseRestService<E, P = any> implements RestService<E, P> {
 

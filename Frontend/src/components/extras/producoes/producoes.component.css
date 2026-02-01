@@ -1,0 +1,31 @@
+@media (min-width: 1200px) {
+    .xl\:col-6 {
+        width: calc(50% - 0.75rem);
+    }
+}
+.numeros{
+    color: #7E57C2;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.barra{
+    width: 206px;
+    height: 3px;
+    background-color: #CFD8DC;
+    border-radius: 15%;
+    margin-top: 1px;
+}
+
+.caixa{
+    border-left: solid 4px;
+    border-color: #7E57C2;
+    background-color: var(--p-surface-200);
+}
+.titulo{
+    color: #7E57C2;
+    font-size: 14px;
+
+}

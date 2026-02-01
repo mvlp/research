@@ -17,8 +17,9 @@ class BaseRepository(Generic[E,M]):
     def get_all(self, filters: dict[str,Any] = {}) -> list[E]:
         with Session(self.sql_engine) as session:
             query = select(self.model_class)
-            for key, value in filters.items():
-                query = query.where(getattr(self.model_class, key) == value)
+            if (filters):
+                for key, value in filters.items():
+                    query = query.where(getattr(self.model_class, key) == value)
             results = session.execute(query).scalars().all()
             lista = []
             for r in results:

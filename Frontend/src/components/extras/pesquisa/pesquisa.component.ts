@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabel } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-pergunta-form',
   imports: [FormsModule,CommonModule,InputTextModule,FloatLabel, ButtonModule, ReactiveFormsModule],
@@ -17,6 +18,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './pesquisa.component.css'
 })
 export class PesquisaComponent {
+  router = inject(Router)
+  redirectGovernanca(){
+    console.log("AAAAAAAAAAAAAAAAA");
+    
+    this.router.navigate(["pesquisas","governanca"])
+  }
   
 
 }

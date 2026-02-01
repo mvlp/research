@@ -15,11 +15,43 @@ class Grafico_entity:
     self.Dado = dado
 
   def to_dict(self) -> Any:
+    datasets = []
+    if (len(self.Limite_superior)): datasets.append(
+          {
+            "label":"Limite superior",
+            "data": self.Limite_superior,
+            "backgroundColor": "rgba(100,116,139,0.4)",
+            "pointRadius": 0,
+            "borderWidth": 0,
+            "fill": 2,
+            "order": 2
+
+          }
+    )
+      
+    if (len(self.Dado)): datasets.append(
+          {
+            "label":"Dados",
+            "data": self.Dado,
+            "backgroundColor": "rgb(85, 190, 122)",
+            "borderColor": "rgb(85, 190, 122)",
+            "order": 1
+          }
+    )
+    if (len(self.Limite_inferior)): datasets.append(
+          {
+            "label":"Limite inferior",
+            "data": self.Limite_inferior,
+            "backgroundColor": "rgba(100,116,139,0.35)",
+            "pointRadius": 0,
+            "borderWidth": 0,
+            "order": 2,
+
+          }
+    )
     return {
         "Nome": self.nome,
-        "Labels": self.labels,
-        "Limite_superior": self.Limite_superior,
-        "Limite_inferior": self.Limite_inferior,
-        "Dado": self.Dado
+        "labels": self.labels,
+        "datasets": datasets
     }
     

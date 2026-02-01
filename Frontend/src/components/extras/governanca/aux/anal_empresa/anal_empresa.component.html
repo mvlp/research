@@ -1,0 +1,10 @@
+<main class="flex flex-column w-full align-items-center">
+    <div class="text-600 font-bold text-xl my-4">Perfil de Governança Corporativa: Análise por Empresa</div>
+    <p-autocomplete placeholder="Procure por nome ou CNPJ" [(ngModel)]="cnpj_empresa" appendTo="body" [suggestions]="empresas" [forceSelection]="true" optionLabel="label" optionValue="value" (onSelect)="selecionado($event.value.value)" (completeMethod)="filter($event)" />
+    @if (cnpj_empresa) {
+        <div class="w-full grid transition-all">
+            <app-grafico-empresa class="col-6" [cnpj_empresa]="cnpj_empresa"/>
+            <app-grafico-empresa class="col-6" [cnpj_empresa]="cnpj_empresa"/>
+        </div>
+    }
+</main>

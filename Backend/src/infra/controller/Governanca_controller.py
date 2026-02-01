@@ -12,6 +12,19 @@ class Governanca_controller(Base_controller):
 
     def add_outras_rotas(self):
 
+        @self.blueprint.get("empresa")
+        def get_empresa():
+            empresa = request.args.get('empresa')
+            if not empresa: return jsonify({"Erro": "Parâmetros não informados"})
+            response = self.service.get_empresa(empresa)
+            return self._convert_to_json(response)
+        
+        @self.blueprint.get("faltantes")
+        def get_dados_faltantes():
+            response = self.service.get_dados_faltantes()
+            return self._convert_to_json(response)
+
+
         @self.blueprint.get("tabela")
         def get_tabela_percentuais():
             response = self.service.get_tabela_percentuais()

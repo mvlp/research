@@ -36,3 +36,11 @@ class Governanca_entity(Base_entity):
         obj.gc_value = self.gc_value
         return obj
     
+    def to_dict(self) -> Any:
+        return {
+            "CNPJ_Companhia": self.CNPJ_Companhia, 
+            "Data_Entrega": self.Data_Entrega, 
+            "Data_Referencia": self.Data_Referencia, 
+            "Nome_Empresarial": self.Nome_Empresarial, 
+        }
+    

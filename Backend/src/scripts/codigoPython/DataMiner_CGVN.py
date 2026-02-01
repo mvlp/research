@@ -73,7 +73,7 @@ class DataMinerCGVN(DataMiner):
 
     # Ordenar por nome
     error_df = error_df.sort_values(by="Nome_Empresarial")
-    error_df.to_json(f"{BASE_DIR}/assets/data/error_log.json", orient="records", force_ascii=False, indent=4)
+    error_df.to_sql("cgvn_dados_faltantes", self.engine, if_exists="replace", index=False)
     self.dataset = self.dataset.dropna(subset=["gc_value"])
     self.dataset.to_csv(f"{BASE_DIR}/docs/dataset_CGVN.csv",index=False, sep=';', encoding='latin1')
     self.dataset.to_sql("cgvn_praticas", self.engine, if_exists="replace", index=False)

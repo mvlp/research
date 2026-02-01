@@ -1,4 +1,5 @@
 from typing import Type
+from src.infra.Database.repositories.indice_repository import Indice_repository
 from src.infra.Database.repositories.governanca_repository import Governanca_repository
 from src.infra.Database.repositories.Dimensao_repository import Dimensao_repository
 from src.infra.Database.Models.Indice import Indice
@@ -22,5 +23,5 @@ UnitOfWorkRepositories: DicionarioEntidadeRepository = {
     Governanca_entity: Governanca_repository(db.engine),
     Dimensao_entity: Dimensao_repository(db.engine),
     Pergunta_entity: BaseRepository(Pergunta_entity, Pergunta, db.engine),
-    Indice_entity: BaseRepository(Indice_entity, Indice, db.engine)
+    Indice_entity: Indice_repository(db.engine)
 }

@@ -43,6 +43,13 @@ class Base_controller(Generic[E]):
 
     def _convert_to_json(self,obj:Any):
         if obj == None: return jsonify(obj)
+        elif isinstance(obj,dict):
+            return jsonify({
+                k: self._convert_to_json(v).json
+                if hasattr(self._convert_to_json(v), "json")
+                else v
+                for k, v in obj.items()
+            })
         elif isinstance(obj,list):
             lista = []
             for item in obj: 

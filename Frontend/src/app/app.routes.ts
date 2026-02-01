@@ -8,7 +8,7 @@ import { ContatoComponent } from '../components/extras/contato/contato.component
 import { PesquisaComponent } from '../components/extras/pesquisa/pesquisa.component';
 import { ProducoesComponent } from '../components/extras/producoes/producoes.component';
 import { ProjetosComponent } from '../components/extras/projetos/projetos.component';
-import { SobreComponent } from '../components/extras/sobre/sobre.component';
+import { GovernancaComponent } from '../components/extras/governanca/governanca.component';
 
 export const routes: Routes = [
     {
@@ -20,24 +20,25 @@ export const routes: Routes = [
                 component: HomeComponent
             },
             {
-                path: "contato",
-                component: ContatoComponent
-            },
-            {
                 path: "pesquisas",
-                component: PesquisaComponent
+                children: [
+                    {
+                        path: "",
+                        component: PesquisaComponent
+                    },
+                    {
+                        path: "governanca",
+                        component: GovernancaComponent   
+                    }
+                ]
             },
             {
-                path: "producoes",
+                path: "publicacoes",
                 component: ProducoesComponent
             },
             {
                 path: "projetos",
                 component: ProjetosComponent
-            },
-            {
-                path: "sobre",
-                component: SobreComponent
             },
             {
                 path: "perguntas",
