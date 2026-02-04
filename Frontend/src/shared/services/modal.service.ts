@@ -2,13 +2,12 @@ import { inject, Injectable, Type } from "@angular/core";
 import { DialogService } from "primeng/dynamicdialog";
 import { ModalComponent } from "../components/modal/modal.component";
 
-export type ModalWidth = "95%" | "85%" | "75%" | "65%" | "55%" | "35%";
 
 type ModalContext = {
   component: Type<any>;
   data?: any;
   header: string;
-  width?: ModalWidth;
+  width?: string;
   onClose?: (res: any) => void;
 }
 

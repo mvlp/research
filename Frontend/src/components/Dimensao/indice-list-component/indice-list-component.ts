@@ -19,6 +19,7 @@ import { IndiceFormComponent } from '../indice-form-component/indice-form-compon
 export class IndiceListComponent extends BaseListDirective<IndiceEntity>{
   override service = inject(IndiceService)
   override component = IndiceFormComponent
-  override header = "Dimensão"
+  override header = "Índice"
+  override modalWidth = "45%"
 
 }

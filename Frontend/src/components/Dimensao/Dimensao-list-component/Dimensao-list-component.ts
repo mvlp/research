@@ -25,6 +25,7 @@ export class DimensaoListComponent extends BaseListDirective<DimensaoEntity>{
   override service = inject(DimensaoService)
   override component = DimensaoFormComponent
   override header = "Dimensão"
+  override modalWidth = "35%";
 
   override async onNgOnInit(): Promise<void> {
     this.filter.addControl('idIndice', new FormControl(this.idIndice))
@@ -34,5 +35,6 @@ export class DimensaoListComponent extends BaseListDirective<DimensaoEntity>{
     this.modalData = {
       idIndice: this.idIndice
     }
+    
   }
 }

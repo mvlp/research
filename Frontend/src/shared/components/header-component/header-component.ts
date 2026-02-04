@@ -16,11 +16,11 @@ export class HeaderComponent {
   items: MenuItem[] = [{
     label: "Governança",
     items: [
-      {
-        label: "Perguntas",
-        icon: "pi pi-question",
-        command: () => {this.router.navigate(["perguntas"])}
-      },
+      // {
+      //   label: "Perguntas",
+      //   icon: "pi pi-question",
+      //   command: () => {this.router.navigate(["perguntas"])}
+      // },
       {
         label: "Dimensões",
         icon: "pi pi-chart-bar",

@@ -47,11 +47,13 @@ class BaseRepository(Generic[E,M]):
         
     def delete_one(self, id: int):
         with Session(self.sql_engine) as session:
-            pesquisa = delete(self.model_class).where(self.model_class.id == id)
-            result = session.execute(pesquisa)
+            obj = session.get(self.model_class, id)
+            if not obj:
+                return None
+
+            session.delete(obj)
             session.commit()
             return None
-
     def update_one(self, entity: E) -> E | None:
         with Session(self.sql_engine) as session:
             obj = session.get(self.model_class, entity.id)

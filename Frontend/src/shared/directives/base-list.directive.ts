@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Directive, inject, OnInit, Type } from "@angular/core";
 import FormService from "../services/form.service";
 import { FormControl, FormGroup } from "@angular/forms";
-import ModalService, { ModalWidth } from "../services/modal.service";
+import ModalService from "../services/modal.service";
 import { ConfirmationComponent } from "../components/confirmation/confirmation.component";
 import { FormSchema } from "../interfaces/form-schema.interface";
 import { RestService } from "../interfaces/rest-service.interface";
@@ -22,7 +22,7 @@ export abstract class BaseListDirective<E extends { id: any }, P = any> implemen
   filteredValues: E[] = [];
   loading: boolean;
 
-  modalWidth: ModalWidth = "85%";
+  modalWidth: string = "85%";
   closeOnSave: boolean = true;
   emptyMessage: string = "Nenhum registro encontrado!";
 

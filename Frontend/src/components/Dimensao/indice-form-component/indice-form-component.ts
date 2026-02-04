@@ -23,8 +23,6 @@ import { DimensaoListComponent } from "../Dimensao-list-component/Dimensao-list-
 export class IndiceFormComponent extends BaseFormDirective<IndiceEntity>{
   override builder = new IndiceBuilder;
   override service = inject(IndiceService)
-  
-
   minDate: Date
     
   override async onNgOnInit(): Promise<void> {

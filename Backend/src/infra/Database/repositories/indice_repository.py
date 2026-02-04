@@ -72,7 +72,7 @@ class Indice_repository(BaseRepository):
                     FROM "Dimensao" d
                     JOIN "Indice" i
                         ON d."idIndice" = i.id
-                    WHERE i.id = 1
+                    WHERE i.id = :idIndice
                 ),
                 perguntas AS (
                     SELECT
