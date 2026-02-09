@@ -12,7 +12,7 @@
                 <div><a href="publicacoes" class="no-underline text-color text-l">Publicações</a></div>
                 <div class="Traco"></div>
             </div>
-            <p-button class="mr-4" >Contato</p-button>
+            <p-button class="mr-4" (onClick)="openContato()" >Contato</p-button>
             <p-button icon="pi pi-cog" (onClick)="menu.toggle($event)"/>
             <p-popover #menu>
                 <p-menu  [model]="items" class="w-12rem" appendTo="body"/>

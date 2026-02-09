@@ -11,6 +11,7 @@ import lara from '@primeuix/themes/lara'
 import { DimensaoService } from '../services/Dimensao.service';
 import { IndiceService } from '../services/indice.service';
 import { GovernancaService } from '../services/Govenanca.service';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,6 +40,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(withFetch()),
     DialogService, 
-    PerguntaService, DimensaoService, IndiceService,GovernancaService
+    PerguntaService, DimensaoService, IndiceService,GovernancaService,MessageService
   ],
 };

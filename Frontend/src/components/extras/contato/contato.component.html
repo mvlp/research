@@ -1,0 +1,24 @@
+<form [formGroup]="form" class="flex flex-column w-full gap-4 my-4" (submit)="enviarEmail()">
+    <p-floatlabel class="">
+        <input pInputText id="over_label" formControlName="nome" autocomplete="off" class="w-full py-3" />
+        <label for="over_label">Nome</label>
+    </p-floatlabel>
+    <p-floatlabel class="">
+        <input pInputText id="over_label_1" formControlName="email" autocomplete="off" class="w-full py-3" />
+        <label for="over_label_1">Email</label>
+    </p-floatlabel>
+
+    <p-floatlabel class="">
+        <input pInputText id="over_label_2" formControlName="assunto" autocomplete="off" class="w-full py-3" />
+        <label for="over_label_2">Assunto</label>
+    </p-floatlabel>
+    <p-floatlabel class="">
+        <textarea pTextarea id="over_label_3" formControlName="texto" rows="5" cols="30" style="resize: none" class="h-full w-full" style="min-height: 300px;" ></textarea>
+        <label for="over_label_3">Deixe sua mensagem aqui</label>
+    </p-floatlabel>
+    <div class=" flex justify-content-between ">
+        <p-button [severity]="'danger'" (click)="cancelar()">Cancelar</p-button>
+        <p-button type="submit" severity="success" >Enviar</p-button>
+
+    </div>
+</form>
