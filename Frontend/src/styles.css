@@ -1,0 +1,22 @@
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+body {
+    margin: 0;
+}
+div {
+  font-family:  'Inter', sans-serif,'Times New Roman', Times, serif ;
+}
+
+:root{
+  --p-button-primary-background: #7E57C2 !important;
+  --p-button-primary-border-color:  #784ebf !important;
+  --p-button-primary-hover-border-color: #7E57C2 !important;
+  --p-button-primary-active-border-color: #784ebf !important;
+  --p-button-primary-hover-background: #5d32a8 !important;
+  --p-button-primary-active-background: #432080 !important;
+  --p-button-border-radius: 12px !important; 
+}
+
+p-button {
+  border-radius: 20px !important;
+}

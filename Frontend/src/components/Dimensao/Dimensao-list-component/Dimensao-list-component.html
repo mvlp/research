@@ -1,0 +1,25 @@
+<div class="border-1 border-300 border-round" >
+    <app-table-header [tableRef]="table" >
+        <ng-template #actions>
+            <p-button [rounded]="true" [loading]="loading" icon="pi pi-sync" text="true" class="mr-2" (click)="updateUI()"/>
+            <p-button [rounded]="true" icon="pi pi-plus" text="true" (click)="add()" [disabled]="loading"/>
+        </ng-template>
+    </app-table-header>
+    <p-table [value]="values" #table >
+        <ng-template #header>
+            <tr>
+                <th>Siglas das dimensões</th>
+                <th>N° Id itens</th>
+                <th>Ações</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-product > 
+            <tr class="cursor-pointer" (click)="onSelect(product.id)">
+                <td>{{ product.sigla }}</td>
+                <td>{{product.perguntas.length}}</td>
+                <td><p-button [rounded]="true" icon="pi pi-trash" text="true" (click)="deleteRegistry($event,product.id)" [disabled]="loading"/></td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>

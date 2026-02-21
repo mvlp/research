@@ -1,0 +1,38 @@
+from src.infra.Database.extensions import db
+
+class fre_posicao_acionaria(db.Model):
+    __tablename__ = "fre_posicao_acionaria"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
+    tipo_csv = db.Column(db.Text, nullable=True)
+
+    Acionista = db.Column(db.Text, nullable=True)
+    Acionista_Controlador = db.Column(db.Text, nullable=True)
+    Acionista_Relacionado = db.Column(db.Text, nullable=True)
+    CNPJ_Companhia = db.Column(db.Text, nullable=True)
+    CPF_CNPJ_Acionista = db.Column(db.Text, nullable=True)
+    CPF_CNPJ_Acionista_Relacionado = db.Column(db.Text, nullable=True)
+    CPF_CNPJ_Representante_legal = db.Column(db.Text, nullable=True)
+    Data_Composicao_Capital_Social = db.Column(db.Date, nullable=True)
+    Data_Referencia = db.Column(db.Date, nullable=True)
+    Data_Ultima_Alteracao = db.Column(db.Date, nullable=True)
+    ID_Acionista = db.Column(db.Integer, nullable=True)
+    ID_Acionista_Relacionado = db.Column(db.Integer, nullable=True)
+    ID_Documento = db.Column(db.Integer, nullable=True)
+    Nacionalidade = db.Column(db.Text, nullable=True)
+    Nome_Companhia = db.Column(db.Text, nullable=True)
+    Participante_Acordo_Acionistas = db.Column(db.Text, nullable=True)
+    Percentual_Acao_Ordinaria_Circulacao = db.Column(db.Numeric(18, 6), nullable=True)
+    Percentual_Acao_Preferencial_Circulacao = db.Column(db.Numeric(18, 6), nullable=True)
+    Percentual_Total_Acoes_Circulacao = db.Column(db.Numeric(18, 6), nullable=True)
+    Quantidade_Acao_Ordinaria_Circulacao = db.Column(db.Numeric(18, 0), nullable=True)
+    Quantidade_Acao_Preferencial_Circulacao = db.Column(db.Numeric(18, 0), nullable=True)
+    Quantidade_Total_Acoes_Circulacao = db.Column(db.Numeric(18, 0), nullable=True)
+    Representante_Legal = db.Column(db.Text, nullable=True)
+    Residente_Exterior = db.Column(db.Text, nullable=True)
+    Sigla_UF = db.Column(db.Text, nullable=True)
+    Tipo_Pessoa_Acionista = db.Column(db.Text, nullable=True)
+    Tipo_Pessoa_Acionista_Relacionado = db.Column(db.Text, nullable=True)
+    Tipo_Pessoa_Representante_Legal = db.Column(db.Text, nullable=True)
+    Versao = db.Column(db.Integer, nullable=True)

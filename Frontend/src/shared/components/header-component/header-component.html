@@ -1,0 +1,24 @@
+<div class="flex justify-content-center surface-0" style="position: sticky; top: 0; z-index: 9;" >
+    <div class="flex justify-content-between w-full px-4 align-items-center" style="max-width: 1440px; height: 72px;">
+        <div class="text-xl font-bold text m-2 ml-0 text-700" >Marcos Pereira</div>
+        <div class="flex justify-content-end relative">
+            <div class="flex justify-content-between gap-4 m-2 mr-4" style="margin-top: 10px !important;">
+                <div><a href="" class="no-underline text-color text-l">Home</a></div>
+                <div class="Traco"></div>
+                <div><a href="pesquisas" class="no-underline text-color text-l">Pesquisas</a></div>
+                <div class="Traco"></div>
+                <div><a href="projetos" class="no-underline text-color text-l">Projetos</a></div>
+                <div class="Traco"></div>
+                <div><a href="publicacoes" class="no-underline text-color text-l">Publicações</a></div>
+                <div class="Traco"></div>
+            </div>
+            <p-button class="mr-4" (onClick)="openContato()" >Contato</p-button>
+            <p-button icon="pi pi-cog" (onClick)="menu.toggle($event)"/>
+            <p-popover #menu>
+                <p-menu  [model]="items" class="w-12rem" appendTo="body"/>
+            </p-popover>
+        </div>
+    </div>
+</div>
+
+ 

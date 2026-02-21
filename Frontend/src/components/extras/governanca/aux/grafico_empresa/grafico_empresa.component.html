@@ -1,0 +1,13 @@
+<main class="w-full flex align-items-center flex-column">
+    <p-tabs [value]="id_indice" class="border-1 border-300 my-4 w-full" (valueChange)="getEmpresaOverview(undefined,$event)">
+        <p-tablist >
+            @for (item of indices; track $index) {
+                <p-tab [value]="item.id" class="text-sm">{{item.nome}}</p-tab>
+            }
+        </p-tablist>
+        <div class="flex flex-column">
+            <p-select [options]="anos" [(ngModel)]="ano_selecionado" placeholder="Selecione um ano" class=" m-4" />
+            <p-chart type="radar" [data]="graficos[ano_selecionado]" [options]="options"/>
+        </div>
+    </p-tabs>
+</main>

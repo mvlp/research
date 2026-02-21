@@ -1,0 +1,16 @@
+<form class="m-grid p-fluid" style="gap: 14px 8px;" *ngIf="formReady" [formGroup]="form" (submit)="onSubmit()" >
+    <div class="flex justify-content-between w-full my-4">
+        <p-floatlabel>
+            <input pInputText id="over_label" formControlName="nome" autocomplete="off" />
+            <label for="over_label">Nome</label>
+        </p-floatlabel>
+        <p-datepicker formControlName="data_ini"  [minDate]="minDate" appendTo="body" placeholder="Data abertura" [disabled]="true"/>
+    </div>
+    <!-- <p-datepicker formControlName="data_fim" appendTo="body" class="my-4" placeholder="Data final"   /> -->
+
+    <app-Dimensao-list-component [idIndice]="id" />
+    <div class="flex justify-content-between mt-4">
+        <p-button severity="danger" (onClick)="back()">Cancelar</p-button>
+        <p-button severity="success" type="submit">Enviar</p-button>
+    </div>
+</form>

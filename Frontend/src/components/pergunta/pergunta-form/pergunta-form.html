@@ -1,0 +1,14 @@
+<form class="m-grid p-fluid" style="gap: 14px 8px;" *ngIf="formReady" [formGroup]="form" (submit)="onSubmit()" >
+    <p-floatlabel>
+        <input pInputText id="over_label" formControlName="texto" autocomplete="off" />
+        <label for="over_label">Texto</label>
+    </p-floatlabel>
+
+    <p-floatlabel>
+        <input pInputText id="over_label" formControlName="id" autocomplete="off" />
+        <label for="over_label">Id item</label>
+    </p-floatlabel>
+    
+    <p-button severity="danger" (onClick)="back()">Cancelar</p-button>
+    <p-button severity="success" type="submit">Enviar</p-button>
+</form>

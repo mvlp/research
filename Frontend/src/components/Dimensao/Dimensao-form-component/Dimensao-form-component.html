@@ -1,0 +1,32 @@
+<form class="flex flex-column" style="gap: 14px 8px;" *ngIf="formReady" [formGroup]="form" (submit)="onSubmit()" >
+    <p-floatlabel>
+        <input pInputText id="over_label" formControlName="sigla" autocomplete="off" class="w-full my-2" />
+        <label for="over_label">Sigla</label>
+    </p-floatlabel>
+    <p-treetable [value]="id_itens" [scrollable]="true" style="table-layout: fixed;" class="flex">
+        <ng-template #header>
+            <tr>
+                <th style="width: 80%;">Descrição</th>
+                <th style="width: 20%;">Seleção</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode">
+                <td style="width: 80%;">
+                    <p-treetable-toggler [rowNode]="rowNode" />
+                    {{ rowNode.node.label}}
+                </td>
+                <td *ngIf="rowData && rowData.id_item" style="width: 20%;">
+                    <p-button
+                    [label]="getLabel(rowData.id_item)"
+                    (onClick)="toggleTriState(rowData.id_item)"
+                    />
+                </td>
+            </tr>
+        </ng-template>
+    </p-treetable>
+    <div class="flex justify-content-between mt-4">
+        <p-button severity="danger" (onClick)="back()">Cancelar</p-button>
+        <p-button severity="success" type="submit">Enviar</p-button>
+    </div>
+</form>

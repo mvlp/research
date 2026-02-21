@@ -1,0 +1,1 @@
+url_db = "postgresql://guilhermedesouzafornaciari:Ga05112002@localhost:5432/research"

@@ -1,0 +1,13 @@
+/Backend/src/scripts/codigoR/*
+Backend/src/scripts/codigoPython/mineracao/META/*
+Backend/src/scripts/codigoPython/mineracao/model/*
+Backend/src/scripts/codigoPython/mineracao/script/*
+/Backend/src/scripts/codigoPython/assets/*
+/Backend/src/scripts/codigoPython/data/zip/*
+/Backend/src/scripts/codigoPython/docs/*
+/Backend/src/scripts/codigoPython/B3_data/*
+/Backend/src/scripts/data/*
+/Backend/src/scripts/assets/*
+/Backend/src/scripts/docs/*
+codigoR/
+**/__pycache__

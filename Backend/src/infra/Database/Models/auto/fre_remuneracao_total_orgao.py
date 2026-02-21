@@ -1,0 +1,36 @@
+from src.infra.Database.extensions import db
+
+class fre_remuneracao_total_orgao(db.Model):
+    __tablename__ = "fre_remuneracao_total_orgao"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
+    tipo_csv = db.Column(db.Text, nullable=True)
+
+    Baseada_Acoes = db.Column(db.Numeric(18, 2), nullable=True)
+    Beneficios_Diretos_Indiretos = db.Column(db.Numeric(18, 2), nullable=True)
+    Bonus = db.Column(db.Numeric(18, 2), nullable=True)
+    Cessacao_Cargo = db.Column(db.Numeric(18, 2), nullable=True)
+    CNPJ_Companhia = db.Column(db.Text, nullable=True)
+    Comissoes = db.Column(db.Numeric(18, 2), nullable=True)
+    Data_Fim_Exercicio_Social = db.Column(db.Date, nullable=True)
+    Data_Inicio_Exercicio_Social = db.Column(db.Date, nullable=True)
+    Data_Referencia = db.Column(db.Date, nullable=True)
+    Descricao_Outros_Remuneracoes_Fixas = db.Column(db.Text, nullable=True)
+    Descricao_Outros_Remuneracoes_Variaveis = db.Column(db.Text, nullable=True)
+    ID_Documento = db.Column(db.Integer, nullable=True)
+    Nome_Companhia = db.Column(db.Text, nullable=True)
+    Numero_Membros = db.Column(db.Numeric(18, 2), nullable=True)
+    Numero_Membros_Remunerados = db.Column(db.Numeric(18, 2), nullable=True)
+    Observacao = db.Column(db.Text, nullable=True)
+    Orgao_Administracao = db.Column(db.Text, nullable=True)
+    Outros_Valores_Fixos = db.Column(db.Numeric(18, 2), nullable=True)
+    Outros_Valores_Variaveis = db.Column(db.Numeric(18, 2), nullable=True)
+    Participacao_Resultados = db.Column(db.Numeric(18, 2), nullable=True)
+    Participacao_Reunioes = db.Column(db.Numeric(18, 2), nullable=True)
+    Participacoes_Comites = db.Column(db.Numeric(18, 2), nullable=True)
+    Pos_emprego = db.Column(db.Numeric(18, 2), nullable=True)
+    Salario = db.Column(db.Numeric(18, 2), nullable=True)
+    Total_Remuneracao = db.Column(db.Numeric(18, 2), nullable=True)
+    Total_Remuneracao_Orgao = db.Column(db.Numeric(18, 2), nullable=True)
+    Versao = db.Column(db.Integer, nullable=True)

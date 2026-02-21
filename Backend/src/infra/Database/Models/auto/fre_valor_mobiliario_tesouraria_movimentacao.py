@@ -1,0 +1,37 @@
+from src.infra.Database.extensions import db
+
+class fre_valor_mobiliario_tesouraria_movimentacao(db.Model):
+    __tablename__ = "fre_valor_mobiliario_tesouraria_movimentacao"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
+    tipo_csv = db.Column(db.Text, nullable=True)
+
+    CNPJ_Companhia = db.Column(db.Text, nullable=True)
+    Data_Fim_Exercicio_Social = db.Column(db.Date, nullable=True)
+    Data_Inicio_Exercicio_Social = db.Column(db.Date, nullable=True)
+    Data_Referencia = db.Column(db.Date, nullable=True)
+    ID_Documento = db.Column(db.Integer, nullable=True)
+    Nome_Companhia = db.Column(db.Text, nullable=True)
+    Valor_Mobiliario = db.Column(db.Text, nullable=True)
+    Versao = db.Column(db.Integer, nullable=True)
+    Percentual_Relacao_Valores_Mobiliarios_Circulacao = db.Column(db.Numeric(18, 6), nullable=True)
+    Quantidade_Final = db.Column(db.Numeric(18, 0), nullable=True)
+    Valor_Total_Final = db.Column(db.Numeric(18, 2), nullable=True)
+    Valor_Total_Cancelado = db.Column(db.Numeric(18, 2), nullable=True)
+    Especie_Acao = db.Column(db.Text, nullable=True)
+    Valor_Preco_Medio_Adquirido = db.Column(db.Numeric(18, 2), nullable=True)
+    Quantidade_Adquirida = db.Column(db.Numeric(18, 0), nullable=True)
+    Quantidade_Inicial = db.Column(db.Numeric(18, 0), nullable=True)
+    Escala_Cotacao = db.Column(db.Text, nullable=True)
+    Valor_Preco_Medio_Final = db.Column(db.Numeric(18, 2), nullable=True)
+    Quantidade_Alienada = db.Column(db.Numeric(18, 0), nullable=True)
+    Valor_Total_Inicial = db.Column(db.Numeric(18, 2), nullable=True)
+    Descricao_Valor_Mobiliario = db.Column(db.Text, nullable=True)
+    Tipo_Classe_Acao_Preferencial = db.Column(db.Text, nullable=True)
+    Valor_Preco_Medio_Alienado = db.Column(db.Numeric(18, 2), nullable=True)
+    Valor_Preco_Medio_Inicial = db.Column(db.Numeric(18, 2), nullable=True)
+    Valor_Total_Alienado = db.Column(db.Numeric(18, 2), nullable=True)
+    Valor_Preco_Medio_Cancelado = db.Column(db.Numeric(18, 2), nullable=True)
+    Quantidade_Cancelada = db.Column(db.Numeric(18, 0), nullable=True)
+    Valor_Total_Adquirido = db.Column(db.Numeric(18, 2), nullable=True)

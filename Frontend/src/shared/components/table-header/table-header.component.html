@@ -1,0 +1,18 @@
+<div class="flex align-items-center gap-2 p-2 mb-2 border-round-md">
+  <div class="flex align-items-center flex-shrink-0" *ngIf="leftSideTemplate">
+    <ng-container *ngTemplateOutlet="leftSideTemplate"></ng-container>
+  </div>
+  <div class="flex align-items-center flex-1">
+    <p-iconField iconPosition="left" class="w-full">
+      <p-inputIcon class="pi pi-search"/>
+      <input pInputText type="text" class="w-full" [(ngModel)]="searchValue" placeholder="Pesquisa..." (input)="onFilter()" >
+    </p-iconField>
+  </div>
+  <div class="flex align-items-center flex-shrink-0" *ngIf="rightSideTemplate">
+    <ng-container *ngTemplateOutlet="rightSideTemplate"></ng-container>
+  </div>
+
+  <div class="flex align-items-center flex-shrink-0" *ngIf="actionsTemplate">
+    <ng-container *ngTemplateOutlet="actionsTemplate"></ng-container>
+  </div>
+</div>

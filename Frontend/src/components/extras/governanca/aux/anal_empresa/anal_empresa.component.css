@@ -1,0 +1,7 @@
+::ng-deep .p-autocomplete {
+  width: 720px;
+}
+
+::ng-deep .p-autocomplete input {
+  width: 100%;
+}

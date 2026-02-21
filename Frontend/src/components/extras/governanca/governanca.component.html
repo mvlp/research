@@ -1,0 +1,93 @@
+<main class="bgHeader flex align-items-center flex-column">
+    <div style="width: 1200px;" class="text-2xl surface-50 text-center text-sm font-bold text-700 border-1 shadow-2 p-4 border-round my-4 border-300">Informe do Código de Governança (ICBGC)</div>
+    <div style="width: 1200px;" class="surface-50 flex flex-column p-7 pt-4 border-1 border-300 border-round">   
+        <div class="text-800 ">O Informe do Código de Governança (ICBGC) é um documento eletrônico periódico previsto no art. 32 da <a href="https://conteudo.cvm.gov.br/legislacao/resolucoes/resol080.html">Resolução CVM nº 80</a>. 
+            Esta amostra contém (IMPORTAR INFO AQUI) documentos do ICBGC, referentes a (IMPORTAR INFO AQUI) empresas (inclui companhias listadas e não listadas em bolsas de valores), 
+            com intervalo de datas de entrega de outubro/2018 a julho/2025 e intervalo de datas de referência de (IMPORTAR INFO AQUI) a (IMPORTAR INFO AQUI).</div>
+        <div class="text-left my-5"><a href="https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/CGVN/DADOS/">Acessar base de dados original</a></div>
+        <app-empresas-ausentes/>
+        <app-analise-empresa class="w-full"/>
+
+        <div class="text-600 font-bold text-xl my-3">Informações Gerais</div>
+        <p-tabs [value]="value" class="border-1 border-300 w-full" (valueChange)="filter($event)">
+            <p-tablist >
+                <p-tab value="1" class="text-sm">1.Acionistas</p-tab>
+                <p-tab value="2" class="text-sm">2.Conselho de administração</p-tab>
+                <p-tab value="3" class="text-sm">3.Diretoria</p-tab>
+                <p-tab value="4" class="text-sm">4.Órgãos de fiscalização e controle</p-tab>
+                <p-tab value="5" class="text-sm">5.Éticas e conflitos de interesse</p-tab>
+            </p-tablist>
+            <div class="flex justify-content-between w-full" >
+                <div class="flex">
+                    <div style=" width: 480px;">
+                        <div class="flex align-items-end">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="percentual_nao" [options]="first_option" />
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; height: 120px;">Não</div>
+                        </div>
+                        <div class="flex">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="percentual_nao_aplica" [options]="mid_options"  />
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; ">Não se aplica</div>
+                        </div>
+                        <div class="flex">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="percentual_parcialmente" [options]="mid_options" />
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; ">Parcialmente</div>
+                        </div>
+                        <div class="flex">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="percentual_sim" [options]="last_option" style="height: 240px;"/>
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; height: 170px; ">Sim</div>
+                        </div>
+                    </div>
+                </div>
+                <div style=" width: 480px;">
+                    <div style=" width: 480px;">
+                        <div class="flex align-items-end">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="qtd_nao" [options]="first_option2" />
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; height: 120px;">Não</div>
+                        </div>
+                        <div class="flex">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="qtd_nao_aplica" [options]="mid_options"  />
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; ">Não se aplica</div>
+                        </div>
+                        <div class="flex">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="qtd_parcialmente" [options]="mid_options" />
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; ">Parcialmente</div>
+                        </div>
+                        <div class="flex">
+                            <p-chart class=" flex-1" type="line" style="width: 100%;" [data]="qtd_sim" [options]="last_option" style="height: 240px;"/>
+                            <div class="text-center text-sm mx-3 " style=" color: #59595A; writing-mode: vertical-rl; height: 170px; ">Sim</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <p-table [value]="data" class=" border-top-1 border-300 my-3">
+                    <ng-template #header let-columns>
+                        <tr>
+                            <th>Item</th>
+                            <th>Principio</th>
+                            <th>Prática recomendada</th>
+                            <th>Não</th>
+                            <th>Não se aplica</th>
+                            <th>Parcialmente</th>
+                            <th>Sim</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-rowData >
+                        <tr>
+                            <td><div class="dados">{{ rowData["CNPJ_Companhia"] }}</div></td>
+                            <td><div class="dados text-sm">{{ rowData["principio"] }}</div></td>
+                            <td><div class="dados text-sm" style="max-width: 540px;">{{ rowData["pratica_recomendada"] }}</div></td>
+                            <td><div class="dados text-sm">{{ rowData["perc_nao"] }}</div></td>
+                            <td><div class="dados text-sm">{{ rowData["perc_nao_aplica"] }}</div></td>
+                            <td><div class="dados text-sm">{{ rowData["perc_parcialmente"] }}</div></td>
+                            <td><div class="dados text-sm">{{ rowData["perc_sim"] }}</div></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                
+            </div>
+        </p-tabs>
+        
+    </div>
+</main>

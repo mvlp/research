@@ -1,0 +1,35 @@
+from src.infra.Database.extensions import db
+
+class fca_geral(db.Model):
+    __tablename__ = "fca_geral"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    arquivo_origem = db.Column(db.Text, nullable=True)
+    tipo_csv = db.Column(db.Text, nullable=True)
+
+    Categoria_Registro_CVM = db.Column(db.Text, nullable=True)
+    CNPJ_Companhia = db.Column(db.Text, nullable=True)
+    Codigo_CVM = db.Column(db.Text, nullable=True)
+    Data_Alteracao_Exercicio_Social = db.Column(db.Date, nullable=True)
+    Data_Categoria_Registro_CVM = db.Column(db.Date, nullable=True)
+    Data_Constituicao = db.Column(db.Date, nullable=True)
+    Data_Especie_Controle_Acionario = db.Column(db.Date, nullable=True)
+    Data_Nome_Empresarial = db.Column(db.Date, nullable=True)
+    Data_Referencia = db.Column(db.Date, nullable=True)
+    Data_Registro_CVM = db.Column(db.Date, nullable=True)
+    Data_Situacao_Emissor = db.Column(db.Date, nullable=True)
+    Data_Situacao_Registro_CVM = db.Column(db.Date, nullable=True)
+    Descricao_Atividade = db.Column(db.Text, nullable=True)
+    Dia_Encerramento_Exercicio_Social = db.Column(db.Integer, nullable=True)
+    Especie_Controle_Acionario = db.Column(db.Text, nullable=True)
+    ID_Documento = db.Column(db.Integer, nullable=True)
+    Mes_Encerramento_Exercicio_Social = db.Column(db.Integer, nullable=True)
+    Nome_Empresarial = db.Column(db.Text, nullable=True)
+    Nome_Empresarial_Anterior = db.Column(db.Text, nullable=True)
+    Pagina_Web = db.Column(db.Text, nullable=True)
+    Pais_Custodia_Valores_Mobiliarios = db.Column(db.Text, nullable=True)
+    Pais_Origem = db.Column(db.Text, nullable=True)
+    Setor_Atividade = db.Column(db.Text, nullable=True)
+    Situacao_Emissor = db.Column(db.Text, nullable=True)
+    Situacao_Registro_CVM = db.Column(db.Text, nullable=True)
+    Versao = db.Column(db.Integer, nullable=True)
