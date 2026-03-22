@@ -16,3 +16,4 @@ class Approved_cash_dividends_b3(db.Model):
     label = db.Column(db.String(45))
     lastDatePrior = db.Column(db.Date, nullable=False)
     remarks = db.Column(db.String(45))
+    value_at_date = db.Column(db.Numeric(24, 10))

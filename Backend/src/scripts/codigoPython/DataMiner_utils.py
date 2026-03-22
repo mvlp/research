@@ -81,7 +81,7 @@ class DataMinerUtil:
         json_str = json.dumps(payload, separators=(",", ":"))
         b64 = base64.b64encode(json_str.encode("utf-8")).decode("utf-8")
         req = {}
-        for _ in range(10):
+        for _ in range(4):
             try:
                 req = get(f"https://sistemaswebb3-listados.b3.com.br/listedCompaniesProxy/CompanyCall/GetListedSupplementCompany/{b64}").json()
                 break

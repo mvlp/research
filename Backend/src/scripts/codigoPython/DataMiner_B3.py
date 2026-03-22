@@ -2,10 +2,13 @@ from datetime import date
 from decimal import Decimal
 from os import listdir
 from pathlib import Path
+from typing import Any
 from requests import get
 from sqlalchemy import Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
+from src.infra.Database.Models.cash_dividends_b3 import Cash_dividends_b3
+from src.infra.Database.Models.subscriptions_b3 import Subscriptions_b3
 from src.scripts.codigoPython.DataMiner_utils import DataMinerUtil, Empresa, Codigo_negociacao
 from src.infra.Database.Models.approved_cash_dividends_b3 import Approved_cash_dividends_b3
 from src.infra.Database.Models.stock_dividends_b3 import Stock_dividends_b3
@@ -52,7 +55,8 @@ class Dataminer_B3:
             print(f'{arquivo} IMPORTADO')
 
     def importar_eventos_empresariais(self):
-        empresas = DataMinerUtil.get_empresas_http()
+        # empresas = DataMinerUtil.get_empresas_http()
+        empresas = [Empresa("1562","asdasdq","BALM4")]
         erros = []
         for empresa in empresas:
             req = DataMinerUtil.get_proventos_aprovados_http(empresa)
@@ -63,10 +67,11 @@ class Dataminer_B3:
             req = req[0]
 
             dividendos = req["stockDividends"]
+            subscricoes = req["subscriptions"]
             empresaNome = req["tradingName"].replace(" ","")
-            proventos_dinheiros = self.import_proventos_dinheiro(empresa,empresaNome)
-            proventos_dinheiros.extend(req["cashDividends"])
-            print(empresa.issuingCompany,dividendos,proventos_dinheiros)
+            proventos = self.import_proventos_dinheiro(empresa,empresaNome)
+            proventos_aprovado = req["cashDividends"]
+            # print(empresa.issuingCompany,subscricoes)
             with Session(self.engine) as session:
                 for dividendo in dividendos:
                     event = Stock_dividends_b3()
@@ -79,59 +84,87 @@ class Dataminer_B3:
                     event.lastDatePrior = dividendo["lastDatePrior"]
                     event.remarks = dividendo["remarks"]
                     session.add(event)
-                for dinheiros_aprovado in proventos_dinheiros:
+                for dividendo in proventos_aprovado:
                     event = Approved_cash_dividends_b3()
-                    event.assetIssued = dinheiros_aprovado["assetIssued"]
-                    event.paymentDate = dinheiros_aprovado["paymentDate"]
-                    event.rate = Decimal(dinheiros_aprovado["rate"].replace('.', '').replace(',', '.'))
-                    event.relatedTo = dinheiros_aprovado["relatedTo"]
-                    event.isinCode = dinheiros_aprovado["isinCode"]
-                    event.approvedOn = dinheiros_aprovado["approvedOn"]
-                    event.label = dinheiros_aprovado["label"]
-                    event.lastDatePrior = dinheiros_aprovado["lastDatePrior"]
-                    event.remarks = dinheiros_aprovado["remarks"]
+                    event.assetIssued = dividendo["assetIssued"]
+                    event.paymentDate = dividendo["paymentDate"]
+                    event.rate = Decimal(dividendo["rate"].replace('.', '').replace(',', '.'))
+                    event.relatedTo = dividendo["relatedTo"]
+                    event.isinCode = dividendo["isinCode"]
+                    event.approvedOn = dividendo["approvedOn"]
+                    event.label = dividendo["label"]
+                    event.lastDatePrior = dividendo["lastDatePrior"]
+                    event.remarks = dividendo["remarks"]
                     session.add(event)
+                for dividendo in proventos:
+                    event = Cash_dividends_b3()
+                    event.assetIssued = dividendo["assetIssued"]
+                    event.paymentDate = dividendo["paymentDate"]
+                    event.rate = Decimal(dividendo["rate"].replace('.', '').replace(',', '.'))
+                    event.relatedTo = dividendo["relatedTo"]
+                    event.isinCode = dividendo["isinCode"]
+                    event.approvedOn = dividendo["approvedOn"]
+                    event.label = dividendo["label"]
+                    event.lastDatePrior = dividendo["lastDatePrior"]
+                    event.remarks = dividendo["remarks"]
+                    event.value_at_date = dividendo["value_at_date"].replace('.', '').replace(',', '.')
+                    session.add(event)
+                for subscription in subscricoes:
+                    event = Subscriptions_b3()
+                    event.approvedOn = subscription["approvedOn"]
+                    event.assetIssued = subscription["assetIssued"]
+                    event.isinCode = subscription["isinCode"]
+                    event.lastDatePrior = subscription["lastDatePrior"]
+                    event.percentage = subscription["percentage"].replace('.', '').replace(',', '.')
+
+                    event.priceUnit = subscription["priceUnit"].replace('.', '').replace(',', '.')
+                    event.remarks = subscription["remarks"]
+                    event.subscriptionDate = subscription["subscriptionDate"]
+                    event.tradingPeriod = subscription["tradingPeriod"]
+                    session.add(event)
+
                 session.commit()
 
-                session.execute(text("""
-                    DELETE FROM approved_cash_dividends_b3 a
-                    USING approved_cash_dividends_b3 b
-                    WHERE a.ctid > b.ctid
-                    AND a."isinCode"      = b."isinCode"
-                    AND a."lastDatePrior" = b."lastDatePrior"
-                    AND a.rate            = b.rate;
-                """))
-                session.commit()
 
+        
+        with Session(self.engine) as session:
+            session.execute(text("""
+                UPDATE cash_dividends_b3 a
+                SET value_at_date = c.preco_fechamento
+                FROM cotacao_b3 c
+                WHERE c.isin = a."isinCode" AND c.codigo_bdi = '2'
+                AND c.data_pregao = a."lastDatePrior"
+            """))
+            session.commit()
 
         print(erros)
 
 
     def import_proventos_dinheiro(self,empresa:Empresa,empresaNome:str):
         codes = DataMinerUtil.get_codes_http(empresa)
-
         if (len(codes) == 0): return []
         req = DataMinerUtil.get_proventos_dinheiro_http(empresaNome,1)
-        if (not req): return []
         paginas_totais = req["page"]["totalPages"]
         results = []
         for i in range(1,paginas_totais + 1):
             req = DataMinerUtil.get_proventos_dinheiro_http(empresaNome,i) 
             for provento in req["results"]:
                 for code in codes:
-                    if code.is_equal(provento["typeStock"]):
-                        results.append({
-                            "assetIssued": code.code,
-                            "isinCode": code.isin,
-                            "rate": provento["valueCash"],
-                            "approvedOn": provento["dateApproval"],
-                            "lastDatePrior": provento["lastDatePriorEx"],
-                            "label": provento["corporateAction"],
-                            "paymentDate": None,
-                            "relatedTo": None,
-                            "remarks": ""
+                    if not code.is_equal(provento["typeStock"]): continue
+                    results.append({
+                        "assetIssued": code.code,
+                        "isinCode": code.isin,
+                        "rate": provento["valueCash"],
+                        "approvedOn": provento["dateApproval"],
+                        "lastDatePrior": provento["lastDatePriorEx"],
+                        "label": provento["corporateAction"],
+                        "paymentDate": None,
+                        "relatedTo": None,
+                        "remarks": "",
+                        "value_at_date": provento["closingPricePriorExDate"]
 
-                        })
+                    }) 
+        
         return results
 
 

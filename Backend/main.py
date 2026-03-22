@@ -14,6 +14,8 @@ from src.infra.Database.Models.Importacao import Importacao
 from src.infra.Database.Models.cotacao_b3 import CotacaoB3
 from src.infra.Database.Models.stock_dividends_b3 import Stock_dividends_b3
 from src.infra.Database.Models.approved_cash_dividends_b3 import Approved_cash_dividends_b3
+from src.infra.Database.Models.cash_dividends_b3 import Cash_dividends_b3
+from src.infra.Database.Models.subscriptions_b3 import Subscriptions_b3
 
 from src.infra.Database.Models.auto.cgvn_praticas import cgvn_praticas
 from src.infra.Database.Models.auto.cgvn_principal import cgvn_principal

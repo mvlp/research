@@ -8,13 +8,14 @@ BASE_DIR = Path(__file__).resolve().parent  # Isso dá "CodigoPython/"
 
 if __name__ == "__main__":
   engine = create_engine(url_db)
-  miner = DataMinerCGVN(engine)
-  miner.importar_tabela()
-  # bases = DataMiner.pegar_nomes_arquivos("https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/")
-  # bases = ["FRE","DFP","FCA","IPE","ITR","VLMO"]
-  # for base in bases:
-  #   miner = DataMiner(engine,base)
-  #   miner.importar_tabela()
+  # miner = DataMinerCGVN(engine)
+  # miner.importar_tabela()
+  bases = DataMiner.pegar_nomes_arquivos("https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/")
+  bases = ["FRE","DFP","FCA","IPE","ITR","VLMO"]
+  bases = ["IPE"]
+  for base in bases:
+    miner = DataMiner(engine,base)
+    miner.importar_tabela()
 
 
     

@@ -12,7 +12,6 @@ class Cotacao_b3_service(Base_service):
         i = len(cotacoes) -1
         for correcao in correcoes:
             for indexCotacao in range(i,-1,-1):
-                print(i)
                 cotacao = cotacoes[indexCotacao]
                 if (cotacao.data_pregao <= correcao.last_date_prior):
                     # i = indexCotacao

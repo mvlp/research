@@ -31,54 +31,61 @@ class Cotacao_b3_repository(BaseRepository):
     def get_correcoes(self,codigo:str):
         sql = text(""" 
 
-                        WITH cash_dividends AS (
-                            SELECT 
-                                a."isinCode"      AS isin,
-                                a."lastDatePrior" AS last_date_prior,
-                                (c.preco_fechamento - SUM(a.rate)) / c.preco_fechamento AS rate
-                            FROM approved_cash_dividends_b3 a
-                            JOIN cotacao_b3 c
-                            ON c.isin = a."isinCode"
-                            AND c.data_pregao = a."lastDatePrior"
-                            WHERE c.preco_fechamento > 0
-                            AND a."isinCode" = :code
-                            AND codigo_bdi = '2'
-                            GROUP BY a."isinCode", a."lastDatePrior", c.preco_fechamento
-                            order by last_date_prior
+WITH total_cash_dividends AS (
+	SELECT 
+	    a."isinCode"      AS isin,
+	    a."lastDatePrior" AS last_date_prior,
+	    (a.value_at_date - SUM(a.rate)) / a.value_at_date AS rate
+	FROM cash_dividends_b3 a
+	WHERE a."isinCode" = :code
+	GROUP BY a."isinCode", a."lastDatePrior", a.value_at_date
+	
+	UNION ALL
+	
+	SELECT 
+	    a."isinCode"      AS isin,
+	    a."lastDatePrior" AS last_date_prior,
+	    (a.value_at_date - SUM(a.rate)) / a.value_at_date AS rate
+	FROM approved_cash_dividends_b3 a
+	WHERE a."isinCode" = :code
+	GROUP BY a."isinCode", a."lastDatePrior", a.value_at_date
+	
+	ORDER BY last_date_prior
 
-                        ),
-                        stock_dividends AS (
-                            SELECT 
-                                s."isinCode"      AS isin,
-                                s."lastDatePrior" AS last_date_prior,
-                                CASE
-                                    WHEN s.label IN ('BONIFICACAO', 'DESDOBRAMENTO') THEN
-                                        1 / (1 + (s.factor / 100))
+),
+stock_dividends AS (
+	SELECT 
+		s."isinCode"      AS isin,
+		s."lastDatePrior" AS last_date_prior,
+		CASE
+			WHEN s.label IN ('BONIFICACAO', 'DESDOBRAMENTO') THEN
+				1 / (1 + (s.factor / 100))
 
-                                    WHEN s.label = 'GRUPAMENTO' THEN
-                                        1 / s.factor
+			WHEN s.label = 'GRUPAMENTO' THEN
+				1 / s.factor
 
-                                    ELSE
-                                        1
-                                END AS rate
-                            FROM stock_dividends_b3 s
-                            WHERE s."isinCode" = :code
-                        )
-                        SELECT
-                            isin,
-                            last_date_prior,
-                            rate
-                        FROM cash_dividends
+			ELSE
+				1
+		END AS rate
+	FROM stock_dividends_b3 s
+	WHERE s."isinCode" = :code
+)
+SELECT
+	isin,
+	last_date_prior,
+	rate
+FROM total_cash_dividends
 
-                        UNION ALL
+UNION ALL
 
-                        SELECT
-                            isin,
-                            last_date_prior,
-                            rate
-                        FROM stock_dividends
+SELECT
+	isin,
+	last_date_prior,
+	rate
+FROM stock_dividends
 
-                        ORDER BY last_date_prior;
+ORDER BY last_date_prior;
+
                    """)
 
         with Session(self.sql_engine) as session:

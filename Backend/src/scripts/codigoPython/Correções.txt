@@ -1,0 +1,2 @@
+1- O valor que vem da B3 do "valor na ultima data" não bate com o histórico da própria B3 em alguns momentos, confiar apenas no da B3
+2- A empresa pode fazer JCP/rendimentos enquanto o capital está fechado, SOLUÇÃO: armazenar o valor q vem dos dividendos da B3 e no final da importação substituir ele em todos os momentos disponíveis, só usar o valor dos dividendos em ultimo caso
