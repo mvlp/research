@@ -6,9 +6,9 @@ from src.services.Base_service import Base_service
 class Cotacao_b3_service(Base_service):
     def __init__(self) -> None:
         super().__init__(Cotacao_b3_entity)
-    def getCorrigido(self,isin:str, codigo):
-        correcoes: list[Fator_b3] = self.repo.get_correcoes(isin)
-        cotacoes: list[Cotacao_b3_entity] = self.repo.get_hist(codigo)
+    def getCorrigido(self,isin:str, codigo:str, data_fim:str):
+        correcoes: list[Fator_b3] = self.repo.get_correcoes(isin,data_fim)
+        cotacoes: list[Cotacao_b3_entity] = self.repo.get_hist(codigo,data_fim)
         i = len(cotacoes) -1
         for correcao in correcoes:
             for indexCotacao in range(i,-1,-1):

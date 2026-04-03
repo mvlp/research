@@ -12,7 +12,6 @@ if __name__ == "__main__":
   # miner.importar_tabela()
   bases = DataMiner.pegar_nomes_arquivos("https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/")
   bases = ["FRE","DFP","FCA","IPE","ITR","VLMO"]
-  bases = ["IPE"]
   for base in bases:
     miner = DataMiner(engine,base)
     miner.importar_tabela()

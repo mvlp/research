@@ -28,8 +28,8 @@ class Dataminer_B3:
         self.dir = f"{str(BASE_DIR)}/B3_data/"
     
     def importar_dados(self):
-        self.importar_eventos_empresariais()
         # self.importar_cotacoes_historicas()
+        self.importar_eventos_empresariais()
 
 
 
@@ -56,7 +56,13 @@ class Dataminer_B3:
 
     def importar_eventos_empresariais(self):
         # empresas = DataMinerUtil.get_empresas_http()
-        empresas = [Empresa("1562","asdasdq","BALM4")]
+        
+
+        empresas = [Empresa("19348","asdasdq","ITUB4")]  #itau
+        # empresas = [Empresa("9512","asdasdq","PETR4")] # petrobras
+        # empresas = [Empresa("1023","asdasdq","BBAS3")]
+
+        
         erros = []
         for empresa in empresas:
             req = DataMinerUtil.get_proventos_aprovados_http(empresa)
@@ -71,7 +77,7 @@ class Dataminer_B3:
             empresaNome = req["tradingName"].replace(" ","")
             proventos = self.import_proventos_dinheiro(empresa,empresaNome)
             proventos_aprovado = req["cashDividends"]
-            # print(empresa.issuingCompany,subscricoes)
+            # print(empresa.issuingCompany, dividendos, proventos, proventos_aprovado,subscricoes)
             with Session(self.engine) as session:
                 for dividendo in dividendos:
                     event = Stock_dividends_b3()
@@ -137,7 +143,7 @@ class Dataminer_B3:
             """))
             session.commit()
 
-        print(erros)
+        print(f"ERROS: {erros}")
 
 
     def import_proventos_dinheiro(self,empresa:Empresa,empresaNome:str):
@@ -151,6 +157,12 @@ class Dataminer_B3:
             for provento in req["results"]:
                 for code in codes:
                     if not code.is_equal(provento["typeStock"]): continue
+                    # print(
+                    #     provento["lastDatePriorEx"],
+                    #     code.code,
+                    #     code.isin,
+                    #     provento["valueCash"],
+                    # )
                     results.append({
                         "assetIssued": code.code,
                         "isinCode": code.isin,

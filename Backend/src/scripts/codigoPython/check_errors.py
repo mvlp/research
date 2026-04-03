@@ -48,13 +48,13 @@ class check_errors:
     def comparar_empresas(self,code:str):
         print("Comparando resultados da empresa: ",code)
         with Session(self.engine) as session:
-            dado = session.execute(text("select isin from cotacao_b3 where data_pregao > '2000-01-01' and codigo_negociacao = :code order by data_pregao desc limit 1;"),{"code":code}).mappings().all()
-            dados_economatica = session.execute(text("select * from cotacao_economatica where data > '2000-01-01' and codigo_negociacao = :code order by data asc;"),{"code":code}).mappings().all()    
+            dado = session.execute(text("select isin from cotacao_b3 where data_pregao > '2010-01-01' and codigo_negociacao = :code order by data_pregao desc limit 1;"),{"code":code}).mappings().all()
+            dados_economatica = session.execute(text("select * from cotacao_economatica where data > '2010-01-01' and codigo_negociacao = :code order by data asc;"),{"code":code}).mappings().all()    
         dados_economatica = [dict(row) for row in dados_economatica]
         if not dado or not dados_economatica: return 0
         isin = dado[0]["isin"]
         service = Cotacao_b3_service()
-        dados_b3 = service.getCorrigido(isin,code)
+        dados_b3 = service.getCorrigido(isin,code,"2024-02-02")
 
         econ_por_data = {}
         for row in dados_economatica:
@@ -81,7 +81,7 @@ class check_errors:
             preco_b3   = b3_por_data[data]
     
             diff_abs = abs(preco_b3 - preco_econ)
-            if diff_abs > 0.01:
+            if diff_abs > 0.001:
                 print(f"{data}: {diff_abs} = |{preco_b3} - {preco_econ}")            
         
 
@@ -116,7 +116,7 @@ class check_errors:
 if __name__ == "__main__":
     engine = create_engine(url_db)
     checador = check_errors(engine)
-    checador.comparar_empresas("BALM4")
+    checador.comparar_empresas("ITUB4")
     # importador.get_piores_empresas()
 
   

@@ -12,6 +12,11 @@ class Governanca_controller(Base_controller):
 
     def add_outras_rotas(self):
 
+        @self.blueprint.get("importacao")
+        def get_importacao():
+            response = self.service.get_dados_importacao()
+            return response
+        
         @self.blueprint.get("empresa")
         def get_empresa():
             empresa = request.args.get('empresa')

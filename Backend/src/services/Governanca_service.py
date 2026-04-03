@@ -7,6 +7,9 @@ class Governanca_service(Base_service):
     def __init__(self) -> None:
         super().__init__(Governanca_entity)
 
+    def get_dados_importacao(self):
+        return self.repo.get_dados_importacao()
+        
     def get_empresa(self,empresa:str):
         return self.repo.get_empresa(empresa)
     

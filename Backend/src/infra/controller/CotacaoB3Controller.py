@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import jsonify, request
 from src.Entities.Cotacao_b3_entity import Cotacao_b3_entity
 from src.services.Cotacao_b3_service import Cotacao_b3_service
@@ -17,7 +18,10 @@ class Cotacao_b3_controller(Base_controller):
         def getCorrigido():
             isin = request.args.get('isin')
             codigo = request.args.get('codigo')
-
+            data_fim = request.args.get('data_fim')
+            if not data_fim:
+                hoje = datetime.today()
+                data_fim = f"{hoje.year}-{hoje.month}-{hoje.day}"
             if not isin or not codigo: return jsonify({"Erro": "Parâmetros não informados"})
-            res = self.service.getCorrigido(isin,codigo)
+            res = self.service.getCorrigido(isin,codigo,data_fim)
             return self._convert_to_json(res)

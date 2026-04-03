@@ -14,6 +14,31 @@ class Governanca_repository(BaseRepository):
     def __init__(self, engine: Engine):
         super().__init__(Governanca_entity, cgvn_praticas, engine)
 
+    def get_dados_importacao(self):
+        sql = text("""
+            select 
+                count(distinct "ID_Documento") as documento_total,
+                count(distinct "CNPJ_Companhia") as cnpj_total,
+                min("Data_Entrega") as data_entrega_min,
+                max("Data_Entrega") as data_entrega_max,
+                min("Data_Referencia") as data_referencia_min,
+                max("Data_Referencia") as data_referencia_max
+            from cgvn_praticas;
+        """)
+
+        with Session(self.sql_engine) as session:
+            result = session.execute(sql).mappings().all()
+        result = result[0]
+        return {
+            "documento_total": result["documento_total"] ,
+            "cnpj_total": result["cnpj_total"] ,
+            "data_entrega_min": result["data_entrega_min"] ,
+            "data_entrega_max": result["data_entrega_max"] ,
+            "data_referencia_min": result["data_referencia_min"] ,
+            "data_referencia_max": result["data_referencia_max"] ,
+        }
+
+
     def get_empresa(self,empresa:str):
         sql = text("""
             SELECT DISTINCT "CNPJ_Companhia", "Nome_Empresarial"

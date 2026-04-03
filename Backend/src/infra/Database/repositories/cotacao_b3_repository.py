@@ -18,9 +18,9 @@ class Cotacao_b3_repository(BaseRepository):
 
 
 
-    def get_hist(self,codigo:str):
+    def get_hist(self,codigo:str, data_fim:str):
         with Session(self.sql_engine) as session:
-            query = select(CotacaoB3).where(CotacaoB3.codigo_negociacao == codigo).order_by(CotacaoB3.data_pregao.asc())
+            query = select(CotacaoB3).where(CotacaoB3.codigo_negociacao == codigo, CotacaoB3.data_pregao < data_fim).order_by(CotacaoB3.data_pregao.asc())
             results = session.execute(query).scalars().all()
             lista = []
             for r in results:
@@ -28,31 +28,72 @@ class Cotacao_b3_repository(BaseRepository):
             return lista
 
 
-    def get_correcoes(self,codigo:str):
+    def get_correcoes(self,codigo:str,data_fim:str):
         sql = text(""" 
 
-WITH total_cash_dividends AS (
-	SELECT 
-	    a."isinCode"      AS isin,
-	    a."lastDatePrior" AS last_date_prior,
-	    (a.value_at_date - SUM(a.rate)) / a.value_at_date AS rate
-	FROM cash_dividends_b3 a
-	WHERE a."isinCode" = :code
-	GROUP BY a."isinCode", a."lastDatePrior", a.value_at_date
-	
-	UNION ALL
-	
-	SELECT 
-	    a."isinCode"      AS isin,
-	    a."lastDatePrior" AS last_date_prior,
-	    (a.value_at_date - SUM(a.rate)) / a.value_at_date AS rate
-	FROM approved_cash_dividends_b3 a
-	WHERE a."isinCode" = :code
-	GROUP BY a."isinCode", a."lastDatePrior", a.value_at_date
-	
-	ORDER BY last_date_prior
 
+WITH base AS (
+    -- TABELA 1 (já agregada)
+    SELECT 
+        a."isinCode"      AS isin,
+        a."lastDatePrior" AS last_date_prior,
+        SUM(a.rate)       AS total_rate,
+        c.preco_fechamento,
+        1 AS prioridade
+    FROM cash_dividends_b3 a
+    JOIN cotacao_b3 c
+        ON c.isin = a."isinCode"
+        AND c.data_pregao = a."lastDatePrior"
+    WHERE c.preco_fechamento > 0
+      AND a."isinCode" = :code
+      AND c.codigo_bdi = '2'
+	  AND a."lastDatePrior" < :data_fim
+    GROUP BY a."isinCode", a."lastDatePrior", c.preco_fechamento
+
+    UNION ALL
+
+    -- TABELA 2 (já agregada)
+    SELECT 
+        a."isinCode"      AS isin,
+        a."lastDatePrior" AS last_date_prior,
+        SUM(a.rate)       AS total_rate,
+        c.preco_fechamento,
+        2 AS prioridade
+    FROM approved_cash_dividends_b3 a
+    JOIN cotacao_b3 c
+        ON c.isin = a."isinCode"
+        AND c.data_pregao = a."lastDatePrior"
+    WHERE c.preco_fechamento > 0
+      AND a."isinCode" = :code
+      AND c.codigo_bdi = '2'
+	  AND a."lastDatePrior" < :data_fim
+    GROUP BY a."isinCode", a."lastDatePrior", c.preco_fechamento
 ),
+
+ranked AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY isin, last_date_prior
+            ORDER BY prioridade
+        ) AS rn
+    FROM base
+),
+
+
+total_cash_dividends AS (
+
+	SELECT 
+	    isin,
+	    last_date_prior,
+	    (preco_fechamento - total_rate) / preco_fechamento AS rate,
+		total_rate,
+		preco_fechamento
+	FROM ranked
+	WHERE rn = 1
+	ORDER BY last_date_prior
+),
+
+
 stock_dividends AS (
 	SELECT 
 		s."isinCode"      AS isin,
@@ -68,7 +109,7 @@ stock_dividends AS (
 				1
 		END AS rate
 	FROM stock_dividends_b3 s
-	WHERE s."isinCode" = :code
+	WHERE s."isinCode" = :code AND s."lastDatePrior" < :data_fim
 )
 SELECT
 	isin,
@@ -89,7 +130,8 @@ ORDER BY last_date_prior;
                    """)
 
         with Session(self.sql_engine) as session:
-            result = session.execute(sql,{"code": codigo}).mappings().all()
+            parametros = {"code": codigo,"data_fim": data_fim}
+            result = session.execute(sql,parametros).mappings().all()
         tabela = []
         for r in result:
             tabela.append(Fator_b3.from_model(dict(r)))

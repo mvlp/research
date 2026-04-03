@@ -8,7 +8,7 @@ class Stock_dividends_b3(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     assetIssued = db.Column(db.String(45))
     cnpj = db.Column(db.String(16))
-    factor = db.Column(db.Numeric(30, 13), nullable=False)
+    factor = db.Column(db.Numeric(50, 25), nullable=False)
     approvedOn = db.Column(db.Date, nullable=False)
     isinCode = db.Column(db.String(45))
     label = db.Column(db.String(45))
