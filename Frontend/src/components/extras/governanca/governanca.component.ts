@@ -32,6 +32,14 @@ export class GovernancaComponent implements OnInit {
   service = inject(GovernancaService)
   cdr = inject(ChangeDetectorRef)
 
+  importacao = {
+    data_entrega_min: "",
+    data_entrega_max: "",
+    data_referencia_min: "",
+    data_referencia_max: "",
+    cnpj_total: 0,
+    documento_total:0
+  }
   value = '1';
   data: Array<tabelaData>;
   tabela: Array<tabelaData>;
@@ -137,9 +145,25 @@ export class GovernancaComponent implements OnInit {
   ngOnInit(): void {
     this.getTabela()
     this.getGrafico()
+    this.getImportacoes()
   }
 
-
+  async getImportacoes(){
+    this.service.getImportacao().subscribe((data:any) => {
+      data.data_entrega_min = new Date(data.data_entrega_min)
+      data.data_entrega_max = new Date(data.data_entrega_max)
+      data.data_referencia_min = new Date(data.data_referencia_min)
+      data.data_referencia_max = new Date(data.data_referencia_max)
+      console.log(data.data_entrega_min.toLocaleDateString('pt-BR'));
+      
+      this.importacao.data_entrega_min = data.data_entrega_min.toLocaleDateString('pt-BR')
+      this.importacao.data_entrega_max = data.data_entrega_max.toLocaleDateString('pt-BR')
+      this.importacao.data_referencia_min = data.data_referencia_min.toLocaleDateString('pt-BR')
+      this.importacao.data_referencia_max = data.data_referencia_max.toLocaleDateString('pt-BR')
+      this.importacao.cnpj_total = data.cnpj_total
+      this.importacao.documento_total = data.documento_total
+    } )
+  }
   async getGrafico(){
     const requisicoes: Array<Promise<GraficoEntity>> = []
     requisicoes.push(lastValueFrom(this.service.getGraficoPercentuais(mapa[this.value],"Não")))

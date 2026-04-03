@@ -2,8 +2,8 @@
     <div style="width: 1200px;" class="text-2xl surface-50 text-center text-sm font-bold text-700 border-1 shadow-2 p-4 border-round my-4 border-300">Informe do Código de Governança (ICBGC)</div>
     <div style="width: 1200px;" class="surface-50 flex flex-column p-7 pt-4 border-1 border-300 border-round">   
         <div class="text-800 ">O Informe do Código de Governança (ICBGC) é um documento eletrônico periódico previsto no art. 32 da <a href="https://conteudo.cvm.gov.br/legislacao/resolucoes/resol080.html">Resolução CVM nº 80</a>. 
-            Esta amostra contém (IMPORTAR INFO AQUI) documentos do ICBGC, referentes a (IMPORTAR INFO AQUI) empresas (inclui companhias listadas e não listadas em bolsas de valores), 
-            com intervalo de datas de entrega de outubro/2018 a julho/2025 e intervalo de datas de referência de (IMPORTAR INFO AQUI) a (IMPORTAR INFO AQUI).</div>
+            Esta amostra contém {{importacao.documento_total}} documentos do ICBGC, referentes a {{importacao.cnpj_total}} empresas (inclui companhias listadas e não listadas em bolsas de valores), 
+            com intervalo de datas de entrega de {{importacao.data_entrega_min}} a {{importacao.data_entrega_max}} e intervalo de datas de referência de {{importacao.data_referencia_min}} a {{importacao.data_referencia_max}}.</div>
         <div class="text-left my-5"><a href="https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/CGVN/DADOS/">Acessar base de dados original</a></div>
         <app-empresas-ausentes/>
         <app-analise-empresa class="w-full"/>

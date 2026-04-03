@@ -9,6 +9,11 @@ import GraficoEntity from "../entities/Grafico.entity";
 export class GovernancaService {
     http: HttpClient = inject(HttpClient);
     route = "governanca"
+
+    getImportacao(){
+        return this.http.get<Array<any>>(`${environment.base_url}${this.route}/importacao`)
+    }
+
     getDadosFaltantes(){
         return this.http.get<Array<any>>(`${environment.base_url}${this.route}/faltantes`)
     }
