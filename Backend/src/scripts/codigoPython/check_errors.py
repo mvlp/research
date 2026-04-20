@@ -81,7 +81,7 @@ class check_errors:
             preco_b3   = b3_por_data[data]
     
             diff_abs = abs(preco_b3 - preco_econ)
-            if diff_abs > 0.001:
+            if diff_abs > 0.01:
                 print(f"{data}: {diff_abs} = |{preco_b3} - {preco_econ}")            
         
 
@@ -116,7 +116,7 @@ class check_errors:
 if __name__ == "__main__":
     engine = create_engine(url_db)
     checador = check_errors(engine)
-    checador.comparar_empresas("ITUB4")
+    checador.comparar_empresas("MGLU3")
     # importador.get_piores_empresas()
 
   

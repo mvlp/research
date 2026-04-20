@@ -110,12 +110,73 @@ stock_dividends AS (
 		END AS rate
 	FROM stock_dividends_b3 s
 	WHERE s."isinCode" = :code AND s."lastDatePrior" < :data_fim
+),
+subscriptions AS (
+	SELECT 
+	    s."isinCode"      AS isin,
+	    s."lastDatePrior" AS last_date_prior,
+	    (
+	        (
+	            (antes.qtd * p.preco_fechamento) +
+	            ((depois.qtd - antes.qtd) * s."priceUnit")
+	        ) / depois.qtd
+	    ) / p.preco_fechamento AS rate
+	
+	FROM subscriptions_b3 s
+	
+	-- preço da ação na data anterior
+	JOIN (
+	    SELECT 
+	        isin,
+	        data_pregao,
+	        preco_fechamento,
+			codigo_bdi
+	    FROM cotacao_b3
+	    ORDER BY isin, data_pregao
+	) p
+	    ON p.isin = s."isinCode"
+	   AND p.data_pregao = s."lastDatePrior"
+	   AND p.codigo_bdi = '2'
+	  
+	
+	-- antes
+	JOIN LATERAL (
+	    SELECT 
+	        i."QT_ACAO_ORDIN_CAP_INTEGR" AS qtd
+	    FROM itr_composicao_capital i
+	    WHERE regexp_replace(i."CNPJ_CIA", '[^0-9]', '', 'g') = s.cnpj
+	      AND i."DT_REFER" < s."lastDatePrior"
+	    ORDER BY i."DT_REFER" DESC, i.ctid DESC
+	    LIMIT 1
+	) antes ON true
+	
+	-- depois
+	JOIN LATERAL (
+	    SELECT 
+	        i."QT_ACAO_ORDIN_CAP_INTEGR" AS qtd
+	    FROM itr_composicao_capital i
+	    WHERE regexp_replace(i."CNPJ_CIA", '[^0-9]', '', 'g') = s.cnpj
+	      AND i."DT_REFER" > s."lastDatePrior"
+	    ORDER BY i."DT_REFER" ASC, i.ctid DESC
+	    LIMIT 1
+	) depois ON true
+	
+	WHERE s."isinCode" = :code AND s."lastDatePrior" < :data_fim
 )
 SELECT
 	isin,
 	last_date_prior,
 	rate
 FROM total_cash_dividends
+
+UNION ALL
+
+
+SELECT
+	isin,
+	last_date_prior,
+	rate
+FROM subscriptions
 
 UNION ALL
 

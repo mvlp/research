@@ -6,6 +6,8 @@ class Subscriptions_b3(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     approvedOn = db.Column(db.Date, nullable=False)
+    cnpj = db.Column(db.String(45), nullable=False)
+    
     assetIssued = db.Column(db.String(45))
     isinCode = db.Column(db.String(45))
     lastDatePrior = db.Column(db.Date, nullable=False)
