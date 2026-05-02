@@ -7,6 +7,7 @@ from requests import get
 from sqlalchemy import Engine, create_engine, select, text
 from sqlalchemy.orm import Session
 
+from src.infra.Database.Models.empresa_b3 import Empresa_b3
 from src.infra.Database.Models.cash_dividends_b3 import Cash_dividends_b3
 from src.infra.Database.Models.subscriptions_b3 import Subscriptions_b3
 from src.scripts.codigoPython.DataMiner_utils import DataMinerUtil, Empresa, Codigo_negociacao
@@ -77,11 +78,23 @@ class Dataminer_B3:
 
             dividendos = req["stockDividends"]
             subscricoes = req["subscriptions"]
+            codigos = DataMinerUtil.get_codes_http(empresa)
+                
+
             empresaNome = req["tradingName"].replace(" ","")
             proventos = self.import_proventos_dinheiro(empresa,empresaNome)
+
+
             proventos_aprovado = req["cashDividends"]
             print(empresa.issuingCompany)
             with Session(self.engine) as session:
+                for codigo in codigos:
+                    empresa_b3 = Empresa_b3()
+                    empresa_b3.cnpj = empresa.cnpj
+                    empresa_b3.codigo_negociacao = codigo.code
+                    empresa_b3.isin = codigo.isin
+                    session.add(empresa_b3)
+
                 for dividendo in dividendos:
                     event = Stock_dividends_b3()
                     event.assetIssued = dividendo["assetIssued"]
@@ -134,6 +147,8 @@ class Dataminer_B3:
                     session.add(event)
 
                 session.commit()
+
+        
 
 
         

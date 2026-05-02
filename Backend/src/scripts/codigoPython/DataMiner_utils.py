@@ -7,6 +7,7 @@ import base64
 class Codigo_negociacao:
     isin: str
     code: str
+
     def __init__(self, isin: str, code: str) -> None:
         self.isin = isin
         self.code = code
