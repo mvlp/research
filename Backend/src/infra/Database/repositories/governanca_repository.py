@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any, Set, Type
 
 from sqlalchemy import Engine, select, text
 from src.Entities.SelectDataEntity import SelectDataEntity
@@ -135,6 +135,151 @@ class Governanca_repository(BaseRepository):
             )
             tabela.append(row)
         return tabela
+
+    def get_grafico_percentual2(self, chapter: str,resposta: str) -> Grafico_entity:
+        sql = text("""
+WITH tamanho_anual AS (
+
+    SELECT DISTINCT ON (
+        cnpj,
+        EXTRACT(YEAR FROM trimestre)
+    )
+
+        cnpj,
+
+        porte,
+
+        EXTRACT(YEAR FROM trimestre) AS ano,
+
+        trimestre
+
+    FROM tamanho_empresa_b3
+
+    ORDER BY
+        cnpj,
+        EXTRACT(YEAR FROM trimestre),
+        trimestre DESC
+),
+base AS (
+    SELECT
+        "CNPJ_Companhia",
+        date_trunc('quarter', "Data_Entrega")::date AS data_entrega,
+        "ID_Documento",
+        "Pratica_Adotada",
+		tamanho_anual.porte
+    FROM cgvn_praticas
+	JOIN tamanho_anual on regexp_replace(cgvn_praticas."CNPJ_Companhia", '[^0-9]', '', 'g') = tamanho_anual.cnpj 
+	AND EXTRACT(YEAR FROM cgvn_praticas."Data_Entrega"::date) = EXTRACT(YEAR FROM tamanho_anual.trimestre)
+    WHERE "Capitulo" = :chapter
+),
+doc_cnts AS (
+	SELECT
+		"CNPJ_Companhia",
+		data_entrega,
+		"ID_Documento",
+		"Pratica_Adotada",
+		base.porte,
+		COUNT(*) AS cnt
+	FROM base
+	GROUP BY
+		"CNPJ_Companhia",
+		data_entrega,
+		"ID_Documento",
+		"Pratica_Adotada",
+		porte
+),
+doc_totals AS (
+	SELECT
+		"CNPJ_Companhia",
+		data_entrega,
+		"ID_Documento",
+		doc_cnts.porte,
+		SUM(cnt) AS total_doc
+	FROM doc_cnts
+	GROUP BY
+		"CNPJ_Companhia",
+		data_entrega,
+		"ID_Documento",
+		doc_cnts.porte
+),
+freq AS (
+
+	SELECT
+		c."CNPJ_Companhia",
+		c.data_entrega,
+		c."Pratica_Adotada",
+		c."ID_Documento",
+		t.porte,
+		c.cnt::numeric / t.total_doc AS freq
+	FROM doc_cnts c
+	JOIN doc_totals t
+	ON t."CNPJ_Companhia" = c."CNPJ_Companhia"
+	AND t.data_entrega     = c.data_entrega
+	AND t."ID_Documento"   = c."ID_Documento"
+)
+
+SELECT
+	data_entrega,
+	freq.porte,
+	"Pratica_Adotada",
+	100 * AVG(freq) AS ybar,
+	COUNT(*) AS n
+FROM freq WHERE "Pratica_Adotada" = :resposta
+GROUP BY
+	data_entrega,
+	"Pratica_Adotada",
+	freq.porte
+ORDER BY
+	data_entrega,
+	"Pratica_Adotada";
+    """)
+        with Session(self.sql_engine) as session:
+            result = session.execute(
+                sql,
+                {"chapter": chapter, "resposta":resposta}
+            ).mappings().all()
+        labels = sorted({
+            str(r["data_entrega"])
+            for r in result
+        })
+        dados = {}
+
+        for r in result:
+            chave = (
+                str(r["data_entrega"]),
+                r["porte"]
+            )
+
+            dados[chave] = float(r["ybar"])
+
+        pequena = []
+        media = []
+        grande = []
+
+        for label in labels:
+
+            pequena.append(
+                dados.get((label, "pequena"))
+            )
+
+            media.append(
+                dados.get((label, "media"))
+            )
+
+            grande.append(
+                dados.get((label, "grande"))
+            )
+
+        grafico = Grafico_entity(
+            "2",
+            labels,
+            media,
+            grande,
+            pequena,
+        )
+        return grafico
+
+
     def get_grafico_percentual(self, chapter: str,resposta: str) -> Grafico_entity:
         ## ESSE deu trabalho
         sql = text("""
@@ -219,7 +364,6 @@ class Governanca_repository(BaseRepository):
             grafico.Limite_superior.append(float(r["yhigh"]))
         return grafico
 
-
     def get_grafico_quantidade(self, chapter: str, resposta: str) -> Grafico_entity:
 
         sql = text("""
@@ -243,4 +387,69 @@ class Governanca_repository(BaseRepository):
         for r in result:
             grafico.labels.append(str(r["data_entrega"]))
             grafico.Dado.append(float(r["quantidade"]))
+        return grafico
+
+    def get_grafico_quantidade2(self, chapter: str, resposta: str) -> Grafico_entity:
+
+        sql = text("""
+                   select porte, data_entrega, "Pratica_Adotada", count("ID_Documento") as quantidade 
+                    from(
+                        select distinct
+                            "CNPJ_Companhia",
+                            date_trunc('quarter', "Data_Entrega")::date AS data_entrega,
+                            "ID_Documento",
+                            "Pratica_Adotada",
+                            tamanho_empresa_b3.porte
+                            from cgvn_praticas 
+                            JOIN tamanho_empresa_b3 on regexp_replace(cgvn_praticas."CNPJ_Companhia", '[^0-9]', '', 'g') = tamanho_empresa_b3.cnpj 
+                            AND EXTRACT(YEAR FROM cgvn_praticas."Data_Entrega"::date) = EXTRACT(YEAR FROM tamanho_empresa_b3.trimestre) 
+                            where "Capitulo" = :chapter and "Pratica_Adotada" = :resposta
+                        )
+                        group by data_entrega,"Pratica_Adotada", porte order by data_entrega, porte;
+                   """)
+
+        with Session(self.sql_engine) as session:
+            result = session.execute(
+                sql,
+                {"chapter": chapter, "resposta":resposta}
+            ).mappings().all()
+        labels = sorted({
+            str(r["data_entrega"])
+            for r in result
+        })
+        dados = {}
+
+        for r in result:
+            chave = (
+                str(r["data_entrega"]),
+                r["porte"]
+            )
+
+            dados[chave] = float(r["quantidade"])
+
+        pequena = []
+        media = []
+        grande = []
+
+        for label in labels:
+
+            pequena.append(
+                dados.get((label, "pequena"))
+            )
+
+            media.append(
+                dados.get((label, "media"))
+            )
+
+            grande.append(
+                dados.get((label, "grande"))
+            )
+
+        grafico = Grafico_entity(
+            "2",
+            labels,
+            media,
+            grande,
+            pequena,
+        )
         return grafico

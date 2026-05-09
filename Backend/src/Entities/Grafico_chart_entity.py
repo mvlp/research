@@ -3,13 +3,16 @@ from typing import Any
 class Dataset:
   label:str
   data: list[float]
-  def __init__(self,label:str) -> None:
+  background: str
+  def __init__(self,label:str, bg: str) -> None:
     self.label = label
     self.data = []
+    self.background = bg
   def to_dict(self) -> Any:
     return {
       "label": self.label,
-      "data": self.data
+      "data": self.data,
+      "backgroundColor": self.background,
     }
 
 

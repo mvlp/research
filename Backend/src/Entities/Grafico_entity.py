@@ -16,7 +16,36 @@ class Grafico_entity:
 
   def to_dict(self) -> Any:
     datasets = []
-    if (len(self.Limite_superior)): datasets.append(
+    if self.nome == "2":
+      datasets.append(
+        {
+            "label":"Grandes empresas",
+            "data": self.Limite_superior,
+            "backgroundColor": "rgb(52, 120, 145)",
+            "borderColor": "rgb(52, 120, 145)",
+            "spanGaps": True
+        }
+      )
+      datasets.append(
+        {
+          "label":"Médias empresas",
+          "data": self.Dado,
+          "backgroundColor": "rgb(85, 190, 122)",
+          "borderColor": "rgb(85, 190, 122)",
+          "spanGaps": True
+        }
+      )
+      datasets.append(
+        {
+            "label":"Empresas pequenas",
+            "data": self.Limite_inferior,
+            "backgroundColor": "rgb(214, 188, 120)",
+            "borderColor": "rgb(214, 188, 120)",
+            "spanGaps": True
+        }
+      )
+    elif (len(self.Limite_superior) and len(self.Limite_inferior) ): 
+      datasets.append(
           {
             "label":"Limite superior",
             "data": self.Limite_superior,
@@ -26,10 +55,8 @@ class Grafico_entity:
             "fill": 2,
             "order": 2
 
-          }
-    )
-      
-    if (len(self.Dado)): datasets.append(
+          })
+      datasets.append(
           {
             "label":"Dados",
             "data": self.Dado,
@@ -37,18 +64,28 @@ class Grafico_entity:
             "borderColor": "rgb(85, 190, 122)",
             "order": 1
           }
-    )
-    if (len(self.Limite_inferior)): datasets.append(
-          {
-            "label":"Limite inferior",
-            "data": self.Limite_inferior,
-            "backgroundColor": "rgba(100,116,139,0.35)",
-            "pointRadius": 0,
-            "borderWidth": 0,
-            "order": 2,
+      )
+      datasets.append({
+        "label":"Limite inferior",
+        "data": self.Limite_inferior,
+        "backgroundColor": "rgba(100,116,139,0.35)",
+        "pointRadius": 0,
+        "borderWidth": 0,
+        "order": 2,
 
+        }
+      )
+    else:
+      datasets.append(
+          {
+            "label":"Dados",
+            "data": self.Dado,
+            "backgroundColor": "rgb(85, 190, 122)",
+            "borderColor": "rgb(85, 190, 122)",
+            "order": 1
           }
-    )
+      )
+      
     return {
         "Nome": self.nome,
         "labels": self.labels,

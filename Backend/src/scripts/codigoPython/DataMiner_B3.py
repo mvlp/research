@@ -68,6 +68,8 @@ class Dataminer_B3:
 
         
         erros = []
+        i = 1
+        n_empresas = len(empresas)
         for empresa in empresas:
             req = DataMinerUtil.get_proventos_aprovados_http(empresa)
             if req == None: 
@@ -82,11 +84,11 @@ class Dataminer_B3:
                 
 
             empresaNome = req["tradingName"].replace(" ","")
-            proventos = self.import_proventos_dinheiro(empresa,empresaNome)
+            # proventos = self.import_proventos_dinheiro(empresa,empresaNome)
 
 
             proventos_aprovado = req["cashDividends"]
-            print(empresa.issuingCompany)
+            print(f"{i}/{n_empresas}",empresa.issuingCompany)
             with Session(self.engine) as session:
                 for codigo in codigos:
                     empresa_b3 = Empresa_b3()
@@ -95,56 +97,56 @@ class Dataminer_B3:
                     empresa_b3.isin = codigo.isin
                     session.add(empresa_b3)
 
-                for dividendo in dividendos:
-                    event = Stock_dividends_b3()
-                    event.assetIssued = dividendo["assetIssued"]
-                    event.cnpj = empresa.cnpj
-                    event.factor = Decimal(dividendo["factor"].replace('.', '').replace(',', '.'))
-                    event.approvedOn = dividendo["approvedOn"]
-                    event.isinCode = dividendo["isinCode"]
-                    event.label = dividendo["label"]
-                    event.lastDatePrior = dividendo["lastDatePrior"]
-                    event.remarks = dividendo["remarks"]
-                    session.add(event)
-                for dividendo in proventos_aprovado:
-                    event = Approved_cash_dividends_b3()
-                    event.assetIssued = dividendo["assetIssued"]
-                    event.paymentDate = dividendo["paymentDate"]
-                    event.rate = Decimal(dividendo["rate"].replace('.', '').replace(',', '.'))
-                    event.relatedTo = dividendo["relatedTo"]
-                    event.isinCode = dividendo["isinCode"]
-                    event.approvedOn = dividendo["approvedOn"]
-                    event.label = dividendo["label"]
-                    event.lastDatePrior = dividendo["lastDatePrior"]
-                    event.remarks = dividendo["remarks"]
-                    session.add(event)
-                for dividendo in proventos:
-                    event = Cash_dividends_b3()
-                    event.assetIssued = dividendo["assetIssued"]
-                    event.paymentDate = dividendo["paymentDate"]
-                    event.rate = Decimal(dividendo["rate"].replace('.', '').replace(',', '.'))
-                    event.relatedTo = dividendo["relatedTo"]
-                    event.isinCode = dividendo["isinCode"]
-                    event.approvedOn = dividendo["approvedOn"]
-                    event.label = dividendo["label"]
-                    event.lastDatePrior = dividendo["lastDatePrior"]
-                    event.remarks = dividendo["remarks"]
-                    event.value_at_date = dividendo["value_at_date"].replace('.', '').replace(',', '.')
-                    session.add(event)
-                for subscription in subscricoes:
-                    event = Subscriptions_b3()
-                    event.cnpj = empresa.cnpj
-                    event.approvedOn = subscription["approvedOn"]
-                    event.assetIssued = subscription["assetIssued"]
-                    event.isinCode = subscription["isinCode"]
-                    event.lastDatePrior = subscription["lastDatePrior"]
-                    event.percentage = subscription["percentage"].replace('.', '').replace(',', '.')
+                # for dividendo in dividendos:
+                #     event = Stock_dividends_b3()
+                #     event.assetIssued = dividendo["assetIssued"]
+                #     event.cnpj = empresa.cnpj
+                #     event.factor = Decimal(dividendo["factor"].replace('.', '').replace(',', '.'))
+                #     event.approvedOn = dividendo["approvedOn"]
+                #     event.isinCode = dividendo["isinCode"]
+                #     event.label = dividendo["label"]
+                #     event.lastDatePrior = dividendo["lastDatePrior"]
+                #     event.remarks = dividendo["remarks"]
+                #     session.add(event)
+                # for dividendo in proventos_aprovado:
+                #     event = Approved_cash_dividends_b3()
+                #     event.assetIssued = dividendo["assetIssued"]
+                #     event.paymentDate = dividendo["paymentDate"]
+                #     event.rate = Decimal(dividendo["rate"].replace('.', '').replace(',', '.'))
+                #     event.relatedTo = dividendo["relatedTo"]
+                #     event.isinCode = dividendo["isinCode"]
+                #     event.approvedOn = dividendo["approvedOn"]
+                #     event.label = dividendo["label"]
+                #     event.lastDatePrior = dividendo["lastDatePrior"]
+                #     event.remarks = dividendo["remarks"]
+                #     session.add(event)
+                # for dividendo in proventos:
+                #     event = Cash_dividends_b3()
+                #     event.assetIssued = dividendo["assetIssued"]
+                #     event.paymentDate = dividendo["paymentDate"]
+                #     event.rate = Decimal(dividendo["rate"].replace('.', '').replace(',', '.'))
+                #     event.relatedTo = dividendo["relatedTo"]
+                #     event.isinCode = dividendo["isinCode"]
+                #     event.approvedOn = dividendo["approvedOn"]
+                #     event.label = dividendo["label"]
+                #     event.lastDatePrior = dividendo["lastDatePrior"]
+                #     event.remarks = dividendo["remarks"]
+                #     event.value_at_date = dividendo["value_at_date"].replace('.', '').replace(',', '.')
+                #     session.add(event)
+                # for subscription in subscricoes:
+                #     event = Subscriptions_b3()
+                #     event.cnpj = empresa.cnpj
+                #     event.approvedOn = subscription["approvedOn"]
+                #     event.assetIssued = subscription["assetIssued"]
+                #     event.isinCode = subscription["isinCode"]
+                #     event.lastDatePrior = subscription["lastDatePrior"]
+                #     event.percentage = subscription["percentage"].replace('.', '').replace(',', '.')
 
-                    event.priceUnit = subscription["priceUnit"].replace('.', '').replace(',', '.')
-                    event.remarks = subscription["remarks"]
-                    event.subscriptionDate = subscription["subscriptionDate"]
-                    event.tradingPeriod = subscription["tradingPeriod"]
-                    session.add(event)
+                #     event.priceUnit = subscription["priceUnit"].replace('.', '').replace(',', '.')
+                #     event.remarks = subscription["remarks"]
+                #     event.subscriptionDate = subscription["subscriptionDate"]
+                #     event.tradingPeriod = subscription["tradingPeriod"]
+                #     session.add(event)
 
                 session.commit()
 

@@ -18,6 +18,7 @@ from src.infra.Database.Models.cash_dividends_b3 import Cash_dividends_b3
 from src.infra.Database.Models.subscriptions_b3 import Subscriptions_b3
 from src.infra.Database.Models.cotacao_b3_relativa import CotacaoB3Corrigida
 from src.infra.Database.Models.empresa_b3 import Empresa_b3
+from src.infra.Database.Models.tamanho_empresa_b3 import Tamanho_empresa_b3
 
 from src.infra.Database.Models.auto.cgvn_praticas import cgvn_praticas
 from src.infra.Database.Models.auto.cgvn_principal import cgvn_principal
