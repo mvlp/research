@@ -19,10 +19,10 @@ class Governanca_service(Base_service):
     def get_tabela_percentuais(self):
         return self.repo.get_tabela_percentuais()
     def get_grafico_percentual(self,capitulo:str,resposta:str):
-        return self.repo.get_grafico_percentual2(capitulo, resposta)
+        return self.repo.get_grafico_percentual(capitulo, resposta)
 
     def get_grafico_quantidade(self,capitulo:str,resposta:str):
-        return self.repo.get_grafico_quantidade2(capitulo, resposta)
+        return self.repo.get_grafico_quantidade(capitulo, resposta)
 
     
 
