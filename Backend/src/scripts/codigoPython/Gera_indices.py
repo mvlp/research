@@ -1,5 +1,6 @@
 from decimal import Decimal
 from pathlib import Path
+from types import SimpleNamespace
 import pandas as pd
 from sqlalchemy import create_engine
 from main import app
@@ -16,13 +17,17 @@ with app.app_context():
 class Gera_indices:
     def __init__(self,engine: Engine) -> None:
         self.engine = engine
-    def preco_para_porcentagem(self):
+    def preco_para_porcentagem(self, isin:str = "", codigo_neg:str = ""):
         service = Cotacao_b3_service()
         with Session(self.engine) as session:
-            session.query(CotacaoB3Corrigida).delete()
+            empresas = []
+            if (isin != "" and codigo_neg != ""):
+                session.query(CotacaoB3Corrigida).where(CotacaoB3Corrigida.isin == isin).delete()
+                empresas = [SimpleNamespace(codigo_negociacao=codigo_neg)]
+            else:
+                session.query(CotacaoB3Corrigida).delete()
+                empresas = session.execute(text("select distinct(codigo_negociacao)  from cotacao_b3 where data_pregao > '2000-01-01' and codigo_bdi = '2';")).mappings().all()
             session.commit()
-            empresas = session.execute(text("select distinct(codigo_negociacao)  from cotacao_b3 where data_pregao > '2000-01-01' and codigo_bdi = '2';")).mappings().all()
-            # empresas = ['BGIP4']
             total = len(empresas)
             count_empresa = 1
             for empresa in empresas:
@@ -30,7 +35,7 @@ class Gera_indices:
                 print(f"{codigo}: {count_empresa}/{total} ")
                 count_empresa+= 1
                 dado = session.execute(text("select isin from cotacao_b3 where data_pregao > '2000-01-01' and codigo_negociacao = :code order by data_pregao desc limit 1;"),{"code":codigo}).mappings().all()
-                dados_b3 = service.getCorrigido(dado[0].isin,codigo,"2026-01-01")
+                dados_b3 = service.getCorrigido(dado[0].isin,codigo,"2026-06-06")
                 for i in range(1,len(dados_b3)):
                     dado = dados_b3[i]
                     anterior = dados_b3[i-1]
@@ -45,11 +50,11 @@ class Gera_indices:
                     corrigido.prazo_termo = dado.prazo_termo
                     corrigido.moeda = dado.moeda
                     
-                    if (dado.preco_abertura and anterior.preco_abertura): corrigido.preco_abertura = dado.preco_abertura
-                    if (dado.preco_maximo and anterior.preco_maximo): corrigido.preco_maximo = dado.preco_maximo
-                    if (dado.preco_minimo and anterior.preco_minimo): corrigido.preco_minimo = dado.preco_minimo
-                    if (dado.preco_medio and anterior.preco_medio): corrigido.preco_medio = dado.preco_medio
-                    if (dado.preco_fechamento and anterior.preco_fechamento): corrigido.preco_fechamento = dado.preco_fechamento
+                    if (dado.preco_abertura): corrigido.preco_abertura = dado.preco_abertura
+                    if (dado.preco_maximo): corrigido.preco_maximo = dado.preco_maximo
+                    if (dado.preco_minimo): corrigido.preco_minimo = dado.preco_minimo
+                    if (dado.preco_medio): corrigido.preco_medio = dado.preco_medio
+                    if (dado.preco_fechamento): corrigido.preco_fechamento = dado.preco_fechamento
 
                     if (dado.preco_abertura and anterior.preco_abertura): corrigido.preco_abertura_relativo = (dado.preco_abertura - anterior.preco_abertura) / anterior.preco_abertura
                     if (dado.preco_maximo and anterior.preco_maximo): corrigido.preco_maximo_relativo = (dado.preco_maximo - anterior.preco_maximo) / anterior.preco_maximo
@@ -78,7 +83,7 @@ class Gera_indices:
 if __name__ == "__main__":
     engine = create_engine(url_db)
     gerador = Gera_indices(engine)
-    gerador.preco_para_porcentagem()
+    gerador.preco_para_porcentagem("BRMGLUACNOR2","MGLU3")
     gerador.RendaMedia()
 
   

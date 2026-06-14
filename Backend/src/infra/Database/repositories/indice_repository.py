@@ -1,6 +1,7 @@
 from typing import Any
 from sqlalchemy import Engine, text
 from sqlalchemy.orm import Session
+from src.services.BARMA_service import BARMA_service
 from src.Entities.Grafico_chart_entity import Dataset, Grafico_chart_entity
 from src.Entities.Grafico_entity import Grafico_entity
 from src.Entities.Indice_entity import Indice_entity
@@ -217,18 +218,24 @@ FROM expandido;
         # monta estrutura base
         # =========================
 
-        for row in media_dado:
+        anos_com_empresa = set() 
 
+        for row in empresa_dado:
+            anos_com_empresa.add(str(row["dt"])) 
+
+        for row in media_dado:
             data = str(row["dt"])
 
-            if data not in dados:
+            if data not in anos_com_empresa:  
+                continue
 
+            if data not in dados:
                 dados[data] = Grafico_chart_entity(
                     [],
                     [
-                        Dataset("Pequena empresa", "rgb(85, 190, 122,0.6)"),
-                        Dataset("Média empresa","rgb(72, 176, 150,0.6)"),
-                        Dataset("Grande empresa","rgb(64, 160, 190,0.6)"),
+                        Dataset("Pequena empresa", "rgb(85, 190, 122,0.4)"),
+                        Dataset("Média empresa","rgb(72, 176, 150,0.4)"),
+                        Dataset("Grande empresa","rgb(64, 160, 190,0.4)"),
                         Dataset("Empresa","rgb(214, 92, 92,0.8)"),
                     ]
                 )
@@ -304,5 +311,64 @@ FROM expandido;
 
             # opcional: coloca nome real da empresa
             grafico.datasets[3].label = row["nome"]
+
+
+        # =========================
+        # previsão BARMA 2027
+        # =========================
+
+        anos_ordenados = sorted(dados.keys())  
+
+        # Coletar todas as siglas presentes
+        todas_siglas = []
+        for ano in anos_ordenados:
+            for sigla in dados[ano].labels:
+                if sigla not in todas_siglas:
+                    todas_siglas.append(sigla)
+
+        # Montar entry 2027 com mesma estrutura
+        ano_previsao = "previsao " + str((int(anos_ordenados[-1]) + 1))
+        if ano_previsao not in dados and len(anos_ordenados) >= 3:
+            dados[ano_previsao] = Grafico_chart_entity(
+                [],
+                [
+                    Dataset("Pequena empresa", "rgb(85, 190, 122,0.2)"),   # alpha menor = indica previsão
+                    Dataset("Média empresa",   "rgb(72, 176, 150,0.3)"),
+                    Dataset("Grande empresa",  "rgb(64, 160, 190,0.4)"),
+                    Dataset("Empresa",         "rgb(214, 92, 92,0.8)"),
+                ]
+            )
+
+            grafico_prev = dados[ano_previsao]
+
+            # Para cada sigla, montar série e prever por dataset (porte + empresa)
+            for ds_index in range(4):  # 0=pequena, 1=media, 2=grande, 3=empresa
+                for sigla in todas_siglas:
+                    serie = []
+                    for ano in anos_ordenados:
+                        g = dados[ano]
+                        if sigla in g.labels:
+                            idx = g.labels.index(sigla)
+                            val = g.datasets[ds_index].data[idx] if idx < len(g.datasets[ds_index].data) else 0.0
+                            serie.append(val)
+                        else:
+                            serie.append(0.0)
+
+                    # Só prevê se tiver valores não-nulos suficientes
+                    serie_valida = [v for v in serie if v > 0]
+                    if len(serie_valida) < 3:
+                        previsao = 0.0
+                    else:
+                        resultado = BARMA_service.fit_and_forecast(serie_valida, steps=1)
+                        previsao = resultado[0] if resultado else 0.0
+
+                    # Adiciona sigla no gráfico de previsão
+                    if sigla not in grafico_prev.labels:
+                        grafico_prev.labels.append(sigla)
+                        for ds in grafico_prev.datasets:
+                            ds.data.append(0.0)
+
+                    idx_prev = grafico_prev.labels.index(sigla)
+                    grafico_prev.datasets[ds_index].data[idx_prev] = previsao
 
         return dados

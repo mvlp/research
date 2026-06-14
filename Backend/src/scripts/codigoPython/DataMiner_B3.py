@@ -29,8 +29,8 @@ class Dataminer_B3:
         self.dir = f"{str(BASE_DIR)}/B3_data/"
     
     def importar_dados(self):
-        # self.importar_cotacoes_historicas()
-        self.importar_eventos_empresariais()
+        self.importar_cotacoes_historicas()
+        # self.importar_eventos_empresariais()
 
 
 
@@ -80,7 +80,7 @@ class Dataminer_B3:
 
             dividendos = req["stockDividends"]
             subscricoes = req["subscriptions"]
-            codigos = DataMinerUtil.get_codes_http(empresa)
+            # codigos = DataMinerUtil.get_codes_http(empresa)
                 
 
             empresaNome = req["tradingName"].replace(" ","")
@@ -90,23 +90,23 @@ class Dataminer_B3:
             proventos_aprovado = req["cashDividends"]
             print(f"{i}/{n_empresas}",empresa.issuingCompany)
             with Session(self.engine) as session:
-                for codigo in codigos:
-                    empresa_b3 = Empresa_b3()
-                    empresa_b3.cnpj = empresa.cnpj
-                    empresa_b3.codigo_negociacao = codigo.code
-                    empresa_b3.isin = codigo.isin
-                    session.add(empresa_b3)
+                # for codigo in codigos:
+                #     empresa_b3 = Empresa_b3()
+                #     empresa_b3.cnpj = empresa.cnpj
+                #     empresa_b3.codigo_negociacao = codigo.code
+                #     empresa_b3.isin = codigo.isin
+                #     session.add(empresa_b3)
 
-                # for dividendo in dividendos:
-                #     event = Stock_dividends_b3()
-                #     event.assetIssued = dividendo["assetIssued"]
-                #     event.cnpj = empresa.cnpj
-                #     event.factor = Decimal(dividendo["factor"].replace('.', '').replace(',', '.'))
-                #     event.approvedOn = dividendo["approvedOn"]
-                #     event.isinCode = dividendo["isinCode"]
-                #     event.label = dividendo["label"]
-                #     event.lastDatePrior = dividendo["lastDatePrior"]
-                #     event.remarks = dividendo["remarks"]
+                for dividendo in dividendos:
+                    event = Stock_dividends_b3()
+                    event.assetIssued = dividendo["assetIssued"]
+                    event.cnpj = empresa.cnpj
+                    event.factor = Decimal(dividendo["factor"].replace('.', '').replace(',', '.'))
+                    event.approvedOn = dividendo["approvedOn"]
+                    event.isinCode = dividendo["isinCode"]
+                    event.label = dividendo["label"]
+                    event.lastDatePrior = dividendo["lastDatePrior"]
+                    event.remarks = dividendo["remarks"]
                 #     session.add(event)
                 # for dividendo in proventos_aprovado:
                 #     event = Approved_cash_dividends_b3()
