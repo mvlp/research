@@ -7,6 +7,8 @@ from main import app
 from sqlalchemy.orm import Session
 from sqlalchemy import Engine, select, text
 from src.scripts.codigoPython.url_db import url_db
+import pandas as pd
+
 BASE_DIR = Path(__file__).resolve().parent  # Isso dá "CodigoPython/"
 
 with app.app_context():
@@ -74,16 +76,136 @@ class Gera_indices:
                     corrigido.distribuicao = dado.distribuicao
                     session.add(corrigido)
                 session.commit()
+    def calcular_retorno(
+        self,
+        painel: pd.DataFrame,
+        coluna_preco: str = 'preco_fechamento',
+        coluna_ativo: str = 'isin',
+        coluna_tempo: str = 'trimestre',
+    ) -> pd.DataFrame:
+        painel = painel.sort_values([coluna_ativo, coluna_tempo]).copy()
 
-    def RendaMedia(self):
+        preco_anterior: pd.Series = painel.groupby(coluna_ativo)[coluna_preco].shift(1)
 
-        pass
+        painel['retorno'] = (
+            (painel[coluna_preco] - preco_anterior) / preco_anterior
+        )
+
+        return painel
+    def calcular_peso(
+        self,
+        painel: pd.DataFrame,
+        coluna_valor: str = 'valor_total',
+        coluna_tempo: str = 'trimestre',
+        coluna_retorno: str = 'retorno',
+    ) -> pd.DataFrame:
+        painel = painel.copy()
+
+        valor_total_periodo: pd.Series = painel.groupby(coluna_tempo)[coluna_valor].transform('sum')
+
+        painel['peso'] = painel[coluna_valor] / valor_total_periodo
+        painel['retorno_ponderado'] = painel[coluna_retorno] * painel['peso']
+
+        return painel
+    
+    def fator_smb_nefin(self) -> pd.Series:
+        dados = pd.read_sql("SELECT * FROM tamanho_empresa_b3", self.engine)
+        dados['trimestre'] = pd.to_datetime(dados['trimestre']).dt.tz_localize(None)
+        dados['ano'] = dados['trimestre'].dt.year
+        dados['mes'] = dados['trimestre'].dt.month
+        dados['valor_total'] = dados['qtd_acoes'] * dados['preco_fechamento']
+
+        # DEBUG: ver quais meses existem
+        print("Meses únicos na tabela:", sorted(dados['mes'].unique()))
+        print("Amostra de trimestres:", dados['trimestre'].sort_values().unique()[:8])
+
+        # Q4 no postgres date_trunc começa em outubro (mes=10)
+        # Esse é o market cap de "dezembro t-1" para classificar o ano t
+        market_cap_q4 = (
+            dados[dados['mes'] == 10]
+            .groupby(['isin', 'ano'])['valor_total']
+            .last()
+            .reset_index()
+            .rename(columns={'valor_total': 'market_cap_ref', 'ano': 'ano_ref'})
+        )
+
+        print("\nAnos disponíveis para classificação:", sorted(market_cap_q4['ano_ref'].unique()))
+
+        def classificar(grupo):
+            grupo = grupo.copy()
+            try:
+                grupo['tercil'] = pd.qcut(
+                    grupo['market_cap_ref'], 3, labels=[0, 1, 2], duplicates='drop'
+                )
+            except Exception:
+                grupo['tercil'] = pd.NA
+            return grupo
+
+        market_cap_q4 = market_cap_q4.groupby('ano_ref', group_keys=False).apply(classificar)
         
-                
+        # ano_ref=2020 Q4 → classifica o ano 2021
+        market_cap_q4['ano_carteira'] = market_cap_q4['ano_ref'] + 1
+
+        dados = dados.merge(
+            market_cap_q4[['isin', 'ano_carteira', 'tercil']],
+            left_on=['isin', 'ano'],
+            right_on=['isin', 'ano_carteira'],
+            how='inner'
+        )
+        dados = dados.dropna(subset=['tercil'])
+        dados = dados[dados['ano'] < 2026]
+
+        dados = dados.sort_values(['isin', 'trimestre'])
+        dados['retorno'] = dados.groupby('isin')['preco_fechamento'].pct_change()
+        dados = dados.dropna(subset=['retorno'])
+
+        print("\nTrimestres no SMB calculado:", sorted(dados['trimestre'].unique())[:8])
+
+        smb = (
+            dados.groupby(['trimestre', 'tercil'])['retorno']
+            .mean()
+            .unstack('tercil')
+        )
+        smb_fator = smb[0] - smb[2]
+        smb_fator.name = 'SMB'
+        return smb_fator
+
+        
 if __name__ == "__main__":
     engine = create_engine(url_db)
     gerador = Gera_indices(engine)
-    gerador.preco_para_porcentagem("BRMGLUACNOR2","MGLU3")
-    gerador.RendaMedia()
 
-  
+    smb = gerador.fator_smb_nefin()
+
+    df = pd.read_csv('/home/guilhermedesouzafornaciari/Documentos/github/research/Backend/src/scripts/codigoPython/planilhas/nefin_factors.csv')
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    nefin_trimestral = (
+        df[df['Date'].dt.year >= 2021]
+        .groupby(df['Date'].dt.to_period('Q'))['SMB']
+        .apply(lambda x: (1 + x).prod() - 1)
+    )
+    nefin_trimestral.index = nefin_trimestral.index.to_timestamp(how='end').normalize()
+
+    smb_seu = smb.copy()
+    smb_seu.index = smb_seu.index.tz_localize(None)
+
+    # Converter ambos para Period('Q') para alinhar sem depender de data exata
+    smb_seu.index = smb_seu.index.to_period('Q')
+    nefin_trimestral.index = nefin_trimestral.index.to_period('Q')
+
+    comparacao = pd.DataFrame({
+        'NEFIN': nefin_trimestral,
+        'Seu_SMB': smb_seu
+    }).dropna()
+
+    print("=== Índices após conversão ===")
+    print("NEFIN:", nefin_trimestral.index[:3])
+    print("SEU:", smb_seu.index[:3])
+
+    print("\n=== Correlação ===")
+    print(comparacao.corr())
+    print("\n=== Diferença média absoluta ===")
+    print((comparacao['NEFIN'] - comparacao['Seu_SMB']).abs().mean())
+    print("\n=== Comparação ===")
+    print(comparacao)
