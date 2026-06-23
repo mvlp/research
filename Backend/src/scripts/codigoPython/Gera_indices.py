@@ -157,9 +157,12 @@ class Gera_indices:
 
         dados = dados.sort_values(['isin', 'trimestre'])
         dados['retorno'] = dados.groupby('isin')['preco_fechamento'].pct_change()
+                # Winsorize: corta retornos abaixo do percentil 1 e acima do percentil 99
+        p1 = dados['retorno'].quantile(0.01)
+        p99 = dados['retorno'].quantile(0.99)
+        dados['retorno'] = dados['retorno'].clip(lower=p1, upper=p99)
+        print(f"Winsorize: cortando retornos fora de [{p1:.3f}, {p99:.3f}]")
         dados = dados.dropna(subset=['retorno'])
-
-        print("\nTrimestres no SMB calculado:", sorted(dados['trimestre'].unique())[:8])
 
         smb = (
             dados.groupby(['trimestre', 'tercil'])['retorno']
@@ -169,13 +172,103 @@ class Gera_indices:
         smb_fator = smb[0] - smb[2]
         smb_fator.name = 'SMB'
         return smb_fator
+    
+
+def teste():
+    dados = pd.read_sql("SELECT * FROM tamanho_empresa_b3", engine)
+    dados['trimestre'] = pd.to_datetime(dados['trimestre']).dt.tz_localize(None)
+    dados['ano'] = dados['trimestre'].dt.year
+    dados['mes'] = dados['trimestre'].dt.month
+    dados['valor_total'] = dados['qtd_acoes'] * dados['preco_fechamento']
+    print("Trimestres únicos disponíveis em julho/2024:")
+    print(dados[dados['trimestre'].dt.month == 7]['trimestre'].unique())
+
+    market_cap_q4 = (
+        dados[dados['mes'] == 10]
+        .groupby(['isin', 'ano'])['valor_total']
+        .last()
+        .reset_index()
+        .rename(columns={'valor_total': 'market_cap_ref', 'ano': 'ano_ref'})
+    )
+
+    def classificar(grupo):
+        grupo = grupo.copy()
+        try:
+            grupo['tercil'] = pd.qcut(grupo['market_cap_ref'], 3, labels=[0,1,2], duplicates='drop')
+        except Exception:
+            grupo['tercil'] = pd.NA
+        return grupo
+
+    market_cap_q4 = market_cap_q4.groupby('ano_ref', group_keys=False).apply(classificar)
+    market_cap_q4['ano_carteira'] = market_cap_q4['ano_ref'] + 1
+
+    dados = dados.merge(
+        market_cap_q4[['isin', 'ano_carteira', 'tercil']],
+        left_on=['isin', 'ano'],
+        right_on=['isin', 'ano_carteira'],
+        how='inner'
+    )
+    dados = dados.sort_values(['isin', 'trimestre'])
+    dados['retorno'] = dados.groupby('isin')['preco_fechamento'].pct_change()
+
+    # Foco no 2024Q3 = trimestre 2024-07-01
+    q3_2024 = dados[
+        (dados['trimestre'].dt.year == 2024) & 
+        (dados['trimestre'].dt.month == 7)
+    ].dropna(subset=['retorno'])
+
+    print("Linhas encontradas:", len(q3_2024))
+    print("\n=== Top 10 retornos no 2024Q3 ===")
+    print(q3_2024.nlargest(10, 'retorno')[['isin', 'codigo_negociacao', 'tercil', 'retorno', 'preco_fechamento', 'valor_total']])
+
+    print("\n=== Retorno médio por tercil no 2024Q3 ===")
+    print(q3_2024.groupby('tercil', observed=True)['retorno'].describe())
+    print("\n=== Bottom 10 retornos no 2024Q3 ===")
+    print(q3_2024.nsmallest(10, 'retorno')[['isin', 'codigo_negociacao', 'tercil', 'retorno', 'preco_fechamento', 'valor_total']])
+
+    print("\n=== Retorno médio por tercil no 2024Q3 ===")
+    print(q3_2024.groupby('tercil')['retorno'].describe())
+
+
+
+    # dados = pd.read_sql("SELECT * FROM tamanho_empresa_b3", engine)
+    # dados['trimestre'] = pd.to_datetime(dados['trimestre']).dt.tz_localize(None)
+    # dados['valor_total'] = dados['qtd_acoes'] * dados['preco_fechamento']
+    
+
+    # print("=== Ações por trimestre ===")
+    # print(dados.groupby('trimestre')['isin'].nunique().tail(12))
+
+    # print("\n=== Nulos por coluna ===")
+    # print(dados[['preco_fechamento', 'qtd_acoes', 'valor_total']].isna().sum())
+
+    # print("\n=== Trimestres disponíveis ===")
+    # print(sorted(dados['trimestre'].unique())[-8:])
+
+    # # Pega o trimestre mais recente disponível dinamicamente
+    # ultimo_trimestre = dados['trimestre'].max()
+    # recente = dados[dados['trimestre'] == ultimo_trimestre].copy()
+    # print("Total de linhas:", len(recente))
+    # print("qtd_acoes nulos:", recente['qtd_acoes'].isna().sum())
+    # print("preco_fechamento nulos:", recente['preco_fechamento'].isna().sum())
+    # print("valor_total nulos:", recente['valor_total'].isna().sum())
+    # print("valor_total zeros:", (recente['valor_total'] == 0).sum())
+    # print("\nAmostra:")
+    # print(recente[['isin', 'preco_fechamento', 'qtd_acoes', 'valor_total']].head(10))
+    # print(f"\n=== Market cap no trimestre {ultimo_trimestre} ===")
+    # recente = dados[dados['trimestre'] == ultimo_trimestre].copy()
+    # recente['tercil'] = pd.qcut(recente['valor_total'].dropna(), 3, labels=['Small','Mid','Big'], duplicates='drop')
+    # print(recente.groupby('tercil')['valor_total'].describe() / 1e6)
 
         
 if __name__ == "__main__":
     engine = create_engine(url_db)
     gerador = Gera_indices(engine)
+    # teste()
+    
 
     smb = gerador.fator_smb_nefin()
+
 
     df = pd.read_csv('/home/guilhermedesouzafornaciari/Documentos/github/research/Backend/src/scripts/codigoPython/planilhas/nefin_factors.csv')
     df['Date'] = pd.to_datetime(df['Date'])
