@@ -57,8 +57,6 @@ class Cotacao_b3_service(Base_service):
                     })
 
         return cotacoes
-        
-        return cotacoes
 
 
         
