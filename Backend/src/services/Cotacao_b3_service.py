@@ -6,50 +6,57 @@ from src.services.Base_service import Base_service
 class Cotacao_b3_service(Base_service):
     def __init__(self) -> None:
         super().__init__(Cotacao_b3_entity)
-    def getCorrigido(self,isin:str, codigo:str, data_fim:str):
-        correcoes: list[Fator_b3] = self.repo.get_correcoes(isin,data_fim)
-        cotacoes: list[Cotacao_b3_entity] = self.repo.get_hist(codigo,data_fim)
-        i = len(cotacoes) -1
+        
+    def getCorrigido(self, isin: str, codigo: str, data_fim: str):
+        correcoes: list[Fator_b3] = self.repo.get_correcoes(isin, data_fim)
+        subscricoes: list = self.repo.get_subscricoes(isin, data_fim)  # NOVO: busca só percentage e priceUnit
+        cotacoes: list[Cotacao_b3_entity] = self.repo.get_hist(codigo, data_fim)
+
+        # Primeiro aplica todas as correções que já existem (dividendos, splits)
+        # — mesma lógica de antes, sem subscrições no SQL
+        i = len(cotacoes) - 1
         for correcao in correcoes:
-            for indexCotacao in range(i,-1,-1):
+            for indexCotacao in range(i, -1, -1):
                 cotacao = cotacoes[indexCotacao]
-                if (cotacao.data_pregao <= correcao.last_date_prior):
-                    # i = indexCotacao
-                    cotacoes[indexCotacao] =  Cotacao_b3_entity({
-                        "id": cotacao.id,
-                        "preco_abertura": cotacao.preco_abertura * correcao.rate,
-                        "preco_maximo": cotacao.preco_maximo * correcao.rate,
-                        "preco_minimo": cotacao.preco_minimo * correcao.rate,
-                        "preco_medio": cotacao.preco_medio * correcao.rate,
-                        "preco_fechamento": cotacao.preco_fechamento * correcao.rate,
-                        "preco_melhor_compra": cotacao.preco_melhor_compra * correcao.rate,
-                        "preco_melhor_venda": cotacao.preco_melhor_venda * correcao.rate,
+                if cotacao.data_pregao <= correcao.last_date_prior:
+                    cotacoes[indexCotacao] = Cotacao_b3_entity({
+                        **cotacao.__dict__,
+                        "preco_abertura":    cotacao.preco_abertura    * correcao.rate,
+                        "preco_maximo":      cotacao.preco_maximo      * correcao.rate,
+                        "preco_minimo":      cotacao.preco_minimo      * correcao.rate,
+                        "preco_medio":       cotacao.preco_medio       * correcao.rate,
+                        "preco_fechamento":  cotacao.preco_fechamento  * correcao.rate,
+                    })
 
-                        "tipo_registro": cotacao.tipo_registro,
-                        "data_pregao": cotacao.data_pregao,
+        # Depois aplica subscrições usando o preço JÁ CORRIGIDO do dia
+        for sub in subscricoes:
+            # Acha o preço corrigido na data da subscrição
+            preco_corrigido = next(
+                (c.preco_fechamento for c in cotacoes if c.data_pregao == sub.lastDatePrior),
+                None
+            )
+            if preco_corrigido is None or preco_corrigido <= 0:
+                continue
 
-                        "codigo_bdi": cotacao.codigo_bdi,
-                        "codigo_negociacao": cotacao.codigo_negociacao,
-                        "mercado": cotacao.mercado,
-                        "nome_empresa": cotacao.nome_empresa,
-                        "especificacao_papel": cotacao.especificacao_papel,
-                        "prazo_termo": cotacao.prazo_termo,
-                        "moeda": cotacao.moeda,
+            rate = (
+                (preco_corrigido + (sub.percentage / 100) * sub.priceUnit)
+                / ((1 + sub.percentage / 100) * preco_corrigido)
+            )
 
+            # Aplica retroativamente em todos os preços anteriores à data
+            for indexCotacao in range(len(cotacoes) - 1, -1, -1):
+                cotacao = cotacoes[indexCotacao]
+                if cotacao.data_pregao <= sub.lastDatePrior:
+                    cotacoes[indexCotacao] = Cotacao_b3_entity({
+                        **cotacao.__dict__,
+                        "preco_abertura":   cotacao.preco_abertura   * rate,
+                        "preco_maximo":     cotacao.preco_maximo     * rate,
+                        "preco_minimo":     cotacao.preco_minimo     * rate,
+                        "preco_medio":      cotacao.preco_medio      * rate,
+                        "preco_fechamento": cotacao.preco_fechamento * rate,
+                    })
 
-                        "numero_negocios": cotacao.numero_negocios,
-                        "quantidade_negociada": cotacao.quantidade_negociada,
-                        "volume_financeiro": cotacao.volume_financeiro,
-
-                        "preco_exercicio": cotacao.preco_exercicio,
-                        "indicador_correcao": cotacao.indicador_correcao,
-                        "data_vencimento": cotacao.data_vencimento,
-                        "fator_cotacao": cotacao.fator_cotacao,
-                        "preco_exercicio_pontos": cotacao.preco_exercicio_pontos,
-
-                        "isin": cotacao.isin,
-                        "distribuicao": cotacao.distribuicao
-                })
+        return cotacoes
         
         return cotacoes
 
